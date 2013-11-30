@@ -1,4 +1,6 @@
-# xlsx-extract -- extracts data from XLSX files with a low memory footprint
+# xlsx-extract 
+
+-- extracts data from XLSX files with a low memory footprint
 
 
 xlsx-files can get pretty large, so nodejs & full featured xlsx-modules often reach memory limits or just use more than is needed for that task.
@@ -10,16 +12,6 @@ hence these magnificent features:
 - filestreams are piped & xml is parsed with sax parser `node-expat`
 - get rows each by callback, all in a array or write them to a .tsv file
 - empty lines at the end of the file are ignored
-
-## Install
-
-    npm install xlsx-extract
-
-or from source:
-
-    git clone git://github.com/ffalt/xlsx-extract.git
-	cd xlsx-extract
-	npm link
 
 #Convenience API
 
@@ -87,4 +79,5 @@ or from source:
 
 - better error handling
 - more testing
+- publish to npm
 
