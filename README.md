@@ -66,7 +66,7 @@ hence these magnificent features:
         sheetnr: 1, // default 1 - the number of the sheet starting on 1
         ignore_header: 0,  // default 0 - the number of header lines to ignore
         include_trailing_empty_rows: false, // default false - include empty rows at the end or not
-	include_empty_rows: false,  // default false - include empty rows in the middle/at start
+        include_empty_rows: false,  // default false - include empty rows in the middle/at start
         raw_values: false,   // default false - do not try to apply cell nr formats
         date1904: false,    // default false - use date 1904 conversion
         tsv_float_comma: false  // default false - use "," als decimal point for floats
