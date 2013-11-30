@@ -1,0 +1,42 @@
+{
+	"name": "xlsx-extract",
+	"description": "super-simple async XLSX reader with low memory footprint",
+	"homepage": "https://github.com/ffalt/xlsx-extract",
+	"keywords": [
+		"xlsx",
+		"tsv",
+		"extract",
+		"excel",
+		"spreadsheet"
+	],
+	"bugs": {
+		"url": "https://github.com/ffalt/xlsx-extract/issues"
+	},
+	"version": "0.0.2",
+	"author": {
+		"name": "ffalt"
+	},
+	"bin": "./bin/xlsxe.js",
+	"main": "./lib",
+	"license": "none",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ffalt/xlsx-extract"
+	},
+	"bugs": {
+		"url": "https://github.com/ffalt/xlsx-extract/issues"
+	},
+	"dependencies": {
+		"node-expat": ">= 2.0.0",
+		"unzip": ">= 0.1.9",
+		"commander": ">= 2.1.0"
+	},
+	"devDependencies": {
+		"mocha": ""
+	},
+	"engines": {
+		"node": ">=0.8.15"
+	},
+	"readme": "# xlsx-extract -- async extracts data from XLSX files",
+	"readmeFilename": "README.md"
+}
