@@ -17,7 +17,7 @@ hence these magnificent features:
 
 ```javascript
 
-	var XLSX = require('xlsx-extract');
+	var XLSX = require('xlsx-extract').XLSX;
 
 	//dump by row
 	new XLSX().extract('path/to/file.xlsx', {sheetNr:1})
@@ -82,5 +82,6 @@ hence these magnificent features:
 - more testing
 - publish to npm
 - docu for command-line tool xlsxe
+- docu for XLSX.utils
 - test & docu for cell callback
 
