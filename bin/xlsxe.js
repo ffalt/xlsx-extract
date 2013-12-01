@@ -14,24 +14,22 @@ program
 	.option('-d, --dest <file>', 'destination .tsv')
 	.option('-h, --header <nr>', 'nr of headers to ignore')
 	.option('-e, --empty', 'include empty lines')
-	.option('-t, --trail', 'include trailing empty lines')
 	.option('-r, --raw', 'do not convert values')
 	.option('--d1904', 'convert dates with 1904 base')
 	.parse(process.argv);
 
 var options = {
-	sheetnr: 1
+	sheet_nr: 1
 };
 var filename, destfile;
 if (program.args[0]) {
 	filename = program.args[0];
 	if (program.args[1]) destfile = program.args[1];
 }
-if (program.sheet) options.sheetnr = program.sheet;
+if (program.sheet) options.sheet_nr = program.sheet;
 if (program.file) filename = program.file;
 if (program.dest) filename = program.dest;
 if (program.empty) options.include_empty_rows = program.empty;
-if (program.trail) options.include_trailing_empty_rows = program.trail;
 if (program.header) options.ignore_header = program.header;
 if (program.raw) options.raw_values = program.raw;
 if (program.d1904) options.date1904 = program.d1904;
@@ -48,7 +46,6 @@ if (!fs.existsSync(filename)) {
 }
 
 if (destfile) {
-
 	var error;
 	new XLSX().convert(filename, destfile, options)
 		.on('error', function (err) {
@@ -61,7 +58,6 @@ if (destfile) {
 		});
 
 } else {
-
 	if (options.format !== 'json')
 		options.format = 'tsv';
 	new XLSX().extract(filename, options)

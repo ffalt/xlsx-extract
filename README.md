@@ -20,9 +20,12 @@ hence these magnificent features:
 	var XLSX = require('xlsx-extract').XLSX;
 
 	//dump by row
-	new XLSX().extract('path/to/file.xlsx', {sheetNr:1})
+	new XLSX().extract('path/to/file.xlsx', {sheet_nr:1})
 		.on('row', function (row) {
-			console.log(row);
+			console.log(row);  //row is a array of values or []
+		})
+		.on('cell', function (cell) {
+			console.log(cell); //cell is a value or null
 		})
 		.on('error', function (err) {
 			console.error(err);
@@ -32,9 +35,12 @@ hence these magnificent features:
 		});
 
 	//dump by row in tsv-format
-	new XLSX().extract('path/to/file.xlsx', {sheetNr:1, format:'tsv'})
+	new XLSX().extract('path/to/file.xlsx', {sheet_nr:1, format:'tsv'})
 		.on('row', function (row) {
-			console.log(row); //row a tsv line
+			console.log(row); //row is a tsv line
+		})
+		.on('cell', function (cell) {
+			console.log(cell); //cell is a tsv value
 		})
 		.on('error', function (err) {
 			console.error(err);
@@ -63,14 +69,19 @@ hence these magnificent features:
 
 
 	demo_options = {
-        sheetnr: 1, // default 1 - the number of the sheet starting on 1
+        sheet_nr: 1, // default 1 - the number of the sheet starting on 1
         ignore_header: 0,  // default 0 - the number of header lines to ignore
-        include_trailing_empty_rows: false, // default false - include empty rows at the end or not
         include_empty_rows: false,  // default false - include empty rows in the middle/at start
-        raw_values: false,   // default false - do not try to apply cell nr formats
         date1904: false,    // default false - use date 1904 conversion
         tsv_float_comma: false  // default false - use "," als decimal point for floats
-        format: ''     // default nothing - convert to nothing||'json'||'tsv'
+        format: '',     // default array - convert to 'array'||'json'||'tsv'||'obj'
+        raw_values: false,   // default false - do not apply cell formats (get values as string as in xlsx)
+		convert_values: { // apply cell number formats or not
+			ints: true,  // rounds to int if number format is for int
+			floats: true,  // rounds floats according to float number format
+			dates: true,   // converts xlsx date to js date
+			bools: true   // converts xlsx bool to js boolean
+		}
      };
 
 
@@ -83,5 +94,5 @@ hence these magnificent features:
 - publish to npm
 - docu for command-line tool xlsxe
 - docu for XLSX.utils
-- test & docu for cell callback
+- docu for formats callback
 
