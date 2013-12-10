@@ -28,7 +28,7 @@ if (program.args[0]) {
 }
 if (program.sheet) options.sheet_nr = program.sheet;
 if (program.file) filename = program.file;
-if (program.dest) filename = program.dest;
+if (program.dest) destfile = program.dest;
 if (program.empty) options.include_empty_rows = program.empty;
 if (program.header) options.ignore_header = program.header;
 if (program.raw) options.raw_values = program.raw;

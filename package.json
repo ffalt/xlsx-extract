@@ -12,7 +12,7 @@
 	"bugs": {
 		"url": "https://github.com/ffalt/xlsx-extract/issues"
 	},
-	"version": "0.0.2",
+	"version": "0.0.4",
 	"author": {
 		"name": "ffalt"
 	},
@@ -32,11 +32,10 @@
 		"commander": ">= 2.1.0"
 	},
 	"devDependencies": {
-		"mocha": ""
+		"mocha": "*"
 	},
 	"engines": {
-		"node": ">=0.8.15"
+		"node": ">= 0.8.15"
 	},
-	"readme": "# xlsx-extract -- async extracts data from XLSX files",
 	"readmeFilename": "README.md"
 }
