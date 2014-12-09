@@ -279,9 +279,12 @@ describe('xlsx', function () {
 
 	describe('end', function () {
 
-		it('should do nothing', function (done) {
-			console.log('done with do nothing<3');
-			setTimeout(done, 2000);
+		it('should do nothing and wait for tests cleaned up the file system', function (done) {
+			this.timeout(3000);
+			setTimeout(function(){
+				console.log('done with do nothing<3');
+				done();
+			}, 2000);
 		});
 
 	});
