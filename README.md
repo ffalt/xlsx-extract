@@ -1,4 +1,4 @@
-# xlsx-extract 
+# xlsx-extract
 
 -- extracts data from XLSX files with low memory footprint
 
@@ -74,6 +74,7 @@ hence these magnificent features:
         include_empty_rows: false,  // default false - include empty rows in the middle/at start
         date1904: false,    // default false - use date 1904 conversion
         tsv_float_comma: false  // default false - use "," als decimal point for floats
+        tsv_delimiter: '\t'  // default '\t' - use specified character to field delimiter
         format: '',     // default array - convert to 'array'||'json'||'tsv'||'obj'
         raw_values: false,   // default false - do not apply cell formats (get values as string as in xlsx)
 		convert_values: { // apply cell number formats or not
