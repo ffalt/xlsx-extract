@@ -13,6 +13,22 @@ describe('xlsx', function () {
 	var sourcefile = path.resolve('./test.xlsx');
 
 	describe('extract', function () {
+		it('should read sheet name', function (done) {
+			//var demo_colcounts = [1, 0, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
+			//var rowcount = 0;
+			new XLSX().extract(sourcefile, {include_empty_rows: true})
+				.on('sheet', function (sheet) {
+					assert.equal(sheet[0], 'Tabelle1', 'invalid sheet name');
+					assert.equal(sheet[1], '1', 'invalid sheet nr');
+				})
+				.on('end', function () {
+					done();
+				})
+				.on('error', function (error) {
+					assert.equal(error, null, 'error!!1!');
+				});
+		});
+
 		it('should read all columns and rows', function (done) {
 			var demo_colcounts = [1, 0, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
 			var rowcount = 0;

@@ -11,24 +11,26 @@ hence these magnificent features:
 
 - filestreams are piped & xml is parsed with sax parser `node-expat`
 - get rows/cells each by callback or write them to a .tsv or .json file
-- empty lines at the end of the file are ignored
 
-#Convenience API
+##Convenience API
 
 ```javascript
 
 	var XLSX = require('xlsx-extract').XLSX;
 
-	//dump by row
+	//dump arrays
 	new XLSX().extract('path/to/file.xlsx', {sheet_nr:1})
+		.on('sheet', function (sheet) {
+			console.log('sheet',sheet);  //sheet is array [sheetname, sheetnr]
+		})
 		.on('row', function (row) {
-			console.log(row);  //row is a array of values or []
+			console.log('row', row);  //row is a array of values or []
 		})
 		.on('cell', function (cell) {
-			console.log(cell); //cell is a value or null
+			console.log('cell', cell); //cell is a value or null
 		})
 		.on('error', function (err) {
-			console.error(err);
+			console.error('error', err);
 		})
 		.on('end', function (err) {
 			console.log('eof');
@@ -36,6 +38,9 @@ hence these magnificent features:
 
 	//dump by row in tsv-format
 	new XLSX().extract('path/to/file.xlsx', {sheet_nr:1, format:'tsv'})
+		.on('sheet', function (sheet) {
+			console.log('sheet', sheet);  //sheet is tsv sheetname sheetnr
+		})
 		.on('row', function (row) {
 			console.log(row); //row is a tsv line
 		})
@@ -49,7 +54,7 @@ hence these magnificent features:
 			console.log('eof');
 		});
 
-	//convert to tsv-file
+	//convert to tsv-file (sheet info is not written to file)
 	new XLSX().convert('path/to/file.xlsx', 'path/to/destfile.tsv')
 		.on('error', function (err) {
 			console.error(err);
@@ -58,7 +63,7 @@ hence these magnificent features:
 			console.log('written');
 		})
 
-	//convert to json-file
+	//convert to json-file (sheet info is not written to file)
 	new XLSX().convert('path/to/file.xlsx', 'path/to/destfile.json')
 		.on('error', function (err) {
 			console.error(err);
