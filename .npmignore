@@ -1,3 +1,5 @@
 .DS_Store
 .idea
 local
+.git
+node_modules

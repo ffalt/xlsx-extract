@@ -12,13 +12,17 @@
 	"bugs": {
 		"url": "https://github.com/ffalt/xlsx-extract/issues"
 	},
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"author": {
 		"name": "ffalt"
 	},
+    "contributors": [{
+	  "name": "Michael Pelikan",
+	  "url": "https://github.com/mpelikan"
+    }],
 	"bin": "./bin/xlsxe.js",
 	"main": "./lib",
-	"license": "none",
+	"license": "MIT",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/ffalt/xlsx-extract"
