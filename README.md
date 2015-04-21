@@ -1,6 +1,6 @@
 # xlsx-extract
 
--- extracts data from XLSX files with low memory footprint
+extracts data from XLSX files with low memory footprint
 
 
 xlsx-files can get pretty large, so nodejs & full featured xlsx-modules can reach memory limits or just use more than is needed for that task. (--max-old-space-size & --stack_size can't help you all the time either)
@@ -11,9 +11,14 @@ hence these magnificent features:
 - get rows/cells each by callback or write them to a .tsv or .json file
 
 ##Install
+
 [![NPM](https://nodei.co/npm/xlsx-extract.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/xlsx-extract/)
 
-[![dependencies](https://david-dm.org/ffalt/xlsx-extract.svg)](https://david-dm.org/ffalt/xlsx-extract)
+[![dependencies](https://img.shields.io/david/ffalt/xlsx-extract.svg)](https://www.npmjs.com/package/xlsx-extract)
+
+[![license](https://img.shields.io/npm/l/xlsx-extract.svg)](http://opensource.org/licenses/MIT)
+
+[![developer](https://img.shields.io/badge/developer-awesome-brightgreen.svg)](https://github.com/ffalt/xlsx-extract)
 
 ##Convenience API
 
@@ -100,7 +105,7 @@ hence these magnificent features:
 
 ```
 
-#TODO
+##TODO
 
 - better error handling
 - more testing
