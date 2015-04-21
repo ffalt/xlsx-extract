@@ -13,6 +13,8 @@ hence these magnificent features:
 ##Install
 [![NPM](https://nodei.co/npm/xlsx-extract.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/xlsx-extract/)
 
+[![dependencies](https://david-dm.org/ffalt/xlsx-extract.svg)](https://david-dm.org/ffalt/xlsx-extract)
+
 ##Convenience API
 
 ```javascript
