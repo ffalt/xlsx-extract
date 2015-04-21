@@ -3,14 +3,15 @@
 -- extracts data from XLSX files with low memory footprint
 
 
-xlsx-files can get pretty large, so nodejs & full featured xlsx-modules often reach memory limits or just use more than is needed for that task.
-
-(--max-old-space-size & --stack_size can't help you all the time either)
+xlsx-files can get pretty large, so nodejs & full featured xlsx-modules can reach memory limits or just use more than is needed for that task. (--max-old-space-size & --stack_size can't help you all the time either)
 
 hence these magnificent features:
 
 - filestreams are piped & xml is parsed with sax parser `node-expat`
 - get rows/cells each by callback or write them to a .tsv or .json file
+
+##Install
+[![NPM][badge-npm-img]][badge-npm-url]
 
 ##Convenience API
 
