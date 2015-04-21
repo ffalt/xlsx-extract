@@ -22,9 +22,9 @@ hence these magnificent features:
 	var XLSX = require('xlsx-extract').XLSX;
 
 	//dump arrays
-	new XLSX().extract('path/to/file.xlsx', {sheet_nr:1})
+	new XLSX().extract('path/to/file.xlsx', {sheet_id:1}) // or sheet_name or sheet_nr
 		.on('sheet', function (sheet) {
-			console.log('sheet',sheet);  //sheet is array [sheetname, sheetnr]
+			console.log('sheet',sheet);  //sheet is array [sheetname, sheetid, sheetnr]
 		})
 		.on('row', function (row) {
 			console.log('row', row);  //row is a array of values or []
@@ -40,7 +40,7 @@ hence these magnificent features:
 		});
 
 	//dump by row in tsv-format
-	new XLSX().extract('path/to/file.xlsx', {sheet_nr:1, format:'tsv'})
+	new XLSX().extract('path/to/file.xlsx', {sheet_id:1, format:'tsv'}) // or sheet_name or sheet_nr
 		.on('sheet', function (sheet) {
 			console.log('sheet', sheet);  //sheet is tsv sheetname sheetnr
 		})
@@ -77,7 +77,11 @@ hence these magnificent features:
 
 
 	demo_options = {
+		//choose sheet by
         sheet_nr: 1, // default 1 - the number of the sheet starting on 1
+        sheet_id: 1, // the internal sheet id
+        sheet_name: 'My Sheet', // the sheet name
+
         ignore_header: 0,  // default 0 - the number of header lines to ignore
         include_empty_rows: false,  // default false - include empty rows in the middle/at start
         date1904: false,    // default false - use date 1904 conversion

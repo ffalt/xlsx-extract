@@ -10,16 +10,52 @@ var assert = require("assert"),
 
 describe('xlsx', function () {
 
-	var sourcefile = path.resolve('./test.xlsx');
+	var sourcefile = path.join(__dirname, 'test.xlsx');
 
 	describe('extract', function () {
 		it('should read sheet name', function (done) {
-			//var demo_colcounts = [1, 0, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
-			//var rowcount = 0;
 			new XLSX().extract(sourcefile, {include_empty_rows: true})
 				.on('sheet', function (sheet) {
 					assert.equal(sheet[0], 'Tabelle1', 'invalid sheet name');
-					assert.equal(sheet[1], '1', 'invalid sheet nr');
+					assert.equal(sheet[1], 'rId1', 'invalid sheet id');
+					assert.equal(sheet[2], '1', 'invalid sheet nr');
+				})
+				.on('end', function () {
+					done();
+				})
+				.on('error', function (error) {
+					assert.equal(error, null, 'error!!1!');
+				});
+		});
+
+		it('should read by sheet name', function (done) {
+			new XLSX().extract(sourcefile, {sheet_name: 'Tabelle1', include_empty_rows: true})
+				.on('sheet', function (sheet) {
+					assert.equal(sheet[0], 'Tabelle1', 'invalid sheet');
+				})
+				.on('end', function () {
+
+					new XLSX().extract(sourcefile, {sheet_name: 'HelloWorld', include_empty_rows: true})
+						.on('sheet', function (sheet) {
+							assert.equal(sheet[0], 'HelloWorld', 'invalid sheet');
+						})
+						.on('end', function () {
+							done();
+						})
+						.on('error', function (error) {
+							assert.equal(error, null, 'error!!1!');
+						});
+
+				})
+				.on('error', function (error) {
+					assert.equal(error, null, 'error!!1!');
+				});
+		});
+
+		it('should read by sheet id', function (done) {
+			new XLSX().extract(sourcefile, {sheet_id: 2, include_empty_rows: true})
+				.on('sheet', function (sheet) {
+					assert.equal(sheet[0], 'HelloWorld', 'invalid sheet');
 				})
 				.on('end', function () {
 					done();
@@ -47,7 +83,7 @@ describe('xlsx', function () {
 		});
 
 		it('should read all columns and all but the first row', function (done) {
-			var demo_colcounts = [0, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 ];
+			var demo_colcounts = [0, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
 			var rowcount = 0;
 			new XLSX().extract(sourcefile, {include_empty_rows: true, ignore_header: 1})
 				.on('row', function (row) {
@@ -297,7 +333,7 @@ describe('xlsx', function () {
 
 		it('should do nothing and wait for tests cleaned up the file system', function (done) {
 			this.timeout(3000);
-			setTimeout(function(){
+			setTimeout(function () {
 				console.log('done with do nothing<3');
 				done();
 			}, 2000);
