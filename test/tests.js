@@ -6,7 +6,10 @@
 var assert = require("assert"),
 	path = require('path'),
 	fs = require('fs'),
-	XLSX = require('../lib').XLSX;
+	XLSX = require('../lib').XLSX,
+	debug = require('debug');
+
+debug.enable('xlsx-extract');
 
 describe('xlsx', function () {
 
