@@ -11,7 +11,7 @@ hence these magnificent features:
 - get rows/cells each by callback or write them to a .tsv or .json file
 
 ##Install
-[![NPM](https://nodei.co/npm/xlsx-extract.png)](https://nodei.co/npm/xlsx-extract/)
+[![NPM](https://nodei.co/npm/xlsx-extract.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/xlsx-extract/)
 
 ##Convenience API
 
