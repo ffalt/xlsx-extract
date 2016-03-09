@@ -12,7 +12,7 @@
   "bugs": {
     "url": "https://github.com/ffalt/xlsx-extract/issues"
   },
-  "version": "0.0.10",
+  "version": "0.0.11",
   "author": {
     "name": "ffalt"
   },
@@ -20,6 +20,10 @@
     {
       "name": "Michael Pelikan",
       "url": "https://github.com/mpelikan"
+    },
+    {
+      "name": "Mikuso",
+      "url": "https://github.com/mikuso"
     }
   ],
   "bin": "./bin/xlsxe.js",
