@@ -29,6 +29,7 @@
   "bin": "./bin/xlsxe.js",
   "main": "./lib",
   "scripts": {
+    "cover": "istanbul cover _mocha",
     "test": "mocha"
   },
   "license": "MIT",
@@ -43,6 +44,7 @@
     "unzip2": "^0.2.5"
   },
   "devDependencies": {
+    "istanbul": "^0.4.5",
     "mocha": "*"
   },
   "engines": {
