@@ -28,6 +28,9 @@
   ],
   "bin": "./bin/xlsxe.js",
   "main": "./lib",
+  "scripts": {
+    "test": "mocha"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
