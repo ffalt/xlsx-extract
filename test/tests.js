@@ -156,7 +156,7 @@ describe('xlsx', function () {
 				null,
 				null,
 				'aha',
-				1296428400000,
+				(new Date(2011,0,31)).valueOf(),
 				'00002222',
 				5.94202898550725,
 				5.94,
