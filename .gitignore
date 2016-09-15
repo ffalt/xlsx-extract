@@ -11,6 +11,6 @@ coverage
 pids
 logs
 results
-
+local
 npm-debug.log
 node_modules

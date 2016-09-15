@@ -109,6 +109,7 @@ hence these magnificent features:
 
 - better error handling
 - more testing
+- split code into modules for better testing
 - docu for command-line tool xlsxe
 - docu for XLSX.utils
 - docu for formats callback

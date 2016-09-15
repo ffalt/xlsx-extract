@@ -12,6 +12,7 @@ var assert = require("assert"),
 debug.enable('xlsx-extract');
 
 describe('xlsx', function () {
+	this.timeout(10000);
 
 	var sourcefile = path.join(__dirname, 'test.xlsx');
 
@@ -335,11 +336,10 @@ describe('xlsx', function () {
 	describe('end', function () {
 
 		it('should do nothing and wait for tests cleaned up the file system', function (done) {
-			this.timeout(3000);
 			setTimeout(function () {
-				console.log('done with do nothing<3');
+				console.log('done with doing nothing <3');
 				done();
-			}, 2000);
+			}, 3000);
 		});
 
 	});

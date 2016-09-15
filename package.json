@@ -12,7 +12,7 @@
   "bugs": {
     "url": "https://github.com/ffalt/xlsx-extract/issues"
   },
-  "version": "0.0.11",
+  "version": "0.0.12",
   "author": {
     "name": "ffalt"
   },
@@ -24,6 +24,10 @@
     {
       "name": "Mikuso",
       "url": "https://github.com/mikuso"
+    },
+    {
+      "name": "Vasil Velichkov",
+      "url": "https://github.com/velichkov"
     }
   ],
   "bin": "./bin/xlsxe.js",
@@ -40,7 +44,7 @@
   "dependencies": {
     "commander": "^2.9.0",
     "debug": "^2.2.0",
-    "node-expat": "^2.3.13",
+    "node-expat": "^2.3.15",
     "unzip2": "^0.2.5"
   },
   "devDependencies": {
