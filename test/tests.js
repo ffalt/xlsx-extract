@@ -70,7 +70,7 @@ describe('xlsx', function () {
 		});
 
 		it('should read all columns and rows', function (done) {
-			var demo_colcounts = [1, 0, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
+			var demo_colcounts = [1, 0, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
 			var rowcount = 0;
 			new XLSX().extract(sourcefile, {include_empty_rows: true})
 				.on('row', function (row) {
@@ -87,7 +87,7 @@ describe('xlsx', function () {
 		});
 
 		it('should read all columns and all but the first row', function (done) {
-			var demo_colcounts = [0, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
+			var demo_colcounts = [0, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
 			var rowcount = 0;
 			new XLSX().extract(sourcefile, {include_empty_rows: true, ignore_header: 1})
 				.on('row', function (row) {
@@ -104,7 +104,7 @@ describe('xlsx', function () {
 		});
 
 		it('should read all columns and non-empty-rows', function (done) {
-			var demo_colcounts = [1, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
+			var demo_colcounts = [1, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
 			var rowcount = 0;
 			new XLSX().extract(sourcefile)
 				.on('row', function (row) {
@@ -135,7 +135,8 @@ describe('xlsx', function () {
 				'5',
 				'5',
 				'4.123456',
-				'4.123456'
+				'4.123456',
+				'0.8'
 			];
 			new XLSX().extract(sourcefile, {raw_values: true, include_empty_rows: true})
 				.on('row', function (row) {
@@ -166,7 +167,8 @@ describe('xlsx', function () {
 				5,
 				5,
 				4.12,
-				4
+				4,
+				80
 			];
 
 			new XLSX().extract(sourcefile, {include_empty_rows: true})
@@ -223,6 +225,7 @@ describe('xlsx', function () {
 				}
 			}
 
+			checkformat('0\\ %', 'i', 0); // 0.8 -> 80
 			checkformat('0.000', 'f', 3); // 3.1415926 -> 3.142
 			checkformat('#,##0', 'i'); //  1234.56 -> 1,235
 			checkformat('#,##0.00', 'f', 2); //   1234.56 -> 1,234.56
@@ -314,19 +317,19 @@ describe('xlsx', function () {
 		};
 
 		it('should write a tsv without the header', function (done) {
-			filetest({ignore_header: 2, include_empty_rows: true}, [238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2], function () {
+			filetest({ignore_header: 2, include_empty_rows: true}, [238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2], function () {
 				done();
 			});
 		});
 
 		it('should write a tsv without empty lines', function (done) {
-			filetest({}, [1, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2], function () {
+			filetest({}, [1, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2], function () {
 				done();
 			});
 		});
 
 		it('should write a tsv with all', function (done) {
-			filetest({include_empty_rows: true}, [1, 1, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2], function () {
+			filetest({include_empty_rows: true}, [1, 1, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2], function () {
 				done();
 			});
 		});
