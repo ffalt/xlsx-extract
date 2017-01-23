@@ -12,7 +12,7 @@
   "bugs": {
     "url": "https://github.com/ffalt/xlsx-extract/issues"
   },
-  "version": "0.0.14",
+  "version": "0.0.15",
   "author": {
     "name": "ffalt"
   },
@@ -28,6 +28,10 @@
     {
       "name": "Vasil Velichkov",
       "url": "https://github.com/velichkov"
+    },
+    {
+      "name": "Laurence Hudson",
+      "url": "https://github.com/laurence-hudson-tessella"
     }
   ],
   "bin": "./bin/xlsxe.js",
