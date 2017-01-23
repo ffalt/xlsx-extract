@@ -189,6 +189,20 @@ describe('xlsx', function () {
 				});
 		});
 
+		it('should emit error for non-xlsx files', function (done) {
+			var emittedError = null;
+			var file = path.join(__dirname, 'fake.xlsx');
+			new XLSX().extract(file, {include_empty_rows: true})
+				.on('error', function (error) {
+					emittedError = error;
+				})
+				.on('end', function () {
+					assert.notEqual(emittedError, null);
+
+					done();
+				});
+		});
+
 	});
 
 	describe('utils', function () {
