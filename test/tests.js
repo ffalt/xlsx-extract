@@ -158,7 +158,7 @@ describe('xlsx', function () {
 				null,
 				null,
 				'aha',
-				(new Date(2011,0,31)).valueOf(),
+				(new Date(2011, 0, 31)).valueOf(),
 				'00002222',
 				5.94202898550725,
 				5.94,
@@ -199,6 +199,29 @@ describe('xlsx', function () {
 				.on('end', function () {
 					assert.notEqual(emittedError, null);
 
+					done();
+				});
+		});
+
+		it('should xlsx files with inlineStr cells', function (done) {
+			var file = path.join(__dirname, 'inlinestr.xlsx');
+			var rowcount = 0;
+			var texts = ['Product', 'Advertiser', 'Campaign', 'Origin', 'Site', 'Region', 'Market', 'Keyword', 'Department', 'Target',
+				'Partition', 'Start Date', 'Post Date', 'Creative', 'Tracking Number', 'Spend', 'GRP',
+				'Rate', 'Clicks', 'Impressions', 'Conversions'];
+			new XLSX().extract(file, {include_empty_rows: true})
+				.on('error', function (error) {
+					console.error(error);
+					assert.equal(error, null, 'error!!1!');
+				})
+				.on('row', function (row) {
+					rowcount++;
+					for (var i = 0; i < row.length; i++) {
+						assert.equal(row[i], texts[i], 'invalid value in cell: ' + i);
+					}
+				})
+				.on('end', function () {
+					assert.equal(rowcount, 1, 'invalid row count');
 					done();
 				});
 		});
