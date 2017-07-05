@@ -10,8 +10,6 @@ hence these magnificent features:
 - filestreams are piped & xml is parsed with sax parser `node-expat`
 - get rows/cells each by callback or write them to a .tsv or .json file
 
-## Install
-
 [![NPM](https://nodei.co/npm/xlsx-extract.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/xlsx-extract/)
 
 [![dependencies](https://img.shields.io/david/ffalt/xlsx-extract.svg)](https://www.npmjs.com/package/xlsx-extract)
@@ -21,6 +19,12 @@ hence these magnificent features:
 [![developer](https://img.shields.io/badge/developer-awesome-brightgreen.svg)](https://github.com/ffalt/xlsx-extract)
 
 [![known vulnerabilities](https://snyk.io/test/github/ffalt/xlsx-extract/badge.svg)](https://snyk.io/test/github/ffalt/xlsx-extract)
+
+## Install
+
+```
+npm install xlsx-extract
+```
 
 ## Convenience API
 
