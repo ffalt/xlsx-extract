@@ -12,7 +12,7 @@
   "bugs": {
     "url": "https://github.com/ffalt/xlsx-extract/issues"
   },
-  "version": "0.0.17",
+  "version": "0.0.18",
   "author": {
     "name": "ffalt"
   },
@@ -46,14 +46,14 @@
     "url": "https://github.com/ffalt/xlsx-extract"
   },
   "dependencies": {
-    "commander": "^2.9.0",
-    "debug": "^2.6.3",
-    "node-expat": "^2.3.15",
+    "commander": "^2.11.0",
+    "debug": "^3.0.0",
+    "node-expat": "^2.3.16",
     "unzip2": "^0.2.5"
   },
   "devDependencies": {
     "istanbul": "^0.4.5",
-    "mocha": "*"
+    "mocha": "^3.5.0"
   },
   "engines": {
     "node": ">= 0.8.15"
