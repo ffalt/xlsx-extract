@@ -100,8 +100,8 @@ npm install xlsx-extract
         tsv_delimiter: '\t',  // default '\t' - use specified character to field delimiter
         format: '',     // default array - convert to 'array'||'json'||'tsv'||'obj'
         raw_values: false,   // default false - do not apply cell formats (get values as string as in xlsx)
-		round_floats: true,  // default true - round float values as the cell format defines
-		convert_values: { // apply cell number formats or not
+		round_floats: true,  // default true - round float values as the cell format defines (values will be reported as parsed floats otherwise)
+		convert_values: { // apply cell number formats or not (values will be reported as strings otherwise)
 			ints: true,  // rounds to int if number format is for int
 			floats: true,  // rounds floats according to float number format
 			dates: true,   // converts xlsx date to js date
