@@ -19,45 +19,27 @@ describe('xlsx', function () {
 	describe('extract', function () {
 		it('should read sheet name', function (done) {
 			new XLSX().extract(sourcefile, {include_empty_rows: true})
-				.on('sheet', function (sheet) {
-					assert.equal(sheet[0], 'Tabelle1', 'invalid sheet name');
-					assert.equal(sheet[1], 'rId1', 'invalid sheet id');
-					assert.equal(sheet[2], '1', 'invalid sheet nr');
-				})
-				.on('end', function () {
-					done();
-				})
-				.on('error', function (error) {
-					assert.equal(error, null, 'error!!1!');
-				});
+			.on('sheet', function (sheet) {
+				assert.equal(sheet[0], 'Tabelle1', 'invalid sheet name');
+				assert.equal(sheet[1], 'rId1', 'invalid sheet id');
+				assert.equal(sheet[2], '1', 'invalid sheet nr');
+			})
+			.on('end', function () {
+				done();
+			})
+			.on('error', function (error) {
+				assert.equal(error, null, 'error!!1!');
+			});
 		});
 
 		it('should read by sheet name', function (done) {
 			new XLSX().extract(sourcefile, {sheet_name: 'Tabelle1', include_empty_rows: true})
-				.on('sheet', function (sheet) {
-					assert.equal(sheet[0], 'Tabelle1', 'invalid sheet');
-				})
-				.on('end', function () {
+			.on('sheet', function (sheet) {
+				assert.equal(sheet[0], 'Tabelle1', 'invalid sheet');
+			})
+			.on('end', function () {
 
-					new XLSX().extract(sourcefile, {sheet_name: 'HelloWorld', include_empty_rows: true})
-						.on('sheet', function (sheet) {
-							assert.equal(sheet[0], 'HelloWorld', 'invalid sheet');
-						})
-						.on('end', function () {
-							done();
-						})
-						.on('error', function (error) {
-							assert.equal(error, null, 'error!!1!');
-						});
-
-				})
-				.on('error', function (error) {
-					assert.equal(error, null, 'error!!1!');
-				});
-		});
-
-		it('should read by sheet id', function (done) {
-			new XLSX().extract(sourcefile, {sheet_id: 2, include_empty_rows: true})
+				new XLSX().extract(sourcefile, {sheet_name: 'HelloWorld', include_empty_rows: true})
 				.on('sheet', function (sheet) {
 					assert.equal(sheet[0], 'HelloWorld', 'invalid sheet');
 				})
@@ -67,57 +49,75 @@ describe('xlsx', function () {
 				.on('error', function (error) {
 					assert.equal(error, null, 'error!!1!');
 				});
+
+			})
+			.on('error', function (error) {
+				assert.equal(error, null, 'error!!1!');
+			});
+		});
+
+		it('should read by sheet id', function (done) {
+			new XLSX().extract(sourcefile, {sheet_id: 2, include_empty_rows: true})
+			.on('sheet', function (sheet) {
+				assert.equal(sheet[0], 'HelloWorld', 'invalid sheet');
+			})
+			.on('end', function () {
+				done();
+			})
+			.on('error', function (error) {
+				assert.equal(error, null, 'error!!1!');
+			});
 		});
 
 		it('should read all columns and rows', function (done) {
 			var demo_colcounts = [1, 0, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
 			var rowcount = 0;
 			new XLSX().extract(sourcefile, {include_empty_rows: true})
-				.on('row', function (row) {
-					assert.equal(row.length, demo_colcounts[rowcount], 'invalid column count : row ' + rowcount);
-					rowcount++;
-				})
-				.on('end', function () {
-					assert.equal(rowcount, demo_colcounts.length, 'invalid row count');
-					done();
-				})
-				.on('error', function (error) {
-					assert.equal(error, null, 'error!!1!');
-				});
+			.on('row', function (row) {
+				assert.equal(row.length, demo_colcounts[rowcount], 'invalid column count : row ' + rowcount);
+				rowcount++;
+			})
+			.on('end', function () {
+				assert.equal(rowcount, demo_colcounts.length, 'invalid row count');
+				done();
+			})
+			.on('error', function (error) {
+				assert.equal(error, null, 'error!!1!');
+			});
 		});
 
 		it('should read all columns and all but the first row', function (done) {
 			var demo_colcounts = [0, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
 			var rowcount = 0;
 			new XLSX().extract(sourcefile, {include_empty_rows: true, ignore_header: 1})
-				.on('row', function (row) {
-					assert.equal(row.length, demo_colcounts[rowcount], 'invalid column count : row ' + rowcount);
-					rowcount++;
-				})
-				.on('end', function () {
-					assert.equal(rowcount, demo_colcounts.length, 'invalid row count');
-					done();
-				})
-				.on('error', function (error) {
-					assert.equal(error, null, 'error!!1!');
-				});
+			.on('row', function (row) {
+				assert.equal(row.length, demo_colcounts[rowcount], 'invalid column count : row ' + rowcount);
+				rowcount++;
+			})
+			.on('end', function () {
+				assert.equal(rowcount, demo_colcounts.length, 'invalid row count');
+				done();
+			})
+			.on('error', function (error) {
+				assert.equal(error, null, 'error!!1!');
+			});
 		});
 
 		it('should read all columns and non-empty-rows', function (done) {
 			var demo_colcounts = [1, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
 			var rowcount = 0;
 			new XLSX().extract(sourcefile)
-				.on('row', function (row) {
-					assert.equal(row.length, demo_colcounts[rowcount], 'invalid column count : row ' + rowcount);
-					rowcount++;
-				})
-				.on('end', function () {
-					assert.equal(rowcount, demo_colcounts.length, 'invalid row count');
-					done();
-				})
-				.on('error', function (error) {
-					assert.equal(error, null, 'error!!1!');
-				});
+			.on('row', function (row) {
+				assert.equal(row.length, demo_colcounts[rowcount], 'invalid column count : row ' + rowcount);
+				rowcount++;
+			})
+			.on('end', function () {
+				assert.equal(rowcount, demo_colcounts.length, 'invalid row count');
+				done();
+			})
+			.on('error', function (error) {
+				assert.equal(error, null, 'error!!1!');
+			});
 		});
 
 		it('should read all raw cell values', function (done) {
@@ -139,17 +139,17 @@ describe('xlsx', function () {
 				'0.8'
 			];
 			new XLSX().extract(sourcefile, {raw_values: true, include_empty_rows: true})
-				.on('row', function (row) {
-					assert.equal(row[1], second_column_value[rowcount], 'invalid value in row: ' + rowcount);
-					rowcount++;
-				})
-				.on('end', function () {
-					assert.equal(rowcount, second_column_value.length, 'invalid row count');
-					done();
-				})
-				.on('error', function (error) {
-					assert.equal(error, null, 'error!!1!');
-				});
+			.on('row', function (row) {
+				assert.equal(row[1], second_column_value[rowcount], 'invalid value in row: ' + rowcount);
+				rowcount++;
+			})
+			.on('end', function () {
+				assert.equal(rowcount, second_column_value.length, 'invalid row count');
+				done();
+			})
+			.on('error', function (error) {
+				assert.equal(error, null, 'error!!1!');
+			});
 		});
 
 		it('should read and format all cell values', function (done) {
@@ -172,35 +172,72 @@ describe('xlsx', function () {
 			];
 
 			new XLSX().extract(sourcefile, {include_empty_rows: true})
-				.on('row', function (row) {
-					var v = row[1];
-					if (rowcount == 3)
-						v = row[1].valueOf();
-					assert.equal(v, second_column_value[rowcount], 'invalid value in row: ' + rowcount);
-					rowcount++;
-				})
-				.on('end', function () {
-					assert.equal(rowcount, second_column_value.length, 'invalid row count');
-					done();
-				})
-				.on('error', function (error) {
-					console.error(error);
-					assert.equal(error, null, 'error!!1!');
-				});
+			.on('row', function (row) {
+				var v = row[1];
+				if (rowcount == 3)
+					v = row[1].valueOf();
+				assert.equal(v, second_column_value[rowcount], 'invalid value in row: ' + rowcount);
+				rowcount++;
+			})
+			.on('end', function () {
+				assert.equal(rowcount, second_column_value.length, 'invalid row count');
+				done();
+			})
+			.on('error', function (error) {
+				console.error(error);
+				assert.equal(error, null, 'error!!1!');
+			});
+		});
+
+		it('should read and format all cell values except floats', function (done) {
+			var rowcount = 0;
+			var second_column_value = [
+				null,
+				null,
+				'aha',
+				(new Date(2011, 0, 31)).valueOf(),
+				'00002222',
+				5.94202898550725,
+				5.942028985507246,
+				5.942028985507246,
+				5.94202898550725,
+				5,
+				5,
+				4.123456,
+				4,
+				80
+			];
+
+			new XLSX().extract(sourcefile, {include_empty_rows: true, round_floats: false})
+			.on('row', function (row) {
+				var v = row[1];
+				if (rowcount === 3)
+					v = row[1].valueOf();
+				assert.equal(v, second_column_value[rowcount], 'invalid value in row: ' + rowcount);
+				rowcount++;
+			})
+			.on('end', function () {
+				assert.equal(rowcount, second_column_value.length, 'invalid row count');
+				done();
+			})
+			.on('error', function (error) {
+				console.error(error);
+				assert.equal(error, null, 'error!!1!');
+			});
 		});
 
 		it('should emit error for non-xlsx files', function (done) {
 			var emittedError = null;
 			var file = path.join(__dirname, 'fake.xlsx');
 			new XLSX().extract(file, {include_empty_rows: true})
-				.on('error', function (error) {
-					emittedError = error;
-				})
-				.on('end', function () {
-					assert.notEqual(emittedError, null);
+			.on('error', function (error) {
+				emittedError = error;
+			})
+			.on('end', function () {
+				assert.notEqual(emittedError, null);
 
-					done();
-				});
+				done();
+			});
 		});
 
 		it('should xlsx files with inlineStr cells', function (done) {
@@ -210,20 +247,20 @@ describe('xlsx', function () {
 				'Partition', 'Start Date', 'Post Date', 'Creative', 'Tracking Number', 'Spend', 'GRP',
 				'Rate', 'Clicks', 'Impressions', 'Conversions'];
 			new XLSX().extract(file, {include_empty_rows: true})
-				.on('error', function (error) {
-					console.error(error);
-					assert.equal(error, null, 'error!!1!');
-				})
-				.on('row', function (row) {
-					rowcount++;
-					for (var i = 0; i < row.length; i++) {
-						assert.equal(row[i], texts[i], 'invalid value in cell: ' + i);
-					}
-				})
-				.on('end', function () {
-					assert.equal(rowcount, 1, 'invalid row count');
-					done();
-				});
+			.on('error', function (error) {
+				console.error(error);
+				assert.equal(error, null, 'error!!1!');
+			})
+			.on('row', function (row) {
+				rowcount++;
+				for (var i = 0; i < row.length; i++) {
+					assert.equal(row[i], texts[i], 'invalid value in cell: ' + i);
+				}
+			})
+			.on('end', function () {
+				assert.equal(rowcount, 1, 'invalid row count');
+				done();
+			});
 		});
 
 	});
@@ -332,25 +369,25 @@ describe('xlsx', function () {
 				fs.unlinkSync(destfile);
 
 			new XLSX().convert(sourcefile, destfile, options)
-				.on('end', function () {
-					var exists = fs.existsSync(destfile);
-					assert.equal(exists, true, 'file not written');
-					if (exists) {
-						var lines = fs.readFileSync(destfile).toString();
-						lines = lines.split('\n');
-						if (lines[lines.length - 1].length == 0)
-							lines = lines.slice(0, lines.length - 1);
-						assert.equal(lines.length, demo_colcounts.length, 'invalid row count in tsv');
-						for (var i = 0; i < lines.length; i++) {
-							assert.equal(demo_colcounts[i], lines[i].split('\t').length, 'invalid cols.count in tsv - row: ' + i + ' ' + lines[i]);
-						}
-						fs.unlinkSync(destfile);
+			.on('end', function () {
+				var exists = fs.existsSync(destfile);
+				assert.equal(exists, true, 'file not written');
+				if (exists) {
+					var lines = fs.readFileSync(destfile).toString();
+					lines = lines.split('\n');
+					if (lines[lines.length - 1].length == 0)
+						lines = lines.slice(0, lines.length - 1);
+					assert.equal(lines.length, demo_colcounts.length, 'invalid row count in tsv');
+					for (var i = 0; i < lines.length; i++) {
+						assert.equal(demo_colcounts[i], lines[i].split('\t').length, 'invalid cols.count in tsv - row: ' + i + ' ' + lines[i]);
 					}
-					cb();
-				})
-				.on('error', function (error) {
-					assert.equal(error, null, 'error!!1!');
-				});
+					fs.unlinkSync(destfile);
+				}
+				cb();
+			})
+			.on('error', function (error) {
+				assert.equal(error, null, 'error!!1!');
+			});
 		};
 
 		it('should write a tsv without the header', function (done) {
