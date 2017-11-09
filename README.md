@@ -96,10 +96,11 @@ npm install xlsx-extract
         ignore_header: 0,  // default 0 - the number of header lines to ignore
         include_empty_rows: false,  // default false - include empty rows in the middle/at start
         date1904: false,    // default false - use date 1904 conversion
-        tsv_float_comma: false  // default false - use "," als decimal point for floats
-        tsv_delimiter: '\t'  // default '\t' - use specified character to field delimiter
+        tsv_float_comma: false,  // default false - use "," als decimal point for floats
+        tsv_delimiter: '\t',  // default '\t' - use specified character to field delimiter
         format: '',     // default array - convert to 'array'||'json'||'tsv'||'obj'
         raw_values: false,   // default false - do not apply cell formats (get values as string as in xlsx)
+		round_floats: true,  // default true - round float values as the cell format defines
 		convert_values: { // apply cell number formats or not
 			ints: true,  // rounds to int if number format is for int
 			floats: true,  // rounds floats according to float number format
