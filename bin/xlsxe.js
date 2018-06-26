@@ -2,7 +2,6 @@
 
 /* vim: set ts=2: */
 var XLSX = require('../lib').XLSX,
-	path = require('path'),
 	fs = require('fs'),
 	program = require('commander');
 program

@@ -174,7 +174,7 @@ describe('xlsx', function () {
 			new XLSX().extract(sourcefile, {include_empty_rows: true})
 			.on('row', function (row) {
 				var v = row[1];
-				if (rowcount == 3)
+				if (rowcount === 3)
 					v = row[1].valueOf();
 				assert.equal(v, second_column_value[rowcount], 'invalid value in row: ' + rowcount);
 				rowcount++;
@@ -285,10 +285,10 @@ describe('xlsx', function () {
 		it('should detect right number format types', function (done) {
 
 			function checkformat(s, ffs, digits) {
-				if (typeof ffs == 'string')
+				if (typeof ffs === 'string')
 					ffs = [ffs];
 				if (digits)
-					if (typeof digits == 'number')
+					if (typeof digits === 'number')
 						digits = [digits];
 				var fmts = XLSX.utils.splitFormats(s);
 				for (var i = 0; i < fmts.length; i++) {
@@ -353,7 +353,7 @@ describe('xlsx', function () {
 			};
 
 			for (var key in XLSX.consts.fmts) {
-				if (XLSX.consts.fmts[key])
+				if (XLSX.consts.fmts.hasOwnProperty(key) && XLSX.consts.fmts[key])
 					checkformat(XLSX.consts.fmts[key], fmts_types[key], fmts_types_digits[key]);
 			}
 
@@ -375,7 +375,7 @@ describe('xlsx', function () {
 				if (exists) {
 					var lines = fs.readFileSync(destfile).toString();
 					lines = lines.split('\n');
-					if (lines[lines.length - 1].length == 0)
+					if (lines[lines.length - 1].length === 0)
 						lines = lines.slice(0, lines.length - 1);
 					assert.equal(lines.length, demo_colcounts.length, 'invalid row count in tsv');
 					for (var i = 0; i < lines.length; i++) {

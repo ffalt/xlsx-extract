@@ -50,14 +50,14 @@
     "url": "https://github.com/ffalt/xlsx-extract"
   },
   "dependencies": {
-    "commander": "^2.11.0",
+    "commander": "^2.15.1",
     "debug": "^3.1.0",
     "node-expat": "^2.3.16",
-    "unzip2": "^0.2.5"
+    "unzipper": "^0.8.14"
   },
   "devDependencies": {
     "istanbul": "^0.4.5",
-    "mocha": "^4.0.1"
+    "mocha": "^5.2.0"
   },
   "engines": {
     "node": ">= 0.8.15"
