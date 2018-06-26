@@ -2,5 +2,6 @@
 .idea
 local
 coverage
+test
 .git
 node_modules
