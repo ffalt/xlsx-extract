@@ -12,7 +12,7 @@
   "bugs": {
     "url": "https://github.com/ffalt/xlsx-extract/issues"
   },
-  "version": "0.0.22",
+  "version": "0.0.21",
   "author": {
     "name": "ffalt"
   },
@@ -41,6 +41,7 @@
   "bin": "./bin/xlsxe.js",
   "main": "./lib",
   "scripts": {
+    "build": "tsc -m commonjs --outDir dist",
     "cover": "istanbul cover _mocha",
     "test": "mocha"
   },
@@ -53,14 +54,17 @@
     "commander": "^2.15.1",
     "debug": "^3.1.0",
     "node-expat": "^2.3.16",
-    "unzipper": "^0.8.14"
+    "unzip2": "^0.2.5"
   },
   "devDependencies": {
+    "@types/debug": "0.0.30",
+    "@types/node": "^10.3.6",
     "istanbul": "^0.4.5",
+    "typescript": "^2.9.2",
     "mocha": "^5.2.0"
   },
   "engines": {
-    "node": ">= 0.8.15"
+    "node": ">= 4.0.0"
   },
   "readmeFilename": "README.md"
 }

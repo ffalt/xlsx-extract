@@ -98,6 +98,7 @@ npm install xlsx-extract
         date1904: false,    // default false - use date 1904 conversion
         tsv_float_comma: false,  // default false - use "," als decimal point for floats
         tsv_delimiter: '\t',  // default '\t' - use specified character to field delimiter
+        tsv_endofline: '\n',  // default depending on your operating system (node os.EOL)
         format: '',     // default array - convert to 'array'||'json'||'tsv'||'obj'
         raw_values: false,   // default false - do not apply cell formats (get values as string as in xlsx)
         round_floats: true,  // default true - round float values as the cell format defines (values will be reported as parsed floats otherwise)
@@ -111,13 +112,4 @@ npm install xlsx-extract
 
 
 ```
-
-## TODO
-
-- better error handling
-- more testing
-- split code into modules for better testing
-- docu for command-line tool xlsxe
-- docu for XLSX.utils
-- docu for formats callback
 

@@ -3,10 +3,11 @@
  * http://visionmedia.github.io/mocha/
  */
 
-var assert = require("assert"),
+const assert = require("assert"),
 	path = require('path'),
 	fs = require('fs'),
-	XLSX = require('../lib').XLSX,
+	XLSX = require('../dist/xlsx-extract').XLSX,
+	utils = require('../dist/lib/utils'),
 	debug = require('debug');
 
 debug.enable('xlsx-extract');
@@ -14,7 +15,7 @@ debug.enable('xlsx-extract');
 describe('xlsx', function () {
 	this.timeout(10000);
 
-	var sourcefile = path.join(__dirname, 'test.xlsx');
+	const sourcefile = path.join(__dirname, 'test.xlsx');
 
 	describe('extract', function () {
 		it('should read sheet name', function (done) {
@@ -28,6 +29,7 @@ describe('xlsx', function () {
 				done();
 			})
 			.on('error', function (error) {
+				console.error(error);
 				assert.equal(error, null, 'error!!1!');
 			});
 		});
@@ -47,11 +49,13 @@ describe('xlsx', function () {
 					done();
 				})
 				.on('error', function (error) {
+					console.error(error);
 					assert.equal(error, null, 'error!!1!');
 				});
 
 			})
 			.on('error', function (error) {
+				console.error(error);
 				assert.equal(error, null, 'error!!1!');
 			});
 		});
@@ -65,16 +69,17 @@ describe('xlsx', function () {
 				done();
 			})
 			.on('error', function (error) {
+				console.error(error);
 				assert.equal(error, null, 'error!!1!');
 			});
 		});
 
 		it('should read all columns and rows', function (done) {
-			var demo_colcounts = [1, 0, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
-			var rowcount = 0;
+			const demo_colcounts = [1, 0, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
+			let rowcount = 0;
 			new XLSX().extract(sourcefile, {include_empty_rows: true})
 			.on('row', function (row) {
-				assert.equal(row.length, demo_colcounts[rowcount], 'invalid column count : row ' + rowcount);
+				assert.equal(row.length, demo_colcounts[rowcount], 'invalid column count in row ' + rowcount);
 				rowcount++;
 			})
 			.on('end', function () {
@@ -82,13 +87,14 @@ describe('xlsx', function () {
 				done();
 			})
 			.on('error', function (error) {
+				console.error(error);
 				assert.equal(error, null, 'error!!1!');
 			});
 		});
 
 		it('should read all columns and all but the first row', function (done) {
-			var demo_colcounts = [0, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
-			var rowcount = 0;
+			const demo_colcounts = [0, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
+			let rowcount = 0;
 			new XLSX().extract(sourcefile, {include_empty_rows: true, ignore_header: 1})
 			.on('row', function (row) {
 				assert.equal(row.length, demo_colcounts[rowcount], 'invalid column count : row ' + rowcount);
@@ -99,13 +105,14 @@ describe('xlsx', function () {
 				done();
 			})
 			.on('error', function (error) {
+				console.error(error);
 				assert.equal(error, null, 'error!!1!');
 			});
 		});
 
 		it('should read all columns and non-empty-rows', function (done) {
-			var demo_colcounts = [1, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
-			var rowcount = 0;
+			const demo_colcounts = [1, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
+			let rowcount = 0;
 			new XLSX().extract(sourcefile)
 			.on('row', function (row) {
 				assert.equal(row.length, demo_colcounts[rowcount], 'invalid column count : row ' + rowcount);
@@ -116,13 +123,14 @@ describe('xlsx', function () {
 				done();
 			})
 			.on('error', function (error) {
+				console.error(error);
 				assert.equal(error, null, 'error!!1!');
 			});
 		});
 
 		it('should read all raw cell values', function (done) {
-			var rowcount = 0;
-			var second_column_value = [
+			let rowcount = 0;
+			const second_column_value = [
 				null,
 				null,
 				'aha',
@@ -149,13 +157,14 @@ describe('xlsx', function () {
 				done();
 			})
 			.on('error', function (error) {
+				console.error(error);
 				assert.equal(error, null, 'error!!1!');
 			});
 		});
 
 		it('should read and format all cell values', function (done) {
-			var rowcount = 0;
-			var second_column_value = [
+			let rowcount = 0;
+			const second_column_value = [
 				null,
 				null,
 				'aha',
@@ -175,7 +184,7 @@ describe('xlsx', function () {
 
 			new XLSX().extract(sourcefile, {include_empty_rows: true})
 			.on('row', function (row) {
-				var v = row[1];
+				let v = row[1];
 				if (rowcount === 3)
 					v = row[1].valueOf();
 				assert.equal(v, second_column_value[rowcount], 'invalid value in row: ' + rowcount);
@@ -192,8 +201,8 @@ describe('xlsx', function () {
 		});
 
 		it('should read and format all cell values except floats', function (done) {
-			var rowcount = 0;
-			var second_column_value = [
+			let rowcount = 0;
+			const second_column_value = [
 				null,
 				null,
 				'aha',
@@ -213,7 +222,7 @@ describe('xlsx', function () {
 
 			new XLSX().extract(sourcefile, {include_empty_rows: true, round_floats: false})
 			.on('row', function (row) {
-				var v = row[1];
+				let v = row[1];
 				if (rowcount === 3)
 					v = row[1].valueOf();
 				assert.equal(v, second_column_value[rowcount], 'invalid value in row: ' + rowcount);
@@ -230,8 +239,8 @@ describe('xlsx', function () {
 		});
 
 		it('should emit error for non-xlsx files', function (done) {
-			var emittedError = null;
-			var file = path.join(__dirname, 'fake.xlsx');
+			let emittedError = null;
+			const file = path.join(__dirname, 'fake.xlsx');
 			new XLSX().extract(file, {include_empty_rows: true})
 			.on('error', function (error) {
 				emittedError = error;
@@ -244,9 +253,9 @@ describe('xlsx', function () {
 		});
 
 		it('should xlsx files with inlineStr cells', function (done) {
-			var file = path.join(__dirname, 'inlinestr.xlsx');
-			var rowcount = 0;
-			var texts = ['Product', 'Advertiser', 'Campaign', 'Origin', 'Site', 'Region', 'Market', 'Keyword', 'Department', 'Target',
+			const file = path.join(__dirname, 'inlinestr.xlsx');
+			let rowcount = 0;
+			const texts = ['Product', 'Advertiser', 'Campaign', 'Origin', 'Site', 'Region', 'Market', 'Keyword', 'Department', 'Target',
 				'Partition', 'Start Date', 'Post Date', 'Creative', 'Tracking Number', 'Spend', 'GRP',
 				'Rate', 'Clicks', 'Impressions', 'Conversions'];
 			new XLSX().extract(file, {include_empty_rows: true})
@@ -256,7 +265,7 @@ describe('xlsx', function () {
 			})
 			.on('row', function (row) {
 				rowcount++;
-				for (var i = 0; i < row.length; i++) {
+				for (let i = 0; i < row.length; i++) {
 					assert.equal(row[i], texts[i], 'invalid value in cell: ' + i);
 				}
 			})
@@ -271,14 +280,14 @@ describe('xlsx', function () {
 	describe('utils', function () {
 
 		it('should match column conversation', function (done) {
-			assert.equal(XLSX.utils.numAlpha(0), 'A');
-			assert.equal(XLSX.utils.numAlpha(26), 'AA');
-			assert.equal(XLSX.utils.numAlpha(701), 'ZZ');
-			assert.equal(XLSX.utils.alphaNum('A'), 0);
-			assert.equal(XLSX.utils.alphaNum('ZZ'), 701);
-			var i = 0;
+			assert.equal(utils.numAlpha(0), 'A');
+			assert.equal(utils.numAlpha(26), 'AA');
+			assert.equal(utils.numAlpha(701), 'ZZ');
+			assert.equal(utils.alphaNum('A'), 0);
+			assert.equal(utils.alphaNum('ZZ'), 701);
+			let i = 0;
 			while (i < 9999) {
-				assert.equal(XLSX.utils.alphaNum(XLSX.utils.numAlpha(i)), i);
+				assert.equal(utils.alphaNum(utils.numAlpha(i)), i);
 				i++;
 			}
 
@@ -287,21 +296,22 @@ describe('xlsx', function () {
 
 		it('should detect right number format types', function (done) {
 
-			function checkformat(s, ffs, digits) {
+			function checkformat(s, ffs, digits, fmtNr) {
 				if (typeof ffs === 'string')
 					ffs = [ffs];
 				if (digits)
 					if (typeof digits === 'number')
 						digits = [digits];
-				var fmts = XLSX.utils.splitFormats(s);
-				for (var i = 0; i < fmts.length; i++) {
-					assert.equal(fmts[i].fmt_type, ffs[i], fmts[i].fmt_type + '=' + ffs[i] + ' ' + JSON.stringify(fmts[i]));
+				const fmts = utils.splitCellFormats(s);
+				for (let i = 0; i < fmts.length; i++) {
+					assert.equal(fmts[i].fmt_type, ffs[i], fmts[i].fmt_type + '=' + ffs[i] + ' ' + JSON.stringify(fmts[i]) + ' check:' + s + (fmtNr ? ' fmtNr:' + fmtNr : ''));
 					if (digits) {
 						assert.equal(fmts[i].digits, digits[i]);
 					}
 				}
 			}
 
+			checkformat('0%', 'i', 0); // 0.8 -> 80
 			checkformat('0\\ %', 'i', 0); // 0.8 -> 80
 			checkformat('0.000', 'f', 3); // 3.1415926 -> 3.142
 			checkformat('#,##0', 'i'); //  1234.56 -> 1,235
@@ -314,7 +324,7 @@ describe('xlsx', function () {
 			/*
 			 xlsx build in nr formats types
 			 */
-			var fmts_types_digits = {
+			const fmts_types_digits = {
 				2: 2, //'0.00',
 				4: 2, // '#,##0.00',
 				10: 2, // '0.00%',
@@ -325,7 +335,7 @@ describe('xlsx', function () {
 				40: [2, 2],//'#,##0.00;[Red](#,##0.00)',
 				48: 18 // '##0.0E+0',
 			};
-			var fmts_types = {
+			const fmts_types = {
 				1: 'i',
 				2: 'f',
 				3: 'i',
@@ -355,9 +365,9 @@ describe('xlsx', function () {
 				49: 's'
 			};
 
-			for (var key in XLSX.consts.fmts) {
-				if (XLSX.consts.fmts.hasOwnProperty(key) && XLSX.consts.fmts[key])
-					checkformat(XLSX.consts.fmts[key], fmts_types[key], fmts_types_digits[key]);
+			for (let key in utils.xlsx_fmts) {
+				if (utils.xlsx_fmts.hasOwnProperty(key) && utils.xlsx_fmts[key])
+					checkformat(utils.xlsx_fmts[key], fmts_types[key], fmts_types_digits[key], key);
 			}
 
 			done();
@@ -366,22 +376,22 @@ describe('xlsx', function () {
 
 	describe('tsv', function () {
 
-		var filetest = function (options, demo_colcounts, cb) {
-			var destfile = path.resolve('./test.tsv');
+		const filetest = function (options, demo_colcounts, cb) {
+			const destfile = path.resolve('./test.tsv');
 			if (fs.existsSync(destfile))
 				fs.unlinkSync(destfile);
 
 			new XLSX().convert(sourcefile, destfile, options)
 			.on('end', function () {
-				var exists = fs.existsSync(destfile);
+				const exists = fs.existsSync(destfile);
 				assert.equal(exists, true, 'file not written');
 				if (exists) {
-					var lines = fs.readFileSync(destfile).toString();
+					let lines = fs.readFileSync(destfile).toString();
 					lines = lines.split('\n');
 					if (lines[lines.length - 1].length === 0)
 						lines = lines.slice(0, lines.length - 1);
 					assert.equal(lines.length, demo_colcounts.length, 'invalid row count in tsv');
-					for (var i = 0; i < lines.length; i++) {
+					for (let i = 0; i < lines.length; i++) {
 						assert.equal(demo_colcounts[i], lines[i].split('\t').length, 'invalid cols.count in tsv - row: ' + i + ' ' + lines[i]);
 					}
 					fs.unlinkSync(destfile);
@@ -389,6 +399,7 @@ describe('xlsx', function () {
 				cb();
 			})
 			.on('error', function (error) {
+				console.error(error);
 				assert.equal(error, null, 'error!!1!');
 			});
 		};
