@@ -6,7 +6,7 @@
 const assert = require("assert"),
 	path = require('path'),
 	fs = require('fs'),
-	XLSX = require('../dist/xlsx-extract').XLSX,
+	XLSX = require('../dist/index').XLSX,
 	utils = require('../dist/lib/utils'),
 	debug = require('debug');
 
@@ -17,118 +17,118 @@ describe('xlsx', function () {
 
 	const sourcefile = path.join(__dirname, 'test.xlsx');
 
-	describe('extract', function () {
-		it('should read sheet name', function (done) {
+	describe('extract', () => {
+		it('should read sheet name', done => {
 			new XLSX().extract(sourcefile, {include_empty_rows: true})
-			.on('sheet', function (sheet) {
+			.on('sheet', sheet => {
 				assert.equal(sheet[0], 'Tabelle1', 'invalid sheet name');
 				assert.equal(sheet[1], 'rId1', 'invalid sheet id');
 				assert.equal(sheet[2], '1', 'invalid sheet nr');
 			})
-			.on('end', function () {
+			.on('end', () => {
 				done();
 			})
-			.on('error', function (error) {
+			.on('error', error => {
 				console.error(error);
 				assert.equal(error, null, 'error!!1!');
 			});
 		});
 
-		it('should read by sheet name', function (done) {
+		it('should read by sheet name', done => {
 			new XLSX().extract(sourcefile, {sheet_name: 'Tabelle1', include_empty_rows: true})
-			.on('sheet', function (sheet) {
+			.on('sheet', sheet => {
 				assert.equal(sheet[0], 'Tabelle1', 'invalid sheet');
 			})
-			.on('end', function () {
+			.on('end', () => {
 
 				new XLSX().extract(sourcefile, {sheet_name: 'HelloWorld', include_empty_rows: true})
-				.on('sheet', function (sheet) {
+				.on('sheet', sheet => {
 					assert.equal(sheet[0], 'HelloWorld', 'invalid sheet');
 				})
-				.on('end', function () {
+				.on('end', () => {
 					done();
 				})
-				.on('error', function (error) {
+				.on('error', error => {
 					console.error(error);
 					assert.equal(error, null, 'error!!1!');
 				});
 
 			})
-			.on('error', function (error) {
+			.on('error', error => {
 				console.error(error);
 				assert.equal(error, null, 'error!!1!');
 			});
 		});
 
-		it('should read by sheet id', function (done) {
+		it('should read by sheet id', done => {
 			new XLSX().extract(sourcefile, {sheet_id: 2, include_empty_rows: true})
-			.on('sheet', function (sheet) {
+			.on('sheet', sheet => {
 				assert.equal(sheet[0], 'HelloWorld', 'invalid sheet');
 			})
-			.on('end', function () {
+			.on('end', () => {
 				done();
 			})
-			.on('error', function (error) {
+			.on('error', error => {
 				console.error(error);
 				assert.equal(error, null, 'error!!1!');
 			});
 		});
 
-		it('should read all columns and rows', function (done) {
+		it('should read all columns and rows', done => {
 			const demo_colcounts = [1, 0, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
 			let rowcount = 0;
 			new XLSX().extract(sourcefile, {include_empty_rows: true})
-			.on('row', function (row) {
+			.on('row', row => {
 				assert.equal(row.length, demo_colcounts[rowcount], 'invalid column count in row ' + rowcount);
 				rowcount++;
 			})
-			.on('end', function () {
+			.on('end', () => {
 				assert.equal(rowcount, demo_colcounts.length, 'invalid row count');
 				done();
 			})
-			.on('error', function (error) {
+			.on('error', error => {
 				console.error(error);
 				assert.equal(error, null, 'error!!1!');
 			});
 		});
 
-		it('should read all columns and all but the first row', function (done) {
+		it('should read all columns and all but the first row', done => {
 			const demo_colcounts = [0, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
 			let rowcount = 0;
 			new XLSX().extract(sourcefile, {include_empty_rows: true, ignore_header: 1})
-			.on('row', function (row) {
+			.on('row', row => {
 				assert.equal(row.length, demo_colcounts[rowcount], 'invalid column count : row ' + rowcount);
 				rowcount++;
 			})
-			.on('end', function () {
+			.on('end', () => {
 				assert.equal(rowcount, demo_colcounts.length, 'invalid row count');
 				done();
 			})
-			.on('error', function (error) {
+			.on('error', error => {
 				console.error(error);
 				assert.equal(error, null, 'error!!1!');
 			});
 		});
 
-		it('should read all columns and non-empty-rows', function (done) {
+		it('should read all columns and non-empty-rows', done => {
 			const demo_colcounts = [1, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
 			let rowcount = 0;
 			new XLSX().extract(sourcefile)
-			.on('row', function (row) {
+			.on('row', row => {
 				assert.equal(row.length, demo_colcounts[rowcount], 'invalid column count : row ' + rowcount);
 				rowcount++;
 			})
-			.on('end', function () {
+			.on('end', () => {
 				assert.equal(rowcount, demo_colcounts.length, 'invalid row count');
 				done();
 			})
-			.on('error', function (error) {
+			.on('error', error => {
 				console.error(error);
 				assert.equal(error, null, 'error!!1!');
 			});
 		});
 
-		it('should read all raw cell values', function (done) {
+		it('should read all raw cell values', done => {
 			let rowcount = 0;
 			const second_column_value = [
 				null,
@@ -148,21 +148,21 @@ describe('xlsx', function () {
 				'0.1'
 			];
 			new XLSX().extract(sourcefile, {raw_values: true, include_empty_rows: true})
-			.on('row', function (row) {
+			.on('row', row => {
 				assert.equal(row[1], second_column_value[rowcount], 'invalid value in row: ' + rowcount);
 				rowcount++;
 			})
-			.on('end', function () {
+			.on('end', () => {
 				assert.equal(rowcount, second_column_value.length, 'invalid row count');
 				done();
 			})
-			.on('error', function (error) {
+			.on('error', error => {
 				console.error(error);
 				assert.equal(error, null, 'error!!1!');
 			});
 		});
 
-		it('should read and format all cell values', function (done) {
+		it('should read and format all cell values', done => {
 			let rowcount = 0;
 			const second_column_value = [
 				null,
@@ -183,24 +183,25 @@ describe('xlsx', function () {
 			];
 
 			new XLSX().extract(sourcefile, {include_empty_rows: true})
-			.on('row', function (row) {
+			.on('row', row => {
 				let v = row[1];
-				if (rowcount === 3)
+				if (rowcount === 3) {
 					v = row[1].valueOf();
+				}
 				assert.equal(v, second_column_value[rowcount], 'invalid value in row: ' + rowcount);
 				rowcount++;
 			})
-			.on('end', function () {
+			.on('end', () => {
 				assert.equal(rowcount, second_column_value.length, 'invalid row count');
 				done();
 			})
-			.on('error', function (error) {
+			.on('error', error => {
 				console.error(error);
 				assert.equal(error, null, 'error!!1!');
 			});
 		});
 
-		it('should read and format all cell values except floats', function (done) {
+		it('should read and format all cell values except floats', done => {
 			let rowcount = 0;
 			const second_column_value = [
 				null,
@@ -221,55 +222,55 @@ describe('xlsx', function () {
 			];
 
 			new XLSX().extract(sourcefile, {include_empty_rows: true, round_floats: false})
-			.on('row', function (row) {
+			.on('row', row => {
 				let v = row[1];
 				if (rowcount === 3)
 					v = row[1].valueOf();
 				assert.equal(v, second_column_value[rowcount], 'invalid value in row: ' + rowcount);
 				rowcount++;
 			})
-			.on('end', function () {
+			.on('end', () => {
 				assert.equal(rowcount, second_column_value.length, 'invalid row count');
 				done();
 			})
-			.on('error', function (error) {
+			.on('error', error => {
 				console.error(error);
 				assert.equal(error, null, 'error!!1!');
 			});
 		});
 
-		it('should emit error for non-xlsx files', function (done) {
+		it('should emit error for non-xlsx files', done => {
 			let emittedError = null;
 			const file = path.join(__dirname, 'fake.xlsx');
 			new XLSX().extract(file, {include_empty_rows: true})
-			.on('error', function (error) {
+			.on('error', error => {
 				emittedError = error;
 			})
-			.on('end', function () {
+			.on('end', () => {
 				assert.notEqual(emittedError, null);
 
 				done();
 			});
 		});
 
-		it('should xlsx files with inlineStr cells', function (done) {
+		it('should xlsx files with inlineStr cells', done => {
 			const file = path.join(__dirname, 'inlinestr.xlsx');
 			let rowcount = 0;
 			const texts = ['Product', 'Advertiser', 'Campaign', 'Origin', 'Site', 'Region', 'Market', 'Keyword', 'Department', 'Target',
 				'Partition', 'Start Date', 'Post Date', 'Creative', 'Tracking Number', 'Spend', 'GRP',
 				'Rate', 'Clicks', 'Impressions', 'Conversions'];
 			new XLSX().extract(file, {include_empty_rows: true})
-			.on('error', function (error) {
+			.on('error', error => {
 				console.error(error);
 				assert.equal(error, null, 'error!!1!');
 			})
-			.on('row', function (row) {
+			.on('row', row => {
 				rowcount++;
 				for (let i = 0; i < row.length; i++) {
 					assert.equal(row[i], texts[i], 'invalid value in cell: ' + i);
 				}
 			})
-			.on('end', function () {
+			.on('end', () => {
 				assert.equal(rowcount, 1, 'invalid row count');
 				done();
 			});
@@ -277,9 +278,9 @@ describe('xlsx', function () {
 
 	});
 
-	describe('utils', function () {
+	describe('utils', () => {
 
-		it('should match column conversation', function (done) {
+		it('should match column conversation', done => {
 			assert.equal(utils.numAlpha(0), 'A');
 			assert.equal(utils.numAlpha(26), 'AA');
 			assert.equal(utils.numAlpha(701), 'ZZ');
@@ -294,7 +295,7 @@ describe('xlsx', function () {
 			done();
 		});
 
-		it('should detect right number format types', function (done) {
+		it('should detect right number format types', done => {
 
 			function checkformat(s, ffs, digits, fmtNr) {
 				if (typeof ffs === 'string')
@@ -374,15 +375,15 @@ describe('xlsx', function () {
 		});
 	});
 
-	describe('tsv', function () {
+	describe('tsv', () => {
 
-		const filetest = function (options, demo_colcounts, cb) {
+		const filetest = (options, demo_colcounts, cb) => {
 			const destfile = path.resolve('./test.tsv');
 			if (fs.existsSync(destfile))
 				fs.unlinkSync(destfile);
 
 			new XLSX().convert(sourcefile, destfile, options)
-			.on('end', function () {
+			.on('end', () => {
 				const exists = fs.existsSync(destfile);
 				assert.equal(exists, true, 'file not written');
 				if (exists) {
@@ -398,36 +399,36 @@ describe('xlsx', function () {
 				}
 				cb();
 			})
-			.on('error', function (error) {
+			.on('error', error => {
 				console.error(error);
 				assert.equal(error, null, 'error!!1!');
 			});
 		};
 
-		it('should write a tsv without the header', function (done) {
-			filetest({ignore_header: 2, include_empty_rows: true}, [238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2], function () {
+		it('should write a tsv without the header', done => {
+			filetest({ignore_header: 2, include_empty_rows: true}, [238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2], () => {
 				done();
 			});
 		});
 
-		it('should write a tsv without empty lines', function (done) {
-			filetest({}, [1, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2], function () {
+		it('should write a tsv without empty lines', done => {
+			filetest({}, [1, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2], () => {
 				done();
 			});
 		});
 
-		it('should write a tsv with all', function (done) {
-			filetest({include_empty_rows: true}, [1, 1, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2], function () {
+		it('should write a tsv with all', done => {
+			filetest({include_empty_rows: true}, [1, 1, 238, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2], () => {
 				done();
 			});
 		});
 
 	});
 
-	describe('end', function () {
+	describe('end', () => {
 
-		it('should do nothing and wait for tests cleaned up the file system', function (done) {
-			setTimeout(function () {
+		it('should do nothing and wait for tests cleaned up the file system', done => {
+			setTimeout(() => {
 				console.log('done with doing nothing <3');
 				done();
 			}, 3000);

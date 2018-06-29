@@ -185,3 +185,20 @@ function parseFmtType(fmt: string): { t: string, f?: number } {
 	}
 	return {t: 'x'};
 }
+
+/*
+ A1 -> 0
+ A2 -> 0
+ B2 -> 1
+ */
+export function getColumnFromDef(coldef: string): number {
+	let cc = '';
+	for (let i = 0; i < coldef.length; i++) {
+		if (isNaN(parseInt(coldef[i], 10))) {
+			cc += coldef[i];
+		} else {
+			break;
+		}
+	}
+	return alphaNum(cc);
+}

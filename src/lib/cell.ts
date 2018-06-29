@@ -22,6 +22,7 @@ export interface ICellFormatStyles {
 export class Cell {
 	val: any;
 	col: number = -1;
+	address?: string;
 	typ?: string;
 	fmt?: ICellFormatStyle;
 	raw?: string;

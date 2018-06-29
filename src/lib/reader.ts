@@ -1,21 +1,13 @@
-import {alphaNum, splitCellFormats, xlsx_fmts} from './utils';
+import {getColumnFromDef, splitCellFormats, xlsx_fmts} from './utils';
 import {Workbook} from './book';
 import * as fs from 'fs';
 import * as os from 'os';
+import * as unzip from 'unzip2';
 import {Row} from './row';
 import {Cell, ICellFormatStyles} from './cell';
 import {IXLSXExtractOptions} from '../types';
 import {Sheet} from './sheet';
-import {Sax} from './sax';
-
-const unzip = require('unzip2');
-const debug = require('debug')('xlsx-extract-reader');
-
-interface IZipEntry {
-	path: string;
-	pipe: (stream: any) => any;
-	autodrain: () => any;
-}
+import {ISaxParser, SaxExpat, SaxSax} from './xml';
 
 export class XLSXReader {
 	filename: string;
@@ -43,29 +35,13 @@ export class XLSXReader {
 		this.options = Object.assign(this.options, options);
 	}
 
-	private createParser(): Sax {
-		const sax = new Sax();
+	private createParser(): ISaxParser {
+		const sax = new SaxSax();
+		// const sax = new SaxExpat();
 		return sax;
 	}
 
-	private parseXMLSheet(entry: IZipEntry, workbook: Workbook, emit: (row?: Row | null, cell?: Cell | null) => void, cb: (err?: Error) => void) {
-		/*
-		 A1 -> 0
-		 A2 -> 0
-		 B2 -> 1
-		 */
-		const getColumnFromDef = (coldef: string) => {
-			let cc = '';
-			for (let i = 0; i < coldef.length; i++) {
-				if (isNaN(parseInt(coldef[i], 10))) {
-					cc += coldef[i];
-				} else {
-					break;
-				}
-			}
-			return alphaNum(cc);
-		};
-
+	private parseXMLSheet(entry: unzip.ZipEntry, workbook: Workbook, emit: (row?: Row | null, cell?: Cell | null) => void, cb: (err?: Error) => void) {
 		/*
 		 converts cell value according to the cell type & number format
 		 */
@@ -91,6 +67,7 @@ export class XLSXReader {
 					cell = new Cell();
 					cell.typ = (attrs.t ? attrs.t : 'n');
 					cell.fmt = attrs.s ? workbook.styles[attrs.s] : undefined;
+					cell.address = attrs.r;
 					cell.col = getColumnFromDef(attrs.r || '');
 					//TODO: if cols are not sorted, we are screwed - track and warn user if so
 					while (row.count() < cell.col) {
@@ -138,14 +115,14 @@ export class XLSXReader {
 		entry.pipe(sax.piper());
 	}
 
-	private parseXMLWorkbookSheets(entry: IZipEntry, cb: (err: Error | undefined, sheets: Array<Sheet>) => void) {
+	private parseXMLWorkbookSheets(entry: unzip.ZipEntry, cb: (err: Error | undefined, sheets: Array<Sheet>) => void) {
 		const sheets: Array<Sheet> = [];
 		const sax = this.createParser()
 			.onStartElement((name, attrs) => {
 				if (name === 'sheet') {
 					const sheet = new Sheet();
 					sheet.rid = attrs['r:id'] || '';
-					sheet.id = attrs.sheetId;
+					sheet.id = attrs.sheetid;
 					sheet.name = attrs.name;
 				}
 			})
@@ -155,16 +132,16 @@ export class XLSXReader {
 		entry.pipe(sax.piper());
 	}
 
-	private parseXMLWorkbookRelations(entry: IZipEntry, cb: (err: Error | undefined, relations: Array<{ sheetid: string, filename: string }>) => void) {
+	private parseXMLWorkbookRelations(entry: unzip.ZipEntry, cb: (err: Error | undefined, relations: Array<{ sheetid: string, filename: string }>) => void) {
 		const relations: Array<{ sheetid: string, filename: string }> = [];
 		const sax = this.createParser()
 			.onStartElement((name, attrs) => {
 				if (
-					(name === 'Relationship') &&
-					(typeof attrs.Target === 'string') &&
-					(attrs.Target.toLowerCase().indexOf('worksheets/sheet') >= 0) &&
-					attrs.Id) {
-					relations.push({sheetid: attrs.Id, filename: attrs.Target});
+					(name === 'relationship') &&
+					(typeof attrs.target === 'string') &&
+					(attrs.target.toLowerCase().indexOf('worksheets/sheet') >= 0) &&
+					attrs.id) {
+					relations.push({sheetid: attrs.id, filename: attrs.target});
 				}
 			})
 			.onClose((err) => {
@@ -173,21 +150,21 @@ export class XLSXReader {
 		entry.pipe(sax.piper());
 	}
 
-	private parseXMLStyles(entry: IZipEntry, cb: (err: Error | undefined, formatstyles: ICellFormatStyles) => void) {
+	private parseXMLStyles(entry: unzip.ZipEntry, cb: (err: Error | undefined, formatstyles: ICellFormatStyles) => void) {
 		const formatstyles: ICellFormatStyles = {};
 		const numFmts: { [id: string]: string } = {};
 		const cellXfs: Array<number> = [];
 		let cellXfs_collect = false;
 		const sax = this.createParser()
 			.onStartElement((name, attrs) => {
-				if (name === 'numFmt') {
-					if (attrs.numFmtId && attrs.formatCode) {
-						numFmts[attrs.numFmtId] = attrs.formatCode;
+				if (name === 'numfmt') {
+					if (attrs.numfmtid && attrs.formatcode) {
+						numFmts[attrs.numfmtid] = attrs.formatcode;
 					}
-				} else if (name === 'cellXfs') {
+				} else if (name === 'cellxfs') {
 					cellXfs_collect = true;
 				} else if ((cellXfs_collect) && (name === 'xf')) {
-					const fmtnr = parseInt(attrs.numFmtId || '', 10);
+					const fmtnr = parseInt(attrs.numfmtid || '', 10);
 					cellXfs.push(fmtnr);
 					const stylenr = (cellXfs.length - 1).toString();
 					const fmt = numFmts[fmtnr] || xlsx_fmts[fmtnr];
@@ -200,7 +177,7 @@ export class XLSXReader {
 				}
 			})
 			.onEndElement((name: string) => {
-				if (name === 'cellXfs') {
+				if (name === 'cellxfs') {
 					cellXfs_collect = false;
 				}
 			})
@@ -210,7 +187,7 @@ export class XLSXReader {
 		entry.pipe(sax.piper());
 	}
 
-	private parseXMLStrings(entry: IZipEntry, cb: (err: Error | undefined, strings: Array<string>) => void) {
+	private parseXMLStrings(entry: unzip.ZipEntry, cb: (err: Error | undefined, strings: Array<string>) => void) {
 		const strings: Array<string> = [];
 		let strings_collect = false;
 		let sl: Array<string> = [];
@@ -281,8 +258,9 @@ export class XLSXReader {
 			.pipe(unzip.Parse())
 			.on('error', (err: Error) => {
 				emit({err});
+				emit({});
 			})
-			.on('entry', (entry: IZipEntry) => {
+			.on('entry', (entry: unzip.ZipEntry) => {
 				const lookup = lookups.find(l => l.filename === entry.path);
 				if (lookup) {
 					running++;
@@ -339,7 +317,7 @@ export class XLSXReader {
 				emit({err});
 				emit({});
 			})
-			.on('entry', (entry: IZipEntry) => {
+			.on('entry', (entry: unzip.ZipEntry) => {
 				if (entry.path === 'xl/sharedStrings.xml') {
 					collecting++;
 					this.parseXMLStrings(entry, (err, strings) => {

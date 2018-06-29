@@ -5,3 +5,4 @@ coverage
 test
 .git
 node_modules
+reports

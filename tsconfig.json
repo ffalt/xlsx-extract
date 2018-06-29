@@ -11,10 +11,22 @@
     "esModuleInterop": true,
     "declaration": true,
     "removeComments": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "paths": {
+      "*": [
+        "typings/*"
+      ]
+    },
+    "typeRoots": [
+      "node_modules/@types/**/*",
+      "node_modules/**/*",
+      "typings/**/*"
+    ]
   },
   "include": [
     "src/types.ts",
+    "typings/**/*",
     "src/**/*"
   ],
   "exclude": [
