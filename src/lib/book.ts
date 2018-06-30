@@ -8,26 +8,16 @@ export class Workbook {
 	relations: Array<{ sheetid: string, filename: string }> = [];
 
 	getById(id: string): Sheet | undefined {
-		return this.sheets.find(sheet => sheet.rid === 'rId' + id);
+		return this.sheets.find(sheet => sheet.rid === id);
 	}
 
 	getByNr(nr: string): Sheet | undefined {
 		return this.sheets.find((sheet) => {
-			return !!sheet.id && parseInt(sheet.id, 10) === parseInt(nr, 10);
+			return !!sheet.nr && sheet.nr.toString() === nr.toString();
 		});
 	}
 
 	getByName(name: string): Sheet | undefined {
 		return this.sheets.find(sheet => sheet.name === name);
-	}
-
-	validate(rid: string): Sheet {
-		let sheet = this.sheets.find(sheet => sheet.rid === rid);
-		if (!sheet) {
-			sheet = new Sheet();
-			sheet.rid = rid;
-			this.sheets.push(sheet);
-		}
-		return sheet;
 	}
 }

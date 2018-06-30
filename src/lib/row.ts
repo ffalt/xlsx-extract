@@ -12,7 +12,7 @@ export class Row {
 				return this.toArray();
 			case 'obj':
 				return this;
-			//case 'tsv':
+			// case 'tsv':
 			default:
 				return this.toTSV(options);
 		}

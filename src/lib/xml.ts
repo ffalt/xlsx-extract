@@ -3,7 +3,7 @@ import * as expat from 'node-expat';
 import sax from 'sax';
 
 function lowerFudge(obj: any): any {
-	let result: any = {};
+	const result: any = {};
 	Object.keys(obj).forEach(key => {
 		result[key.toLowerCase()] = obj[key];
 	});

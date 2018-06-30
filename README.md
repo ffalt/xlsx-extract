@@ -89,8 +89,8 @@ npm install xlsx-extract
 
 	demo_options = {
         //choose sheet by
-        sheet_nr: 1, // default 1 - the number of the sheet starting on 1
-        sheet_id: 1, // the internal sheet id
+        sheet_nr: "1", // default 1 - the number of the sheet starting on 1
+        sheet_id: "rId1", // the internal sheet id
         sheet_name: 'My Sheet', // the sheet name
 
         ignore_header: 0,  // default 0 - the number of header lines to ignore

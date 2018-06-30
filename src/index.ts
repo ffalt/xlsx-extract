@@ -14,7 +14,7 @@ export class XLSX extends events.EventEmitter {
 		events.EventEmitter.call(this);
 	}
 
-	extract(filename: string, options: IXLSXExtractOptions): XLSX {
+	extract(filename: string, options?: IXLSXExtractOptions): XLSX {
 		const reader = new XLSXReader(filename, options);
 		reader.read((what: string, data: any) => {
 			this.emit(what, data);

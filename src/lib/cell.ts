@@ -21,7 +21,7 @@ export interface ICellFormatStyles {
 
 export class Cell {
 	val: any;
-	col: number = -1;
+	col?: number;
 	address?: string;
 	typ?: string;
 	fmt?: ICellFormatStyle;
@@ -35,7 +35,7 @@ export class Cell {
 				return this.val;
 			case 'obj':
 				return this;
-			//case 'tsv':
+			// case 'tsv':
 			default:
 				return this.toTSV(options);
 		}
@@ -44,12 +44,11 @@ export class Cell {
 	toTSV(options: IXLSXExtractOptions): string | undefined {
 		let val: string;
 
-		let delimiter = options.tsv_delimiter || '\t';
+		const delimiter = options.tsv_delimiter || '\t';
 
 		if (this.val === null || this.val === undefined) {
 			val = '';
-		}
-		else if (util.types.isDate(this.val)) {
+		} else if (util.types.isDate(this.val)) {
 			val = this.val.toISOString();
 		} else {
 			val = this.val.toString();
@@ -114,9 +113,8 @@ export class Cell {
 				case 'f':
 					if ((format.digits !== undefined) && (format.digits > 0) && options.convert_values.floats) {
 						if (options.round_floats) {
-							this.val = this.val.toFixed(format.digits)
+							this.val = this.val.toFixed(format.digits);
 						}
-
 						const v = parseFloat(this.val);
 						if (!isNaN(v)) {
 							this.val = v;
@@ -124,7 +122,7 @@ export class Cell {
 					}
 					break;
 				default:
-					//nop
+					// nop
 					break;
 			}
 		}
@@ -162,5 +160,5 @@ export class Cell {
 					// debug('Unknown cell type: "%s"', this.typ);
 			}
 		}
-	};
+	}
 }

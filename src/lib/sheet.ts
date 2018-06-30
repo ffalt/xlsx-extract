@@ -1,7 +1,7 @@
 import {IXLSXExtractOptions} from '../types';
 
 export class Sheet {
-	id?: string;
+	nr?: string;
 	rid?: string;
 	name?: string;
 
@@ -13,7 +13,7 @@ export class Sheet {
 				return this.toArray();
 			case 'obj':
 				return this;
-			//case 'tsv':
+			// case 'tsv':
 			default:
 				return this.toTSV(options);
 		}
@@ -26,11 +26,12 @@ export class Sheet {
 	toJson(): string {
 		return JSON.stringify({
 			name: this.name,
-			nr: this.id
+			nr: this.nr,
+			rid: this.rid
 		});
 	}
 
 	toArray(): Array<string | undefined> {
-		return [this.name, this.rid, this.id];
+		return [this.name, this.rid, this.nr];
 	}
 }

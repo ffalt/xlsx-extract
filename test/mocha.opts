@@ -1,0 +1,6 @@
+--ui mocha-typescript
+--require ts-node/register
+--require source-map-support/register
+--recursive test
+test/test.ts
+test/formats/test.ts

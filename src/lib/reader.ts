@@ -19,6 +19,7 @@ export class XLSXReader {
 		tsv_float_comma: false,
 		tsv_delimiter: '\t',
 		tsv_endofline: os.EOL,
+		parser: 'sax',
 		format: 'array',
 		raw_values: false,
 		round_floats: true,
@@ -30,15 +31,16 @@ export class XLSXReader {
 		}
 	};
 
-	constructor(filename: string, options: IXLSXExtractOptions) {
+	constructor(filename: string, options?: IXLSXExtractOptions) {
 		this.filename = filename;
 		this.options = Object.assign(this.options, options);
 	}
 
 	private createParser(): ISaxParser {
-		const sax = new SaxSax();
-		// const sax = new SaxExpat();
-		return sax;
+		if (this.options.parser === 'expat') {
+			return new SaxExpat();
+		}
+		return new SaxSax();
 	}
 
 	private parseXMLSheet(entry: unzip.ZipEntry, workbook: Workbook, emit: (row?: Row | null, cell?: Cell | null) => void, cb: (err?: Error) => void) {
@@ -54,8 +56,8 @@ export class XLSXReader {
 				if (name === 'row') {
 					if (this.options.include_empty_rows) {
 						const rownr = parseInt(attrs.r || '', 10);
-						//TODO: if rows are not sorted, we are screwed - track and warn user if so
-						//reading them first and sort is not wanted, since rows are streamed
+						// TODO: if rows are not sorted, we are screwed - track and warn user if so
+						// reading them first and sort is not wanted, since rows are streamed
 						while (rownum < rownr) {
 							rownum++;
 							emit(new Row());
@@ -69,7 +71,7 @@ export class XLSXReader {
 					cell.fmt = attrs.s ? workbook.styles[attrs.s] : undefined;
 					cell.address = attrs.r;
 					cell.col = getColumnFromDef(attrs.r || '');
-					//TODO: if cols are not sorted, we are screwed - track and warn user if so
+					// TODO: if cols are not sorted, we are screwed - track and warn user if so
 					while (row.count() < cell.col) {
 						const empty = new Cell();
 						empty.col = row.count();
@@ -94,7 +96,7 @@ export class XLSXReader {
 					addvalue = false;
 				} else if (name === 'c') {
 					addvalue = false;
-					if (cell.col >= 0) {
+					if (cell.col !== undefined && cell.col >= 0) {
 						if (cell.typ === 's') {
 							cell.val = workbook.sharedStrings[parseInt(cell.val, 10)];
 						}
@@ -122,8 +124,9 @@ export class XLSXReader {
 				if (name === 'sheet') {
 					const sheet = new Sheet();
 					sheet.rid = attrs['r:id'] || '';
-					sheet.id = attrs.sheetid;
+					sheet.nr = attrs.sheetid;
 					sheet.name = attrs.name;
+					sheets.push(sheet);
 				}
 			})
 			.onClose((err) => {
@@ -189,7 +192,7 @@ export class XLSXReader {
 
 	private parseXMLStrings(entry: unzip.ZipEntry, cb: (err: Error | undefined, strings: Array<string>) => void) {
 		const strings: Array<string> = [];
-		let strings_collect = false;
+		let collect_strings = false;
 		let sl: Array<string> = [];
 		let s = '';
 		const sax = this.createParser()
@@ -198,21 +201,21 @@ export class XLSXReader {
 					sl = [];
 				}
 				if (name === 't') {
-					strings_collect = true;
+					collect_strings = true;
 					s = '';
 				}
 			})
 			.onEndElement((name) => {
 				if (name === 't') {
 					sl.push(s);
-					strings_collect = false;
+					collect_strings = false;
 				}
 				if (name === 'si') {
 					strings.push(sl.join(''));
 				}
 			})
 			.onText((txt) => {
-				if (strings_collect) {
+				if (collect_strings) {
 					s = s + txt;
 				}
 			})
@@ -223,21 +226,35 @@ export class XLSXReader {
 	}
 
 	private getLookups(workbook: Workbook): Array<{ sheet?: Sheet, filename: string }> {
+		const result: Array<{ sheet?: Sheet, filename: string }> = [];
+		if (this.options.sheet_all) {
+			workbook.sheets.forEach(s => {
+				const rel = workbook.relations.find(r => r.sheetid === s.rid);
+				if (rel) {
+					result.push({sheet: s, filename: 'xl/' + rel.filename});
+				}
+			});
+			return result;
+		}
 		let sheet: Sheet | undefined;
-		let result: Array<{ sheet?: Sheet, filename: string }> = [];
 		if (this.options.sheet_name) {
 			sheet = workbook.getByName(this.options.sheet_name);
 		} else if (this.options.sheet_id) {
-			sheet = workbook.getById(this.options.sheet_id);
-		} else if (this.options.sheet_nr) {
-			sheet = workbook.getByNr(this.options.sheet_nr);
+			let sheet_id = this.options.sheet_id.toString();
+			if (sheet_id.indexOf('rId') < 0) {
+				sheet_id = 'rId' + sheet_id;
+			}
+			sheet = workbook.getById(sheet_id);
+		} else {
+			const sheet_nr = this.options.sheet_nr || '1';
+			sheet = workbook.getByNr(sheet_nr);
 			if (!sheet) {
-				result.push({filename: 'xl/worksheets/sheet' + this.options.sheet_nr + '.xml'});
+				result.push({filename: 'xl/worksheets/sheet' + sheet_nr + '.xml'});
 			}
 		}
 		if (sheet) {
-			let sheetId = sheet.id;
-			let rel = workbook.relations.find(r => r.sheetid === sheetId);
+			const sheetId = sheet.rid;
+			const rel = workbook.relations.find(r => r.sheetid === sheetId);
 			if (rel) {
 				result.push({sheet, filename: 'xl/' + rel.filename});
 			}
@@ -253,7 +270,7 @@ export class XLSXReader {
 				emit({});
 			}
 		};
-		let lookups = this.getLookups(workbook);
+		const lookups = this.getLookups(workbook);
 		fs.createReadStream(this.filename)
 			.pipe(unzip.Parse())
 			.on('error', (err: Error) => {
@@ -265,7 +282,7 @@ export class XLSXReader {
 				if (lookup) {
 					running++;
 					let row_count = 1;
-					let row_start = this.options.ignore_header || 0;
+					const row_start = this.options.ignore_header || 0;
 					if (lookup.sheet) {
 						emit({sheet: lookup.sheet});
 					}
@@ -282,7 +299,7 @@ export class XLSXReader {
 						}
 					}, (err) => {
 						if (err) {
-							emit({err: err})
+							emit({err: err});
 						} else {
 							running--;
 							finish();

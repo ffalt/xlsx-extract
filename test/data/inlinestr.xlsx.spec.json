@@ -1,0 +1,77 @@
+{
+  "description": "Inline Strings",
+  "sheets": [
+    {
+      "rid": "rId4",
+      "nr": "1",
+      "name": "data",
+      "rows": [
+        [
+          {
+            "raw": "Product"
+          },
+          {
+            "raw": "Advertiser"
+          },
+          {
+            "raw": "Campaign"
+          },
+          {
+            "raw": "Origin"
+          },
+          {
+            "raw": "Site"
+          },
+          {
+            "raw": "Region"
+          },
+          {
+            "raw": "Market"
+          },
+          {
+            "raw": "Keyword"
+          },
+          {
+            "raw": "Department"
+          },
+          {
+            "raw": "Target"
+          },
+          {
+            "raw": "Partition"
+          },
+          {
+            "raw": "Start Date"
+          },
+          {
+            "raw": "Post Date"
+          },
+          {
+            "raw": "Creative"
+          },
+          {
+            "raw": "Tracking Number"
+          },
+          {
+            "raw": "Spend"
+          },
+          {
+            "raw": "GRP"
+          },
+          {
+            "raw": "Rate"
+          },
+          {
+            "raw": "Clicks"
+          },
+          {
+            "raw": "Impressions"
+          },
+          {
+            "raw": "Conversions"
+          }
+        ]
+      ]
+    }
+  ]
+}

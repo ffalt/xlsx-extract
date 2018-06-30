@@ -1,5 +1,7 @@
 {
   "name": "xlsx-extract",
+  "version": "0.0.21",
+  "license": "MIT",
   "description": "super-simple async XLSX reader with low memory footprint",
   "homepage": "https://github.com/ffalt/xlsx-extract",
   "keywords": [
@@ -9,10 +11,18 @@
     "excel",
     "spreadsheet"
   ],
+  "scripts": {
+    "build": "tsc -m commonjs --outDir dist",
+    "cover": "istanbul cover _mocha",
+    "pretest": "tsc --outDir dist",
+    "lint": "tslint --project tsconfig.json \"src/**/*.ts\"",
+    "test": "nyc mocha",
+    "watch": "mocha-typescript-watch",
+    "prepare": "tsc --outDir dist"
+  },
   "bugs": {
     "url": "https://github.com/ffalt/xlsx-extract/issues"
   },
-  "version": "0.0.21",
   "author": {
     "name": "ffalt"
   },
@@ -41,12 +51,6 @@
   "bin": "./bin/xlsxe.js",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "scripts": {
-    "build": "tsc -m commonjs --outDir dist",
-    "cover": "istanbul cover _mocha",
-    "test": "mocha"
-  },
-  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/ffalt/xlsx-extract"
@@ -55,24 +59,27 @@
     "@types/sax": "^1.0.1",
     "commander": "^2.15.1",
     "debug": "^3.1.0",
+    "mocha-typescript": "^1.1.16",
     "node-expat": "^2.3.16",
     "sax": "^1.2.4",
+    "source-map-support": "^0.5.6",
     "unzip2": "^0.2.5"
   },
   "devDependencies": {
-    "@types/debug": "0.0.30",
     "@types/chai": "^4.1.4",
-    "@types/node": "^10.3.6",
+    "@types/debug": "0.0.30",
     "@types/mocha": "^5.2.2",
+    "@types/node": "^10.3.6",
     "@types/tmp": "0.0.33",
-    "istanbul": "^0.4.5",
     "chai": "^4.1.2",
+    "chai-exclude": "^1.0.8",
+    "istanbul": "^0.4.5",
+    "mocha": "^5.2.0",
     "nyc": "^12.0.2",
     "tmp": "0.0.33",
     "ts-node": "^6.1.1",
     "tslint": "^5.10.0",
-    "typescript": "^2.9.2",
-    "mocha": "^5.2.0"
+    "typescript": "^2.9.2"
   },
   "engines": {
     "node": ">= 4.0.0"
@@ -81,19 +88,22 @@
     "temp-directory": "./reports/.nyc_output",
     "report-dir": "./reports/coverage",
     "include": [
-      "src/*.ts",
       "src/**/*.ts"
     ],
-    "extension": [
-      ".ts"
+    "exclude": [
+      "test/**/*.ts"
     ],
     "require": [
-      "ts-node/register"
+      "ts-node/register",
+      "source-map-support/register"
     ],
     "reporter": [
+      "lcov",
       "text-summary",
       "html"
     ],
+    "all": true,
+    "check-coverage": true,
     "sourceMap": true,
     "instrument": true
   },

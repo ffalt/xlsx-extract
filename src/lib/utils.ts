@@ -33,7 +33,7 @@ export function xlsx_date(value: number, date1904: boolean) {
  xlsx build in nr formats
  */
 export const xlsx_fmts: { [id: number]: string | null } = {
-	0: null,//General
+	0: null, // General
 	1: '0',
 	2: '0.00',
 	3: '#,##0',
@@ -109,21 +109,17 @@ export function splitCellFormats(s: string): Array<ICellFormat> {
 	/*
 	 http://office.microsoft.com/en-gb/excel-help/create-or-delete-a-custom-number-format-HP005199500.aspx?redir=0
 	 _-* #,##0\ _€_-;\-* #,##0\ _€_-;_-* "-"??\ _€_-;_-@_-
-	 positiv value ; negativ value ; zero; string
+	 positive value ; negative value ; zero; string
 	 */
 	const fmts = s.split(/(?!\\);/);
 	let nr = 0;
-	let lastff = {t: 'x'};
+	let last = {t: 'x'};
 	const result: Array<ICellFormat> = [];
 	for (let i = 0; i < fmts.length; i++) {
 		let ff = parseFmtType(fmts[i]);
-		ff = (ff.t === 'l' ? lastff : ff);
-		lastff = ff;
-		const format: ICellFormat = {fmt: fmts[i], fmt_type: ff.t, digits: undefined};
-		if (ff.f) {
-			format.digits = ff.f;
-		}
-		result.push(format);
+		ff = (ff.t === 'l' ? last : ff);
+		last = ff;
+		result.push({fmt: fmts[i], fmt_type: ff.t, digits: ff.f});
 		nr++;
 	}
 	return result;
@@ -133,7 +129,7 @@ export function splitCellFormats(s: string): Array<ICellFormat> {
  parse cell format
  */
 function parseFmtType(fmt: string): { t: string, f?: number } {
-	// messy hack for extracting some infos from the number format (type and float-digits}
+	// messy hack for extracting some info from the number format (type and float-digits}
 	let s = fmt;
 	let b = '';
 	while (s.length > 0) {
@@ -146,7 +142,7 @@ function parseFmtType(fmt: string): { t: string, f?: number } {
 		} else if (c === '"') {
 			s = s.slice(s.indexOf('"') + 1);
 		} else if ((c === '(') || (c === ')')) {
-			//nop
+			// nop
 		} else {
 			b += c;
 		}
@@ -191,11 +187,11 @@ function parseFmtType(fmt: string): { t: string, f?: number } {
  A2 -> 0
  B2 -> 1
  */
-export function getColumnFromDef(coldef: string): number {
+export function getColumnFromDef(colDef: string): number {
 	let cc = '';
-	for (let i = 0; i < coldef.length; i++) {
-		if (isNaN(parseInt(coldef[i], 10))) {
-			cc += coldef[i];
+	for (let i = 0; i < colDef.length; i++) {
+		if (isNaN(parseInt(colDef[i], 10))) {
+			cc += colDef[i];
 		} else {
 			break;
 		}
