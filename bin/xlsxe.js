@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
 /* vim: set ts=2: */
-var XLSX = require('../lib').XLSX,
+var XLSX = require('../dist').XLSX,
 	fs = require('fs'),
 	program = require('commander');
+	pack = require('../package.json');
 program
-	.version('0.0.2')
+	.version(pack.version)
 	.usage('[options] <file> [destfile]')
 	.option('-m, --mode <mode>', 'json or tsv (default tsv)')
 	.option('-f, --file <file>', 'source .xlsx')
@@ -35,12 +36,12 @@ if (program.d1904) options.date1904 = program.d1904;
 if (program.mode) options.format = program.mode;
 
 if (!filename) {
-	console.error("xlsx2tsv: must specify a filename");
+	console.error("xlsxe: must specify a filename");
 	process.exit(1);
 }
 
 if (!fs.existsSync(filename)) {
-	console.error("xlsx2tsv: " + filename + ": No such file or directory");
+	console.error("xlsxe: " + filename + ": No such file or directory");
 	process.exit(2);
 }
 
