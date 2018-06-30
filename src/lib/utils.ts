@@ -198,3 +198,4 @@ export function getColumnFromDef(colDef: string): number {
 	}
 	return alphaNum(cc);
 }
+

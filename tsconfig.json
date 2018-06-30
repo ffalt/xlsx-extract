@@ -1,17 +1,20 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es5",
     "module": "commonjs",
-    "outDir": ".",
+    "outDir": "dist/lib",
     "sourceMap": true,
+    "declaration": true,
     "strict": true,
     "strictNullChecks": true,
     "noImplicitAny": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "declaration": true,
     "removeComments": true,
     "allowSyntheticDefaultImports": true,
+    "lib": [
+      "es2015"
+    ],
     "baseUrl": "./",
     "paths": {
       "*": [
@@ -20,7 +23,6 @@
     },
     "typeRoots": [
       "node_modules/@types/**/*",
-      "node_modules/**/*",
       "typings/**/*"
     ]
   },
@@ -30,11 +32,19 @@
     "src/**/*"
   ],
   "exclude": [
+    "./node_modules/**/*.tsx",
+    "node_modules/**/*.ts",
+    "node_modules",
     "bin",
     "lib",
     "data",
     "local",
     "dist",
     "**/*.spec.ts"
-  ]
+  ],
+  "awesomeTypescriptLoaderOptions": {
+    "forkChecker": true,
+    "useWebpackText": true,
+    "transpileOnly": true
+  }
 }

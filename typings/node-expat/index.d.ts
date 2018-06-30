@@ -3,7 +3,8 @@
 // Definitions by: ffalt <https://github.com/ffalt>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
-declare module "node-expat" {
-	import * as stream from "stream";
+declare module 'node-expat' {
+	import * as stream from 'stream';
+
 	export function createParser(): stream.Duplex;
 }

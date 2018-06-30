@@ -1,39 +1,22 @@
 import {getColumnFromDef, splitCellFormats, xlsx_fmts} from './utils';
 import {Workbook} from './book';
-import * as fs from 'fs';
-import * as os from 'os';
-import * as unzip from 'unzip2';
+import fs from 'fs';
+import unzip from 'unzip2';
 import {Row} from './row';
 import {Cell, ICellFormatStyles} from './cell';
 import {IXLSXExtractOptions} from '../types';
 import {Sheet} from './sheet';
 import {ISaxParser, SaxExpat, SaxSax} from './xml';
+import {applyDefaults} from './defaults';
+
 
 export class XLSXReader {
 	filename: string;
-	options: IXLSXExtractOptions = {
-		sheet_nr: '1',
-		ignore_header: 0,
-		date1904: false,
-		include_empty_rows: false,
-		tsv_float_comma: false,
-		tsv_delimiter: '\t',
-		tsv_endofline: os.EOL,
-		parser: 'sax',
-		format: 'array',
-		raw_values: false,
-		round_floats: true,
-		convert_values: {
-			ints: true,
-			floats: true,
-			dates: true,
-			bools: true
-		}
-	};
+	options: IXLSXExtractOptions = {};
 
 	constructor(filename: string, options?: IXLSXExtractOptions) {
 		this.filename = filename;
-		this.options = Object.assign(this.options, options);
+		this.options = applyDefaults(options);
 	}
 
 	private createParser(): ISaxParser {

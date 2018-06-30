@@ -1,5 +1,5 @@
-import * as stream from 'stream';
-import * as expat from 'node-expat';
+import stream from 'stream';
+import expat from 'node-expat';
 import sax from 'sax';
 
 function lowerFudge(obj: any): any {

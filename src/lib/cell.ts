@@ -1,4 +1,4 @@
-import * as util from 'util';
+import util from 'util';
 import {xlsx_date} from './utils';
 import {IXLSXExtractOptions} from '../types';
 
@@ -112,7 +112,7 @@ export class Cell {
 					break;
 				case 'f':
 					if ((format.digits !== undefined) && (format.digits > 0) && options.convert_values.floats) {
-						if (options.round_floats) {
+						if (options.round_floats && !isNaN(this.val)) {
 							this.val = this.val.toFixed(format.digits);
 						}
 						const v = parseFloat(this.val);
@@ -154,10 +154,10 @@ export class Cell {
 					}
 					break;
 				case 'e':
-					// debug('Error cell type: Value will be invalid ("#REF!", "#NAME?", "#VALUE!" or similar).');
-					// break;
+				// debug('Error cell type: Value will be invalid ("#REF!", "#NAME?", "#VALUE!" or similar).');
+				// break;
 				default:
-					// debug('Unknown cell type: "%s"', this.typ);
+				// debug('Unknown cell type: "%s"', this.typ);
 			}
 		}
 	}
