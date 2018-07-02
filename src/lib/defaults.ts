@@ -12,6 +12,7 @@ export function applyDefaults(options: IXLSXExtractOptions | undefined) {
 		tsv_endofline: os.EOL,
 		parser: 'sax',
 		format: 'array',
+		workfolder: 'xl',
 		raw_values: false,
 		round_floats: true,
 		convert_values: {

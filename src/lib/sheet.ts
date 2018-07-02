@@ -2,6 +2,7 @@ import {IXLSXExtractOptions} from '../types';
 
 export class Sheet {
 	nr?: string;
+	id?: string;
 	rid?: string;
 	name?: string;
 

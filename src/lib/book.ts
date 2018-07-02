@@ -7,8 +7,12 @@ export class Workbook {
 	styles: ICellFormatStyles = {};
 	relations: Array<{ sheetid: string, filename: string }> = [];
 
-	getById(id: string): Sheet | undefined {
+	getByRId(id: string): Sheet | undefined {
 		return this.sheets.find(sheet => sheet.rid === id);
+	}
+
+	getById(id: string): Sheet | undefined {
+		return this.sheets.find(sheet => sheet.id === id);
 	}
 
 	getByNr(nr: string): Sheet | undefined {

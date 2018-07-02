@@ -6,36 +6,62 @@ import chaiExclude = require('chai-exclude');
 import {describe, it} from 'mocha';
 import {Sheet} from '../src/lib/sheet';
 import {XLSX} from '../src';
+import XLSXJS, {WorkSheet} from 'xlsx';
 import {IXLSXExtractOptions} from '../src/types';
 import {Cell} from '../src/lib/cell';
 import tmp from 'tmp';
+import {escapeTSV, isValidDate} from '../src/lib/utils';
 
 use(chaiExclude);
-
 const parsers: Array<string> = [
 	'sax',
 	'expat',
 ];
-const testfiles: Array<string> = [
-	'test.xlsx',
-	'inlinestr.xlsx',
-	'fake.xlsx',
-];
+
+export function collectTestFiles(dirs: Array<string>, rootDir: string, testSingleFile?: string): Array<string> {
+	const files: Array<string> = [];
+	dirs.forEach(dir => {
+		const files1 = fs.readdirSync(path.join(rootDir, dir));
+		files1.forEach(f => {
+			if (['.xlsx'].indexOf(path.extname(f).toLowerCase()) >= 0) {
+				const stat = fs.lstatSync(path.join(rootDir, dir, f));
+				if (!stat.isDirectory()
+					&& (!testSingleFile || path.join(dir, f).indexOf(testSingleFile) >= 0)
+				) {
+					files.push(path.join(dir, f));
+				}
+			}
+		});
+	});
+	return files;
+}
+
+const testfiles: Array<string> = collectTestFiles([
+		'data',
+		// 'data/sheetjs_test_files'
+	], __dirname
+	// , 'wtf_path'
+);
 
 interface IXLSXSpecCell {
 	raw?: string;
 	val?: any;
+	typ?: any;
+	fmt?: any;
+	fmt_typ?: any;
 }
 
 interface IXLSXSpecSheet {
 	nr: string;
 	name: string;
+	id: string;
 	rid: string;
 	rows: Array<Array<IXLSXSpecCell>>;
 }
 
 interface IXLSXSpec {
 	description: string;
+	workfolder?: string;
 	sheets?: Array<IXLSXSpecSheet>;
 	error?: boolean;
 }
@@ -47,7 +73,6 @@ interface IXLSXDataSheet extends Sheet {
 interface IXLSXData {
 	sheets: Array<IXLSXDataSheet>;
 }
-
 
 function convertToTsv(filename: string, options: IXLSXExtractOptions, cb: (err: Error | null, tsv?: string) => void) {
 	const file = tmp.fileSync();
@@ -95,12 +120,15 @@ function readFile(filename: string, options: IXLSXExtractOptions, cb: (err: Erro
 		});
 }
 
-function compareSheet(specsheet: IXLSXSpecSheet, sheet?: IXLSXDataSheet) {
+function compareSheet(filename: string, specsheet: IXLSXSpecSheet, sheet?: IXLSXDataSheet) {
 	should().exist(sheet);
 	if (!sheet) {
 		return;
 	}
 	expect(sheet).excluding(['rows']).to.deep.equal(specsheet, 'Sheets not equal');
+	if (sheet.rows.length !== (specsheet.rows ? specsheet.rows.length : 0)) {
+		console.log(sheet, specsheet);
+	}
 	assert.equal(sheet.rows.length, specsheet.rows ? specsheet.rows.length : 0, 'Invalid sheet row count');
 	if (!specsheet.rows) {
 		return;
@@ -108,12 +136,20 @@ function compareSheet(specsheet: IXLSXSpecSheet, sheet?: IXLSXDataSheet) {
 	specsheet.rows.forEach((specrow, index) => {
 		const sheetrow = sheet.rows[index].cells.map((cell: Cell) => {
 			const def: IXLSXSpecCell = {};
+			const fmt = cell.getEffectiveNumFormat();
+			if (fmt) {
+				def.fmt = fmt.fmt;
+				def.fmt_typ = fmt.fmt_type;
+			}
+			if (cell.typ) {
+				def.typ = cell.typ;
+			}
 			if (cell.raw) {
 				def.raw = cell.raw;
 			}
-			if (cell.val !== cell.raw) {
+			if (cell.raw && cell.val !== cell.raw) {
 				def.val = cell.val;
-				if (util.types.isDate(def.val)) {
+				if (isValidDate(def.val)) {
 					def.val = def.val.toISOString();
 				}
 			}
@@ -121,100 +157,246 @@ function compareSheet(specsheet: IXLSXSpecSheet, sheet?: IXLSXDataSheet) {
 		});
 		expect(sheetrow).to.deep.equal(specrow, 'Row not equal');
 	});
-	// console.log(JSON.stringify(
-	// 	row.cells.map((cell: Cell) => {
-	// 		return {raw: cell.raw, val: cell.val !== cell.raw ? cell.val : undefined};
-	// 	})
-	// ));
-
 }
 
-function compareSpec(xlsx: IXLSXData, spec: IXLSXSpec) {
+function toSpec(xlsx: IXLSXData, filename: string) {
+	if (fs.existsSync(filename + '.spec.json')) {
+		return;
+	}
+	const spec = {
+		description: 'must be manually compared',
+		sheets: xlsx.sheets.map(sheet => {
+			return {
+				'name': sheet.name,
+				'nr': sheet.nr,
+				'id': sheet.id,
+				'rid': sheet.rid,
+				'rows': sheet.rows.map(r => {
+					return r.cells.map((cell: Cell) => {
+						const def: IXLSXSpecCell = {};
+						const fmt = cell.getEffectiveNumFormat();
+						if (fmt) {
+							def.fmt = fmt.fmt;
+							def.fmt_typ = fmt.fmt_type;
+						}
+						if (cell.typ) {
+							def.typ = cell.typ;
+						}
+						if (cell.raw) {
+							def.raw = cell.raw;
+						}
+						if (cell.raw && cell.val !== cell.raw) {
+							def.val = cell.val;
+							if (util.types.isDate(def.val)) {
+								if (isValidDate(cell.val)) {
+									def.val = cell.val.toISOString();
+								} else {
+									def.val = cell.val.toString();
+								}
+							}
+						}
+						return def;
+					});
+				})
+			};
+		})
+	};
+
+	const compact = JSON.stringify(spec).replace(/\],\[/g, '],\n\t\t\t[')
+		.replace(/"sheets":\[{/g, '\n\t"sheets": [\n\t{\n\t\t')
+		.replace(/"rows":\[/g, '\n\t\t"rows": [\n\t\t\t')
+		.replace(/}\]\]},/g, '}]\n\t\t]\n\t},\n\t')
+		.replace(/{"name"/g, '{\n\t\t"name"')
+		.replace(/\]\]}\]}/g, ']\n\t\t]\n\t}\n\t]\n}')
+	;
+	fs.writeFileSync(filename + '.spec.json', compact);
+}
+
+function compareSpec(filename: string, xlsx: IXLSXData, spec: IXLSXSpec) {
 	const specsheets = (spec.sheets || []);
 	assert.equal(xlsx.sheets.length, specsheets.length, 'Invalid sheet count');
 	specsheets.forEach((specsheet) => {
-		compareSheet(specsheet, xlsx.sheets.find(s => s.nr === specsheet.nr));
+		compareSheet(filename, specsheet, xlsx.sheets.find(s => s.nr === specsheet.nr));
 	});
 }
 
-function compareSingleSpec(xlsx: IXLSXData, specsheet: IXLSXSpecSheet) {
+function compareSingleSpec(filename: string, xlsx: IXLSXData, specsheet: IXLSXSpecSheet) {
 	assert.equal(xlsx.sheets.length, 1, 'Invalid sheet count, should be 1');
-	compareSheet(specsheet, xlsx.sheets[0]);
+	compareSheet(filename, specsheet, xlsx.sheets[0]);
 }
 
 function defToTSV(specSheet: IXLSXSpecSheet, options: IXLSXExtractOptions) {
 	return (specSheet.rows || []).map(row => {
 		return row.map(cell => {
-			return cell.val !== undefined ? cell.val : cell.raw;
+			if (cell.typ === 'b') {
+				return cell.val ? 'true' : 'false';
+			}
+			return escapeTSV((cell.val || cell.raw || '').toString(), options);
 		}).join(options.tsv_delimiter);
-	}).join(options.tsv_endofline) + options.tsv_endofline;
+	}).join(options.tsv_endofline) + ((specSheet.rows || []).length > 0 ? options.tsv_endofline : '');
+}
+
+function compareSheetToXSLXJS(sourcefile: string, sheet: IXLSXDataSheet, workSheet: WorkSheet) {
+	sheet.rows.forEach(row => {
+		row.cells.forEach(cell => {
+			if (cell.address) {
+				const compare = workSheet[cell.address || ''];
+				if (cell.raw) {
+					should().exist(compare, sheet.name + ' - Cell not found: ' + JSON.stringify(cell));
+					if (!compare) {
+						return;
+					}
+					if (cell.typ === 'd') {
+						// assert.equal(parseFloat(cell.raw), compare.v, 'Invalid cell date value ' + JSON.stringify({cell, compare}));
+					} else if (cell.typ === 'e') {
+						assert.equal(cell.val, compare.w, 'Invalid cell error value ' + JSON.stringify({cell, compare}));
+					} else if (cell.typ === 'n') {
+						const fmt = cell.getEffectiveNumFormat();
+						if (cell.fmt && fmt) {
+							assert.equal(parseFloat(cell.raw), compare.v, 'Invalid cell formatted number value ' + JSON.stringify({cell, compare}));
+						} else {
+							assert.equal(cell.val, compare.v, 'Invalid cell number value ' + JSON.stringify({cell, compare}));
+						}
+					} else {
+						if (typeof compare.v === 'string') {
+							assert.equal(cell.val, compare.v.replace(/\r\n/g, '\n'), 'Invalid cell value ' + JSON.stringify({cell, compare}));
+						} else {
+							assert.equal(cell.val, compare.v, 'Invalid cell value ' + JSON.stringify({cell, compare}));
+						}
+					}
+				}
+			}
+		});
+	});
+}
+
+function compareToXSLXJS(sourcefile: string, xlsx: IXLSXData) {
+
+	const xjs = XLSXJS.readFile(sourcefile, {});
+	should().exist(xjs.Workbook);
+	if (!xjs.Workbook) {
+		return;
+	}
+	const sheets = <any>(xjs.Workbook.Sheets || []);
+	assert.equal(xlsx.sheets.length, sheets.length, 'Invalid sheet count');
+	xlsx.sheets.forEach(sheet => {
+		const wbs = sheets.find((s: any) => s.sheetId === sheet.id);
+		should().exist(wbs);
+		if (!wbs) {
+			return;
+		}
+		assert.equal(sheet.id, wbs.sheetId, 'Invalid sheet id');
+		assert.equal(sheet.rid, wbs.id, 'Invalid sheet rid');
+		assert.equal(sheet.name, wbs.name, 'Invalid sheet name');
+		// fs.writeFileSync('test.json',
+		// 	JSON.stringify(xjs.Sheets, null, '\t')
+		// );
+		compareSheetToXSLXJS(sourcefile, sheet, xjs.Sheets[sheet.name || '']);
+	});
 }
 
 describe('xlsx', function() {
 	this.timeout(10000);
-	parsers.forEach(parser => {
-		describe(parser, () => {
-			testfiles.forEach(testfile => {
-				const sourcefile = path.join(__dirname, 'data', testfile);
-				const spec: IXLSXSpec = JSON.parse(fs.readFileSync(sourcefile + '.spec.json').toString());
-				if (spec.error) {
-					describe(spec.description + ' - ' + testfile, () => {
+	testfiles.forEach(testfile => {
+		const sourcefile = path.join(__dirname, testfile);
+		if (!fs.existsSync(sourcefile + '.spec.json')) {
+			readFile(sourcefile, {sheet_all: true}, (err, xlsx) => {
+				if (err || !xlsx) {
+					return;
+				}
+				toSpec(xlsx, sourcefile);
+			});
+			return;
+		}
+		const spec: IXLSXSpec = JSON.parse(fs.readFileSync(sourcefile + '.spec.json').toString());
+		const workfolder: string | undefined = spec.workfolder;
+		if (spec.error) {
+			describe(spec.description + ' - ' + testfile, () => {
+				parsers.forEach(parser => {
+					describe(parser, () => {
 						it('should fail according to spec', done => {
-							readFile(sourcefile, {sheet_all: true, parser}, (err, xlsx) => {
+							readFile(sourcefile, {sheet_all: true, parser, workfolder}, (err, xlsx) => {
 								should().exist(err);
 								done();
 							});
 						});
 					});
-				} else {
-					describe(spec.description + ' - ' + testfile, () => {
-						it('should read and compare according to spec', done => {
-							readFile(sourcefile, {sheet_all: true, parser}, (err, xlsx) => {
+				});
+			});
+		} else {
+			describe(spec.description + ' - ' + testfile, () => {
+				parsers.forEach(parser => {
+					describe(parser, () => {
+
+						it('should read and compare with xlsx-js', done => {
+							readFile(sourcefile, {sheet_all: true, parser, workfolder}, (err, xlsx) => {
 								should().not.exist(err);
 								should().exist(xlsx);
 								if (!xlsx) {
 									return done();
 								}
-								compareSpec(xlsx, spec);
+								compareToXSLXJS(sourcefile, xlsx);
+								done();
+							});
+						});
+						it('should read and compare according to spec', done => {
+							readFile(sourcefile, {sheet_all: true, parser, workfolder}, (err, xlsx) => {
+								should().not.exist(err);
+								should().exist(xlsx);
+								if (!xlsx) {
+									return done();
+								}
+								compareSpec(sourcefile, xlsx, spec);
 								done();
 							});
 						});
 						(spec.sheets || []).forEach(specSheet => {
 							it('should read the sheet ' + specSheet.nr + ' by number: ' + specSheet.nr, done => {
-								readFile(sourcefile, {sheet_nr: specSheet.nr, parser}, (err, xlsx) => {
+								readFile(sourcefile, {sheet_nr: specSheet.nr, parser, workfolder}, (err, xlsx) => {
 									should().not.exist(err);
 									should().exist(xlsx);
 									if (!xlsx) {
 										return done();
 									}
-									compareSingleSpec(xlsx, specSheet);
+									compareSingleSpec(sourcefile, xlsx, specSheet);
 									done();
 								});
 							});
 							it('should read the sheet ' + specSheet.nr + ' by name: ' + specSheet.name, done => {
-								readFile(sourcefile, {sheet_name: specSheet.name, parser}, (err, xlsx) => {
+								readFile(sourcefile, {sheet_name: specSheet.name, parser, workfolder}, (err, xlsx) => {
 									should().not.exist(err);
 									should().exist(xlsx);
 									if (!xlsx) {
 										return done();
 									}
-									compareSingleSpec(xlsx, specSheet);
+									compareSingleSpec(sourcefile, xlsx, specSheet);
 									done();
 								});
 							});
-							it('should read the sheet ' + specSheet.nr + ' by id: ' + specSheet.rid, done => {
-								readFile(sourcefile, {sheet_id: specSheet.rid, parser}, (err, xlsx) => {
+							it('should read the sheet ' + specSheet.nr + ' by id: ' + specSheet.id, done => {
+								readFile(sourcefile, {sheet_id: specSheet.id, parser, workfolder}, (err, xlsx) => {
 									should().not.exist(err);
 									should().exist(xlsx);
 									if (!xlsx) {
 										return done();
 									}
-									compareSingleSpec(xlsx, specSheet);
+									compareSingleSpec(sourcefile, xlsx, specSheet);
+									done();
+								});
+							});
+							it('should read the sheet ' + specSheet.nr + ' by rid: ' + specSheet.rid, done => {
+								readFile(sourcefile, {sheet_rid: specSheet.rid, parser, workfolder}, (err, xlsx) => {
+									should().not.exist(err);
+									should().exist(xlsx);
+									if (!xlsx) {
+										return done();
+									}
+									compareSingleSpec(sourcefile, xlsx, specSheet);
 									done();
 								});
 							});
 							it('should read the sheet ' + specSheet.nr + ' ignoring the first line', done => {
-								readFile(sourcefile, {sheet_id: specSheet.rid, ignore_header: 1, parser}, (err, xlsx) => {
+								readFile(sourcefile, {sheet_rid: specSheet.rid, ignore_header: 1, parser, workfolder}, (err, xlsx) => {
 									should().not.exist(err);
 									should().exist(xlsx);
 									if (!xlsx) {
@@ -223,15 +405,16 @@ describe('xlsx', function() {
 									const specSheetLimited: IXLSXSpecSheet = {
 										nr: specSheet.nr,
 										name: specSheet.name,
+										id: specSheet.id,
 										rid: specSheet.rid,
 										rows: specSheet.rows ? specSheet.rows.slice(1) : []
 									};
-									compareSingleSpec(xlsx, specSheetLimited);
+									compareSingleSpec(sourcefile, xlsx, specSheetLimited);
 									done();
 								});
 							});
 							it('should read the sheet ' + specSheet.nr + ' ignoring the two lines', done => {
-								readFile(sourcefile, {sheet_id: specSheet.rid, ignore_header: 2, parser}, (err, xlsx) => {
+								readFile(sourcefile, {sheet_rid: specSheet.rid, ignore_header: 2, parser, workfolder}, (err, xlsx) => {
 									should().not.exist(err);
 									should().exist(xlsx);
 									if (!xlsx) {
@@ -240,15 +423,16 @@ describe('xlsx', function() {
 									const specSheetLimited: IXLSXSpecSheet = {
 										nr: specSheet.nr,
 										name: specSheet.name,
+										id: specSheet.id,
 										rid: specSheet.rid,
 										rows: specSheet.rows ? specSheet.rows.slice(2) : []
 									};
-									compareSingleSpec(xlsx, specSheetLimited);
+									compareSingleSpec(sourcefile, xlsx, specSheetLimited);
 									done();
 								});
 							});
 							it('should read the sheet ' + specSheet.nr + ' with empty rows filtered', done => {
-								readFile(sourcefile, {sheet_id: specSheet.rid, include_empty_rows: false, parser}, (err, xlsx) => {
+								readFile(sourcefile, {sheet_rid: specSheet.rid, include_empty_rows: false, parser, workfolder}, (err, xlsx) => {
 									should().not.exist(err);
 									should().exist(xlsx);
 									if (!xlsx) {
@@ -257,15 +441,16 @@ describe('xlsx', function() {
 									const specSheetLimited: IXLSXSpecSheet = {
 										nr: specSheet.nr,
 										name: specSheet.name,
+										id: specSheet.id,
 										rid: specSheet.rid,
 										rows: specSheet.rows ? specSheet.rows.filter(r => r.length > 0) : []
 									};
-									compareSingleSpec(xlsx, specSheetLimited);
+									compareSingleSpec(sourcefile, xlsx, specSheetLimited);
 									done();
 								});
 							});
 							it('should read the sheet ' + specSheet.nr + ' ignoring the first line and empty rows filtered', done => {
-								readFile(sourcefile, {sheet_id: specSheet.rid, ignore_header: 1, include_empty_rows: false, parser}, (err, xlsx) => {
+								readFile(sourcefile, {sheet_rid: specSheet.rid, ignore_header: 1, include_empty_rows: false, parser, workfolder}, (err, xlsx) => {
 									should().not.exist(err);
 									should().exist(xlsx);
 									if (!xlsx) {
@@ -274,15 +459,16 @@ describe('xlsx', function() {
 									const specSheetLimited: IXLSXSpecSheet = {
 										nr: specSheet.nr,
 										name: specSheet.name,
+										id: specSheet.id,
 										rid: specSheet.rid,
 										rows: specSheet.rows ? specSheet.rows.filter(r => r.length > 0).slice(1) : []
 									};
-									compareSingleSpec(xlsx, specSheetLimited);
+									compareSingleSpec(sourcefile, xlsx, specSheetLimited);
 									done();
 								});
 							});
 							it('should read the sheet ' + specSheet.nr + ' ignoring the first two lines and empty rows filtered', done => {
-								readFile(sourcefile, {sheet_id: specSheet.rid, ignore_header: 2, include_empty_rows: false, parser}, (err, xlsx) => {
+								readFile(sourcefile, {sheet_rid: specSheet.rid, ignore_header: 2, include_empty_rows: false, parser, workfolder}, (err, xlsx) => {
 									should().not.exist(err);
 									should().exist(xlsx);
 									if (!xlsx) {
@@ -291,18 +477,19 @@ describe('xlsx', function() {
 									const specSheetLimited: IXLSXSpecSheet = {
 										nr: specSheet.nr,
 										name: specSheet.name,
+										id: specSheet.id,
 										rid: specSheet.rid,
 										rows: specSheet.rows ? specSheet.rows.filter(r => r.length > 0).slice(2) : []
 									};
-									compareSingleSpec(xlsx, specSheetLimited);
+									compareSingleSpec(sourcefile, xlsx, specSheetLimited);
 									done();
 								});
 							});
 							it('should convert to tsv', done => {
 								const options: IXLSXExtractOptions = {
-									sheet_id: specSheet.rid, include_empty_rows: true,
+									sheet_rid: specSheet.rid, include_empty_rows: true,
 									tsv_delimiter: '\t', tsv_endofline: '\n', tsv_float_comma: false,
-									parser
+									parser, workfolder
 								};
 								convertToTsv(sourcefile, options, (err, tsv) => {
 									should().not.exist(err);
@@ -313,11 +500,9 @@ describe('xlsx', function() {
 							});
 
 						});
-
 					});
-				}
+				});
 			});
-		});
+		}
 	});
-
 });

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /* vim: set ts=2: */
-var XLSX = require('../dist/lib/index').XLSX,
+var XLSX = require('../lib/index').XLSX,
 	fs = require('fs'),
 	program = require('commander');
 	pack = require('../package.json');

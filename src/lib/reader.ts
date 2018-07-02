@@ -13,10 +13,12 @@ import {applyDefaults} from './defaults';
 export class XLSXReader {
 	filename: string;
 	options: IXLSXExtractOptions = {};
+	workfolder: string;
 
 	constructor(filename: string, options?: IXLSXExtractOptions) {
 		this.filename = filename;
 		this.options = applyDefaults(options);
+		this.workfolder = this.options.workfolder || 'xl';
 	}
 
 	private createParser(): ISaxParser {
@@ -31,6 +33,7 @@ export class XLSXReader {
 		 converts cell value according to the cell type & number format
 		 */
 		let addvalue = false;
+		let addformular = false;
 		let row: Row;
 		let rownum = 1;
 		let cell: Cell;
@@ -66,17 +69,23 @@ export class XLSXReader {
 					addvalue = true;
 				} else if (name === 't') { // support for inline text <c t="inlineStr"><is><t>Product</t></is></c>
 					addvalue = true;
+				} else if (name === 'f') {
+					addformular = true;
 				}
 			})
 			.onEndElement((name) => {
 				if (name === 'row') {
 					if (row) {
-						emit(row);
+						if (row.cells.length > 0 || this.options.include_empty_rows) {
+							emit(row);
+						}
 					}
 				} else if (name === 'v') {
 					addvalue = false;
 				} else if (name === 't') {
 					addvalue = false;
+				} else if (name === 'f') {
+					addformular = false;
 				} else if (name === 'c') {
 					addvalue = false;
 					if (cell.col !== undefined && cell.col >= 0) {
@@ -95,6 +104,9 @@ export class XLSXReader {
 				if (addvalue) {
 					cell.val = (cell.val ? cell.val : '') + txt;
 				}
+				if (addformular) {
+					cell.formular = (cell.formular ? cell.formular : '') + txt;
+				}
 			})
 			.onClose(cb);
 		entry.pipe(sax.piper());
@@ -107,7 +119,8 @@ export class XLSXReader {
 				if (name === 'sheet') {
 					const sheet = new Sheet();
 					sheet.rid = attrs['r:id'] || '';
-					sheet.nr = attrs.sheetid;
+					sheet.id = attrs.sheetid;
+					sheet.nr = (sheets.length + 1).toString();
 					sheet.name = attrs.name;
 					sheets.push(sheet);
 				}
@@ -199,7 +212,7 @@ export class XLSXReader {
 			})
 			.onText((txt) => {
 				if (collect_strings) {
-					s = s + txt;
+					s = s + txt.replace(/\r\n/g, '\n');
 				}
 			})
 			.onClose((err) => {
@@ -214,7 +227,7 @@ export class XLSXReader {
 			workbook.sheets.forEach(s => {
 				const rel = workbook.relations.find(r => r.sheetid === s.rid);
 				if (rel) {
-					result.push({sheet: s, filename: 'xl/' + rel.filename});
+					result.push({sheet: s, filename: this.workfolder + '/' + rel.filename});
 				}
 			});
 			return result;
@@ -222,24 +235,23 @@ export class XLSXReader {
 		let sheet: Sheet | undefined;
 		if (this.options.sheet_name) {
 			sheet = workbook.getByName(this.options.sheet_name);
+		} else if (this.options.sheet_rid) {
+			sheet = workbook.getByRId(this.options.sheet_rid.toString());
 		} else if (this.options.sheet_id) {
-			let sheet_id = this.options.sheet_id.toString();
-			if (sheet_id.indexOf('rId') < 0) {
-				sheet_id = 'rId' + sheet_id;
-			}
+			const sheet_id = this.options.sheet_id.toString();
 			sheet = workbook.getById(sheet_id);
 		} else {
 			const sheet_nr = this.options.sheet_nr || '1';
 			sheet = workbook.getByNr(sheet_nr);
 			if (!sheet) {
-				result.push({filename: 'xl/worksheets/sheet' + sheet_nr + '.xml'});
+				result.push({filename: this.workfolder + '/worksheets/sheet' + sheet_nr + '.xml'});
 			}
 		}
 		if (sheet) {
 			const sheetId = sheet.rid;
 			const rel = workbook.relations.find(r => r.sheetid === sheetId);
 			if (rel) {
-				result.push({sheet, filename: 'xl/' + rel.filename});
+				result.push({sheet, filename: this.workfolder + '/' + rel.filename});
 			}
 		}
 		return result;
@@ -318,25 +330,25 @@ export class XLSXReader {
 				emit({});
 			})
 			.on('entry', (entry: unzip.ZipEntry) => {
-				if (entry.path === 'xl/sharedStrings.xml') {
+				if (entry.path === this.workfolder + '/sharedStrings.xml') {
 					collecting++;
 					this.parseXMLStrings(entry, (err, strings) => {
 						workbook.sharedStrings = strings;
 						checkStartParseSheet();
 					});
-				} else if (entry.path === 'xl/styles.xml') {
+				} else if (entry.path === this.workfolder + '/styles.xml') {
 					collecting++;
 					this.parseXMLStyles(entry, (err, formatstyles) => {
 						workbook.styles = formatstyles;
 						checkStartParseSheet();
 					});
-				} else if (entry.path === 'xl/workbook.xml') {
+				} else if (entry.path === this.workfolder + '/workbook.xml') {
 					collecting++;
 					this.parseXMLWorkbookSheets(entry, (err, sheets) => {
 						workbook.sheets = sheets;
 						checkStartParseSheet();
 					});
-				} else if (entry.path === 'xl/_rels/workbook.xml.rels') {
+				} else if (entry.path === this.workfolder + '/_rels/workbook.xml.rels') {
 					collecting++;
 					this.parseXMLWorkbookRelations(entry, (err, relations) => {
 						workbook.relations = relations;

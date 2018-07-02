@@ -1,77 +1,10 @@
-{
-  "description": "Inline Strings",
-  "sheets": [
-    {
-      "rid": "rId4",
-      "nr": "1",
-      "name": "data",
-      "rows": [
-        [
-          {
-            "raw": "Product"
-          },
-          {
-            "raw": "Advertiser"
-          },
-          {
-            "raw": "Campaign"
-          },
-          {
-            "raw": "Origin"
-          },
-          {
-            "raw": "Site"
-          },
-          {
-            "raw": "Region"
-          },
-          {
-            "raw": "Market"
-          },
-          {
-            "raw": "Keyword"
-          },
-          {
-            "raw": "Department"
-          },
-          {
-            "raw": "Target"
-          },
-          {
-            "raw": "Partition"
-          },
-          {
-            "raw": "Start Date"
-          },
-          {
-            "raw": "Post Date"
-          },
-          {
-            "raw": "Creative"
-          },
-          {
-            "raw": "Tracking Number"
-          },
-          {
-            "raw": "Spend"
-          },
-          {
-            "raw": "GRP"
-          },
-          {
-            "raw": "Rate"
-          },
-          {
-            "raw": "Clicks"
-          },
-          {
-            "raw": "Impressions"
-          },
-          {
-            "raw": "Conversions"
-          }
-        ]
-      ]
-    }
-  ]
+{"description":"Inline Strings",
+	"sheets": [
+	{
+		"name":"data","nr":"1","id":"1","rid":"rId4",
+		"rows": [
+			[{"typ":"inlineStr","raw":"Product"},{"typ":"inlineStr","raw":"Advertiser"},{"typ":"inlineStr","raw":"Campaign"},{"typ":"inlineStr","raw":"Origin"},{"typ":"inlineStr","raw":"Site"},{"typ":"inlineStr","raw":"Region"},{"typ":"inlineStr","raw":"Market"},{"typ":"inlineStr","raw":"Keyword"},{"typ":"inlineStr","raw":"Department"},{"typ":"inlineStr","raw":"Target"},{"typ":"inlineStr","raw":"Partition"},{"typ":"inlineStr","raw":"Start Date"},{"typ":"inlineStr","raw":"Post Date"},{"typ":"inlineStr","raw":"Creative"},{"typ":"inlineStr","raw":"Tracking Number"},{"typ":"inlineStr","raw":"Spend"},{"typ":"inlineStr","raw":"GRP"},{"typ":"inlineStr","raw":"Rate"},{"typ":"inlineStr","raw":"Clicks"},{"typ":"inlineStr","raw":"Impressions"},{"typ":"inlineStr","raw":"Conversions"}]
+		]
+	}
+	]
 }

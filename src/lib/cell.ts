@@ -1,5 +1,4 @@
-import util from 'util';
-import {xlsx_date} from './utils';
+import {escapeTSV, isValidDate, unescapexml, xlsx_date} from './utils';
 import {IXLSXExtractOptions} from '../types';
 
 export interface ICellFormat {
@@ -25,6 +24,7 @@ export class Cell {
 	address?: string;
 	typ?: string;
 	fmt?: ICellFormatStyle;
+	formular?: string;
 	raw?: string;
 
 	getFormat(options: IXLSXExtractOptions) {
@@ -43,26 +43,17 @@ export class Cell {
 
 	toTSV(options: IXLSXExtractOptions): string | undefined {
 		let val: string;
-
-		const delimiter = options.tsv_delimiter || '\t';
-
-		if (this.val === null || this.val === undefined) {
+		if (this.val === null || this.val === undefined || this.raw === undefined) {
 			val = '';
-		} else if (util.types.isDate(this.val)) {
+		} else if (isValidDate(this.val)) {
 			val = this.val.toISOString();
 		} else {
 			val = this.val.toString();
 		}
-
 		if (options.tsv_float_comma && (typeof this.val === 'number')) {
 			val = val.replace('.', ',');
 		}
-
-		if (val.indexOf('"') > -1 || val.indexOf('\n') > -1 || val.indexOf('\r') > -1 || val.indexOf(delimiter) > -1) {
-			val = '"' + val.replace(/"/g, '""') + '"';
-		}
-
-		return val;
+		return escapeTSV(val, options);
 	}
 
 	toJson() {
@@ -140,8 +131,12 @@ export class Cell {
 						this.applyNumFormat(options);
 					}
 					break;
-				case 's':
 				case 'str':
+					if (this.raw) {
+						this.val = unescapexml(this.raw);
+					}
+					break;
+				case 's':
 				case 'inlineStr':
 					break; // string, do nothing
 				case 'b':

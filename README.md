@@ -3,12 +3,13 @@
 extracts data from XLSX files with low memory footprint
 
 
-xlsx-files can get pretty large, so nodejs & full featured xlsx-modules can reach memory limits or just use more than is needed for that task. (--max-old-space-size & --stack_size can't help you all the time either)
+xlsx-files can get pretty big, so nodejs & full featured xlsx-modules can reach memory limits or just use more than is needed for that task. (--max-old-space-size & --stack_size can't help you all the time either)
 
 hence these magnificent features:
 
-- filestreams are piped & xml is parsed with sax parser `node-expat`
+- files are parsed with sax parser `sax` or `node-expat`
 - get rows/cells each by callback or write them to a .tsv or .json file
+
 
 [![NPM](https://nodei.co/npm/xlsx-extract.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/xlsx-extract/)
 
@@ -24,6 +25,50 @@ hence these magnificent features:
 
 ```
 npm install xlsx-extract
+```
+
+The XML files of the format are parsed with [sax-js]()https://github.com/isaacs/sax-js). 
+If you want to use the faster [node-expat](https://github.com/astro/node-expat) parser please install it manually. (Needs compiling on the destination system)
+
+```
+npm install node node-expat
+```
+
+
+## Options
+
+```
+
+interface IXLSXExtractOptions {
+	// sheet selection (provide one of the following)
+	sheet_name?: string; // select by sheet name
+	sheet_nr?: string; // default "1" - select by number of the sheet starting on 1
+	sheet_id?: string; // select by sheet id, e.g. "1"
+	sheet_rid?: string; // select by internal sheet rid, e.g. "rId1'
+	sheet_all?: boolean; // default false - select all sheets
+	// sax parser selection
+	parser?: string; // default "sax" - 'sax'|'expat'
+	// row selection
+	ignore_header?: number; // default 0 - the number of header lines to ignore
+	include_empty_rows?: boolean; // default false - include empty rows in the middle/at start
+	// how to output sheet, rows and cells
+	format?: string; // default array - convert to 'array'||'json'||'tsv'||'obj'
+	// tsv output options
+	tsv_float_comma?: boolean; // default false - use "," als decimal point for floats
+	tsv_delimiter?: string; // default '\t' - use specified character to field delimiter
+	tsv_endofline?: string; // default depending on your operating system (node os.EOL) e.g. '\n'
+	// cell value formats
+	raw_values?: boolean;  // default false - do not apply cell formats (get values as string as in xlsx)
+	round_floats?: boolean; // default true - round float values as the cell format defines (values will be reported as parsed floats otherwise)
+	date1904?: boolean;   // default false - use date 1904 conversion
+	convert_values?: { // apply cell number formats or not (values will be reported as strings otherwise)
+		ints?: boolean;  // rounds to int if number format is for int
+		floats?: boolean;  // rounds floats according to float number format
+		dates?: boolean;  // converts xlsx date to js date
+		bools?: boolean; // converts xlsx bool to js boolean
+	};
+}
+
 ```
 
 ## Convenience API
@@ -86,29 +131,6 @@ npm install xlsx-extract
 			console.log('written');
 		})
 
-
-	demo_options = {
-        //choose sheet by
-        sheet_nr: "1", // default 1 - the number of the sheet starting on 1
-        sheet_id: "rId1", // the internal sheet id
-        sheet_name: 'My Sheet', // the sheet name
-
-        ignore_header: 0,  // default 0 - the number of header lines to ignore
-        include_empty_rows: false,  // default false - include empty rows in the middle/at start
-        date1904: false,    // default false - use date 1904 conversion
-        tsv_float_comma: false,  // default false - use "," als decimal point for floats
-        tsv_delimiter: '\t',  // default '\t' - use specified character to field delimiter
-        tsv_endofline: '\n',  // default depending on your operating system (node os.EOL)
-        format: '',     // default array - convert to 'array'||'json'||'tsv'||'obj'
-        raw_values: false,   // default false - do not apply cell formats (get values as string as in xlsx)
-        round_floats: true,  // default true - round float values as the cell format defines (values will be reported as parsed floats otherwise)
-        convert_values: { // apply cell number formats or not (values will be reported as strings otherwise)
-              ints: true,  // rounds to int if number format is for int
-              floats: true,  // rounds floats according to float number format
-              dates: true,   // converts xlsx date to js date
-              bools: true   // converts xlsx bool to js boolean
-        }
-     };
 
 
 ```

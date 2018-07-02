@@ -1,4 +1,5 @@
 import {ICellFormat} from './cell';
+import {IXLSXExtractOptions} from '../types';
 
 /**
  converts a raw xlsx-date to js date
@@ -199,3 +200,38 @@ export function getColumnFromDef(colDef: string): number {
 	return alphaNum(cc);
 }
 
+export function isValidDate(d: any): boolean {
+	return d instanceof Date && !isNaN(d.getTime());
+}
+
+export function escapeTSV(val: string, options: IXLSXExtractOptions): string {
+	const delimiter = options.tsv_delimiter || '\t';
+	if (val && val.indexOf('"') > -1 || val.indexOf('\n') > -1 || val.indexOf('\r') > -1 || val.indexOf(delimiter) > -1) {
+		val = '"' + val.replace(/"/g, '""') + '"';
+	}
+	return val;
+}
+
+export function unescapexml(text: string): string {
+	const encregex = /&(?:quot|apos|gt|lt|amp|#x?([\da-fA-F]+));/g
+	const coderegex = /_x([\da-fA-F]{4})_/g;
+	const encodings: { [key: string]: string } = {
+		'&quot;': '"',
+		'&apos;': '\'',
+		'&gt;': '>',
+		'&lt;': '<',
+		'&amp;': '&'
+	};
+	const s = text + '';
+	const i = s.indexOf('<![CDATA[');
+	if (i === -1) {
+		return s.replace(encregex, function($$, $1) {
+			return encodings[$$] || String.fromCharCode(parseInt($1, $$.indexOf('x') > -1 ? 16 : 10)) || $$;
+		}).replace(coderegex, function(m, c) {
+			return String.fromCharCode(parseInt(c, 16));
+		});
+	}
+	const j = s.indexOf(']]>');
+	return unescapexml(s.slice(0, i)) + s.slice(i + 9, j) + unescapexml(s.slice(j + 3));
+
+}

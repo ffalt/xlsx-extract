@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "outDir": "dist/lib",
+    "outDir": "lib",
     "sourceMap": true,
     "declaration": true,
     "strict": true,
