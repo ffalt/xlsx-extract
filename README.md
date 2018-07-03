@@ -27,11 +27,11 @@ hence these magnificent features:
 npm install xlsx-extract
 ```
 
-The XML files of the format are parsed with [sax-js]()https://github.com/isaacs/sax-js). 
-If you want to use the faster [node-expat](https://github.com/astro/node-expat) parser please install it manually. (Needs compiling on the destination system)
+The XML files of the format are parsed with [sax-js](https://github.com/isaacs/sax-js) by default. 
 
+If you want to use the faster [node-expat](https://github.com/astro/node-expat) parser please install it manually and use the {parser:"expat"} option. (Needs native compiling on the destination system)
 ```
-npm install node node-expat
+npm install node-expat
 ```
 
 
@@ -67,7 +67,11 @@ interface IXLSXExtractOptions {
 		dates?: boolean;  // converts xlsx date to js date
 		bools?: boolean; // converts xlsx bool to js boolean
 	};
+	// xlsx structure options
+	workfolder?: string; // default 'xl' - the workbook subfolder in zip structure
 }
+
+
 
 ```
 

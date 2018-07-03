@@ -1,6 +1,6 @@
 {
   "name": "xlsx-extract",
-  "version": "0.0.21",
+  "version": "0.1.0",
   "license": "MIT",
   "description": "super-simple async XLSX reader with low memory footprint",
   "homepage": "https://github.com/ffalt/xlsx-extract",
@@ -12,9 +12,9 @@
     "spreadsheet"
   ],
   "scripts": {
-    "clean": "shx rm -rf dist",
-    "build": "npm run clean && npm run build:plain && npm run build:esm && npm run build:single",
-    "build:plain": "tsc",
+    "clean": "rimraf dist",
+    "build": "npm run clean && npm run build:commonjs && npm run build:esm && npm run build:single",
+    "build:commonjs": "tsc",
     "build:esm": "tsc -m es6 --outDir dist/lib-esm",
     "build:single": "webpack --mode production",
     "cover": "nyc npm run test",
@@ -44,7 +44,7 @@
     "mocha-typescript": "^1.1.16",
     "node-expat": "^2.3.16",
     "nyc": "^12.0.2",
-    "shx": "^0.3.1",
+    "rimraf": "^2.6.2",
     "source-map-support": "^0.5.6",
     "tmp": "0.0.33",
     "ts-node": "^6.1.1",
@@ -84,8 +84,8 @@
     }
   ],
   "bin": "./bin/xlsxe.js",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "dist/lib/index.js",
+  "types": "dist/lib/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/ffalt/xlsx-extract"
