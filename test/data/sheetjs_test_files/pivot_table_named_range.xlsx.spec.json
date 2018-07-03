@@ -1,0 +1,78 @@
+{"description":"Pivot",
+	"sheets": [
+	{
+		"name":"PTRange","nr":"4","id":"4","rid":"rId4",
+		"rows": [
+			[{"typ":"s","raw":"Foo"},{"typ":"s","raw":"(All)"}],
+			[{"typ":"s","raw":"Bar"},{"typ":"s","raw":"(Multiple Items)"}],
+			[],
+			[{"typ":"s","raw":"Count of Quux"},{"typ":"s","raw":"Column Labels"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"s","raw":"Row Labels"},{"typ":"n"},{"typ":"s","raw":"buzz"},{"typ":"s","raw":"Grand Total"}],
+			[{"typ":"s","raw":"Group1"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"n","raw":"0.9","val":0.9},{"typ":"n","raw":"1.5","val":1.5},{"typ":"n","raw":"1","val":1}],
+			[{"typ":"s","raw":"fizz"},{"typ":"n","raw":"1.2","val":1.2},{"typ":"n","raw":"0","val":0},{"typ":"n","raw":"1","val":1}],
+			[{"typ":"s","raw":"Grand Total"},{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"1","val":1}]
+		]
+	},
+	{
+		"name":"PTTable","nr":"3","id":"2","rid":"rId3",
+		"rows": [
+			[],
+			[],
+			[],
+			[{"typ":"s","raw":"Count of Quux"},{"typ":"s","raw":"Column Labels"}],
+			[{"typ":"s","raw":"Row Labels"},{},{"typ":"s","raw":"buzz"},{"typ":"s","raw":"Grand Total"}],
+			[{"typ":"s","raw":"Group1"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"n","raw":"11","val":11},{"typ":"n","raw":"3","val":3},{"typ":"n","raw":"14","val":14}],
+			[{"typ":"s","raw":"fizz"},{"typ":"n","raw":"5","val":5},{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"6","val":6}],
+			[{"typ":"s","raw":"Grand Total"},{"typ":"n","raw":"16","val":16},{"typ":"n","raw":"4","val":4},{"typ":"n","raw":"20","val":20}]
+		]
+	},
+	{
+		"name":"FizzBuzzTable","nr":"2","id":"1","rid":"rId2",
+		"rows": [
+			[{"typ":"s","raw":"Foo"},{"typ":"s","raw":"Bar"},{"typ":"s","raw":"Baz"},{"typ":"s","raw":"Qux"},{"typ":"s","raw":"Quux"}],
+			[{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"2","val":2},{"typ":"str"},{"typ":"str"},{"typ":"n","raw":"1","val":1}],
+			[{"typ":"n","raw":"2","val":2},{"typ":"n","raw":"4","val":4},{"typ":"str"},{"typ":"str"},{"typ":"n","raw":"2","val":2}],
+			[{"typ":"n","raw":"3","val":3},{"typ":"n","raw":"6","val":6},{"typ":"str","raw":"fizz"},{"typ":"str"},{"typ":"str","raw":"fizz"}],
+			[{"typ":"n","raw":"4","val":4},{"typ":"n","raw":"8","val":8},{"typ":"str"},{"typ":"str"},{"typ":"n","raw":"4","val":4}],
+			[{"typ":"n","raw":"5","val":5},{"typ":"n","raw":"10","val":10},{"typ":"str"},{"typ":"str","raw":"buzz"},{"typ":"str","raw":"buzz"}],
+			[{"typ":"n","raw":"6","val":6},{"typ":"n","raw":"12","val":12},{"typ":"str","raw":"fizz"},{"typ":"str"},{"typ":"str","raw":"fizz"}],
+			[{"typ":"n","raw":"7","val":7},{"typ":"n","raw":"14","val":14},{"typ":"str"},{"typ":"str"},{"typ":"n","raw":"7","val":7}],
+			[{"typ":"n","raw":"8","val":8},{"typ":"n","raw":"16","val":16},{"typ":"str"},{"typ":"str"},{"typ":"n","raw":"8","val":8}],
+			[{"typ":"n","raw":"9","val":9},{"typ":"n","raw":"18","val":18},{"typ":"str","raw":"fizz"},{"typ":"str"},{"typ":"str","raw":"fizz"}],
+			[{"typ":"n","raw":"10","val":10},{"typ":"n","raw":"20","val":20},{"typ":"str"},{"typ":"str","raw":"buzz"},{"typ":"str","raw":"buzz"}],
+			[{"typ":"n","raw":"11","val":11},{"typ":"n","raw":"22","val":22},{"typ":"str"},{"typ":"str"},{"typ":"n","raw":"11","val":11}],
+			[{"typ":"n","raw":"12","val":12},{"typ":"n","raw":"24","val":24},{"typ":"str","raw":"fizz"},{"typ":"str"},{"typ":"str","raw":"fizz"}],
+			[{"typ":"n","raw":"13","val":13},{"typ":"n","raw":"26","val":26},{"typ":"str"},{"typ":"str"},{"typ":"n","raw":"13","val":13}],
+			[{"typ":"n","raw":"14","val":14},{"typ":"n","raw":"28","val":28},{"typ":"str"},{"typ":"str"},{"typ":"n","raw":"14","val":14}],
+			[{"typ":"n","raw":"15","val":15},{"typ":"n","raw":"30","val":30},{"typ":"str","raw":"fizz"},{"typ":"str","raw":"buzz"},{"typ":"str","raw":"fizzbuzz"}],
+			[{"typ":"n","raw":"16","val":16},{"typ":"n","raw":"32","val":32},{"typ":"str"},{"typ":"str"},{"typ":"n","raw":"16","val":16}],
+			[{"typ":"n","raw":"17","val":17},{"typ":"n","raw":"34","val":34},{"typ":"str"},{"typ":"str"},{"typ":"n","raw":"17","val":17}],
+			[{"typ":"n","raw":"18","val":18},{"typ":"n","raw":"36","val":36},{"typ":"str","raw":"fizz"},{"typ":"str"},{"typ":"str","raw":"fizz"}],
+			[{"typ":"n","raw":"19","val":19},{"typ":"n","raw":"38","val":38},{"typ":"str"},{"typ":"str"},{"typ":"n","raw":"19","val":19}],
+			[{"typ":"n","raw":"20","val":20},{"typ":"n","raw":"40","val":40},{"typ":"str"},{"typ":"str","raw":"buzz"},{"typ":"str","raw":"buzz"}]
+		]
+	},
+	{
+		"name":"PTWithLabelFilter","nr":"1","id":"5","rid":"rId1",
+		"rows": [
+			[{"typ":"s","raw":"Foo"},{"typ":"s","raw":"(Multiple Items)"}],
+			[],
+			[{"typ":"s","raw":"Count of Qux"},{"typ":"s","raw":"Column Labels"}],
+			[{"typ":"s","raw":"Row Labels"},{"typ":"n","raw":"10","val":10},{"typ":"n","raw":"14","val":14},{"typ":"n","raw":"18","val":18},{"typ":"n","raw":"22","val":22},{"typ":"n","raw":"26","val":26},{"typ":"n","raw":"30","val":30},{"typ":"n","raw":"34","val":34},{"typ":"n","raw":"38","val":38},{"typ":"s","raw":"Grand Total"}],
+			[{"typ":"s"},{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"1","val":1},{"typ":"n"},{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"1","val":1},{"typ":"n"},{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"6","val":6}],
+			[{"typ":"n","raw":"7","val":7},{"typ":"n"},{"typ":"n","raw":"1","val":1},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n","raw":"1","val":1}],
+			[{"typ":"n","raw":"11","val":11},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n","raw":"1","val":1},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n","raw":"1","val":1}],
+			[{"typ":"n","raw":"13","val":13},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n","raw":"1","val":1},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n","raw":"1","val":1}],
+			[{"typ":"n","raw":"17","val":17},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n","raw":"1","val":1},{"typ":"n"},{"typ":"n","raw":"1","val":1}],
+			[{"typ":"n","raw":"19","val":19},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"1","val":1}],
+			[{"typ":"s","raw":"buzz"},{"typ":"n","raw":"1","val":1},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n","raw":"1","val":1}],
+			[{"typ":"s","raw":"fizz"},{"typ":"n"},{"typ":"n"},{"typ":"n","raw":"1","val":1},{"typ":"n"},{"typ":"n"},{"typ":"n","raw":"1","val":1},{"typ":"n"},{"typ":"n"},{"typ":"n","raw":"2","val":2}],
+			[{"typ":"s","raw":"fizz"},{"typ":"n"},{"typ":"n"},{"typ":"n","raw":"1","val":1},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n","raw":"1","val":1}],
+			[{"typ":"s","raw":"fizzbuzz"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n","raw":"1","val":1},{"typ":"n"},{"typ":"n"},{"typ":"n","raw":"1","val":1}],
+			[{"typ":"s","raw":"Grand Total"},{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"8","val":8}]
+		]
+	}
+	]
+}

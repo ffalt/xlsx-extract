@@ -6,7 +6,6 @@ import chaiExclude = require('chai-exclude');
 import {describe, it} from 'mocha';
 import {Sheet} from '../src/lib/sheet';
 import {XLSX} from '../src';
-import XLSXJS, {WorkSheet} from 'xlsx';
 import {IXLSXExtractOptions} from '../src/types';
 import {Cell} from '../src/lib/cell';
 import tmp from 'tmp';
@@ -38,7 +37,7 @@ export function collectTestFiles(dirs: Array<string>, rootDir: string, testSingl
 
 const testfiles: Array<string> = collectTestFiles([
 		'data',
-		// 'data/sheetjs_test_files'
+		'data/sheetjs_test_files'
 	], __dirname
 	// , 'wtf_path'
 );
@@ -236,65 +235,6 @@ function defToTSV(specSheet: IXLSXSpecSheet, options: IXLSXExtractOptions) {
 	}).join(options.tsv_endofline) + ((specSheet.rows || []).length > 0 ? options.tsv_endofline : '');
 }
 
-function compareSheetToXSLXJS(sourcefile: string, sheet: IXLSXDataSheet, workSheet: WorkSheet) {
-	sheet.rows.forEach(row => {
-		row.cells.forEach(cell => {
-			if (cell.address) {
-				const compare = workSheet[cell.address || ''];
-				if (cell.raw) {
-					should().exist(compare, sheet.name + ' - Cell not found: ' + JSON.stringify(cell));
-					if (!compare) {
-						return;
-					}
-					if (cell.typ === 'd') {
-						// assert.equal(parseFloat(cell.raw), compare.v, 'Invalid cell date value ' + JSON.stringify({cell, compare}));
-					} else if (cell.typ === 'e') {
-						assert.equal(cell.val, compare.w, 'Invalid cell error value ' + JSON.stringify({cell, compare}));
-					} else if (cell.typ === 'n') {
-						const fmt = cell.getEffectiveNumFormat();
-						if (cell.fmt && fmt) {
-							assert.equal(parseFloat(cell.raw), compare.v, 'Invalid cell formatted number value ' + JSON.stringify({cell, compare}));
-						} else {
-							assert.equal(cell.val, compare.v, 'Invalid cell number value ' + JSON.stringify({cell, compare}));
-						}
-					} else {
-						if (typeof compare.v === 'string') {
-							assert.equal(cell.val, compare.v.replace(/\r\n/g, '\n'), 'Invalid cell value ' + JSON.stringify({cell, compare}));
-						} else {
-							assert.equal(cell.val, compare.v, 'Invalid cell value ' + JSON.stringify({cell, compare}));
-						}
-					}
-				}
-			}
-		});
-	});
-}
-
-function compareToXSLXJS(sourcefile: string, xlsx: IXLSXData) {
-
-	const xjs = XLSXJS.readFile(sourcefile, {});
-	should().exist(xjs.Workbook);
-	if (!xjs.Workbook) {
-		return;
-	}
-	const sheets = <any>(xjs.Workbook.Sheets || []);
-	assert.equal(xlsx.sheets.length, sheets.length, 'Invalid sheet count');
-	xlsx.sheets.forEach(sheet => {
-		const wbs = sheets.find((s: any) => s.sheetId === sheet.id);
-		should().exist(wbs);
-		if (!wbs) {
-			return;
-		}
-		assert.equal(sheet.id, wbs.sheetId, 'Invalid sheet id');
-		assert.equal(sheet.rid, wbs.id, 'Invalid sheet rid');
-		assert.equal(sheet.name, wbs.name, 'Invalid sheet name');
-		// fs.writeFileSync('test.json',
-		// 	JSON.stringify(xjs.Sheets, null, '\t')
-		// );
-		compareSheetToXSLXJS(sourcefile, sheet, xjs.Sheets[sheet.name || '']);
-	});
-}
-
 describe('xlsx', function() {
 	this.timeout(10000);
 	testfiles.forEach(testfile => {
@@ -327,18 +267,6 @@ describe('xlsx', function() {
 			describe(spec.description + ' - ' + testfile, () => {
 				parsers.forEach(parser => {
 					describe(parser, () => {
-
-						it('should read and compare with xlsx-js', done => {
-							readFile(sourcefile, {sheet_all: true, parser, workfolder}, (err, xlsx) => {
-								should().not.exist(err);
-								should().exist(xlsx);
-								if (!xlsx) {
-									return done();
-								}
-								compareToXSLXJS(sourcefile, xlsx);
-								done();
-							});
-						});
 						it('should read and compare according to spec', done => {
 							readFile(sourcefile, {sheet_all: true, parser, workfolder}, (err, xlsx) => {
 								should().not.exist(err);

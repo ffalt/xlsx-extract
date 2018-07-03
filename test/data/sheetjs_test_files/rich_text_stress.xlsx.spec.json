@@ -1,0 +1,24 @@
+{"description":"Richtext",
+	"sheets": [
+	{
+		"name":"Sheet1","nr":"1","id":"1","rid":"rId1",
+		"rows": [
+			[{"typ":"s","raw":"normal"},{"typ":"s","raw":"this text is normal, sure enough"}],
+			[{"typ":"s","raw":"bold"},{"typ":"s","raw":"this text is bold, sure enough"}],
+			[{"typ":"s","raw":"italic"},{"typ":"s","raw":"this text is italicized sure enough"}],
+			[{"typ":"s","raw":"underline"},{"typ":"s","raw":"this text is underlined, sure enough"}],
+			[{"typ":"s","raw":"sz10"},{"typ":"s","raw":"this text is sz10, sure enough"}],
+			[{"typ":"s","raw":"strike"},{"typ":"s","raw":"this text is stricken sure enough"}],
+			[{"typ":"s","raw":"subscript"},{"typ":"s","raw":"this text is subscripted sure enough"}],
+			[{"typ":"s","raw":"superscript"},{"typ":"s","raw":"this text is superscripted sure enough"}],
+			[{"typ":"s","raw":"outline"},{"typ":"s","raw":"this text is outlined sure enough"}],
+			[{"typ":"s","raw":"shadow"},{"typ":"s","raw":"this text is shadowed sure enough"}],
+			[{"typ":"s","raw":"2underline"},{"typ":"s","raw":"this text is double underlined sure enough"}],
+			[{"typ":"s","raw":"accounting"},{"typ":"s","raw":"this text is accounting underlined sure enough"}],
+			[{"typ":"s","raw":"2accounting"},{"typ":"s","raw":"this text is double accounting underlined sure enough"}],
+			[],
+			[{"typ":"s","raw":"BIU"},{"typ":"s","raw":"lets try all combinations of BIU in cell"}]
+		]
+	}
+	]
+}

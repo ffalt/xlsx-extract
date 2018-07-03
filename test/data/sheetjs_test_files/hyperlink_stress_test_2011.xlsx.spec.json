@@ -1,0 +1,16 @@
+{"description":"Hyperlink Stress Test 2011",
+	"sheets": [
+	{
+		"name":"Sheet1","nr":"1","id":"1","rid":"rId1",
+		"rows": [
+			[{"typ":"s","raw":"http://www.sheetjs.com"}],
+			[{"typ":"s","raw":"OSS"}],
+			[{"typ":"s","raw":"OSS#foo"}],
+			[{"typ":"s","raw":"dev at sheetjs dot com"}],
+			[{"typ":"s","raw":"dev at sheetjs.com subject hyperlink"}],
+			[{"typ":"s","raw":"file://localhost/Users/sheetjs/Documents/Test.xlsx"}],
+			[{"typ":"s","raw":"http://sheetjs.com screentip foo bar baz"}]
+		]
+	}
+	]
+}

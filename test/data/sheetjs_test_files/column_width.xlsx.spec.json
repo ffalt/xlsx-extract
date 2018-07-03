@@ -1,0 +1,13 @@
+{"description":"Column Width",
+	"sheets": [
+	{
+		"name":"Sheet1","nr":"1","id":"1","rid":"rId1",
+		"rows": [
+			[{"typ":"s","raw":"default"},{"typ":"s","raw":"W .09"},{},{},{"typ":"s","raw":"W 4"},{},{"typ":"s","raw":"W 12"}],
+			[{"typ":"s","raw":"W 10"},{"typ":"s","raw":"1 px"},{},{"typ":"s","raw":"10 px"},{},{"typ":"s","raw":"W 8"},{},{"typ":"s","raw":"W 16"}],
+			[{"typ":"s","raw":"65 px"},{},{"typ":"s","raw":"W 15.83"},{},{"typ":"s","raw":"29 px"},{},{"typ":"s","raw":"77 px"}],
+			[{},{},{"typ":"s","raw":"100 px"},{"typ":"s","raw":"W .9"},{},{"typ":"s","raw":"53 px"},{},{"typ":"s","raw":"101 px"}]
+		]
+	}
+	]
+}

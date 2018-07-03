@@ -1,0 +1,13 @@
+{"description":"Row height",
+	"sheets": [
+	{
+		"name":"Sheet1","nr":"1","id":"1","rid":"rId1",
+		"rows": [
+			[{"typ":"s","raw":"default"},{"typ":"s","raw":"16 px"}],
+			[{},{},{"typ":"s","raw":"1 px"}],
+			[{"typ":"s","raw":"10px"}],
+			[{},{"typ":"s","raw":"100 px"}]
+		]
+	}
+	]
+}

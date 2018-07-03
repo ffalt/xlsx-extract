@@ -1,0 +1,14 @@
+{"description":"RkNumber",
+	"sheets": [
+	{
+		"name":"RkNumber","nr":"1","id":"1","rid":"rId1",
+		"rows": [
+			[{"typ":"s","raw":"fX100"},{"typ":"s","raw":"fInt"},{"typ":"s","raw":"sample"}],
+			[{"typ":"s","raw":"0"},{"typ":"s","raw":"0"},{"typ":"n","raw":"10000000","val":10000000}],
+			[{"typ":"s","raw":"0"},{"typ":"s","raw":"1"},{"typ":"n","raw":"1200455","val":1200455}],
+			[{"typ":"s","raw":"1"},{"typ":"s","raw":"0"},{"typ":"n","raw":"0.01","val":0.01}],
+			[{"typ":"s","raw":"1"},{"typ":"s","raw":"1"},{"typ":"n","raw":"12004.55","val":12004.55}]
+		]
+	}
+	]
+}

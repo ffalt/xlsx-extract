@@ -1,0 +1,24 @@
+{"description":"Internal Link",
+	"sheets": [
+	{
+		"name":"Sheet2","nr":"2","id":"2","rid":"rId2",
+		"rows": [
+			[{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"2","val":2},{"typ":"n","raw":"3","val":3},{"typ":"n","raw":"4","val":4}],
+			[{"typ":"n","raw":"8","val":8},{"typ":"n","raw":"7","val":7},{"typ":"n","raw":"6","val":6},{"typ":"n","raw":"5","val":5}]
+		]
+	},
+	{
+		"name":"Sheet1","nr":"1","id":"1","rid":"rId1",
+		"rows": [
+			[{"typ":"s","raw":"Link to Sheet2"}],
+			[{"typ":"s","raw":"Link to Name (WB)"}],
+			[{"typ":"s","raw":"Link to Name (WS1)"}],
+			[{"typ":"s","raw":"Link to Name (WS2)"},{},{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"2","val":2},{"typ":"n","raw":"3","val":3}],
+			[{"typ":"s","raw":"Link to Self"},{},{"typ":"n","raw":"4","val":4},{"typ":"n","raw":"5","val":5},{"typ":"n","raw":"6","val":6}],
+			[],
+			[{},{},{"typ":"n","raw":"7","val":7},{"typ":"n","raw":"8","val":8},{"typ":"n","raw":"9","val":9}],
+			[{},{},{"typ":"n","raw":"0","val":0},{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"2","val":2}]
+		]
+	}
+	]
+}

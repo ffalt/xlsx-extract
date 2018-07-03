@@ -1,0 +1,57 @@
+{"description":"Interview",
+	"sheets": [
+	{
+		"name":"tags","nr":"2","id":"2","rid":"rId2",
+		"rows": [
+			[{"typ":"s","raw":"group"},{"typ":"s","raw":"name"},{"typ":"s","raw":"label"},{"typ":"s","raw":"imagePath"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"s","raw":"default"},{"typ":"s","raw":"important"},{"typ":"s","raw":"important"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"s","raw":"default"},{"typ":"s","raw":"tangential"},{"typ":"s","raw":"tangential"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"s","raw":"default"},{"typ":"s","raw":"star"},{"typ":"n"},{"typ":"s","raw":"star.png"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"s","raw":"admin_tasks"},{"typ":"s","raw":"interview designer"},{"typ":"s","raw":"interview designer"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"s","raw":"admin_tasks"},{"typ":"s","raw":"interviewer"},{"typ":"s","raw":"interviewer"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"s","raw":"admin_tasks"},{"typ":"s","raw":"datas analysis"},{"typ":"s","raw":"datas analysis"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"s","raw":"exp_tags"},{"typ":"s","raw":"highly experienced interviewer"},{"typ":"s","raw":"highly experienced interviewer"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"s","raw":"exp_tags"},{"typ":"s","raw":"highly experienced interviewee"},{"typ":"s","raw":"highly experienced interviewee"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"}]
+		]
+	},
+	{
+		"name":"interview","nr":"1","id":"1","rid":"rId1",
+		"rows": [
+			[{"typ":"s","raw":"type"},{"typ":"s","raw":"name"},{"typ":"s","raw":"label"},{"typ":"s","raw":"tags"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"s","raw":"start"},{"typ":"s","raw":"How would you characterize your experience as an interviewer/interviewee?"},{"typ":"s","raw":"exp_tags"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"s","raw":"purposes"},{"typ":"s","raw":"What are some of the purposes of the interviews you've been involved in? (data gathering, recruiting, health diagnostics, investigative journalism)"},{"typ":"s","raw":"none"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"s","raw":"duration"},{"typ":"s","raw":"How long do your interviews usually last? Did you usually have an idea of how far along you are in the interview?"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"s","raw":"sittings"},{"typ":"s","raw":"Have you participated in interviews that took place over multiple sittings? Does this seem to be a common case?"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"s","raw":"medium"},{"typ":"s","raw":"Have your interviews been in person? on the phone? written response?"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"s","raw":"admin"},{"typ":"s","raw":"Have you been involved in any interviewing projects in an administrative capacity? What tasks did you perform?"},{"typ":"s","raw":"admin_tasks"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"s","raw":"begin branch"},{},{"typ":"s","raw":"Administrative experience follow-up questions."},{},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"s","raw":"challenges"},{"typ":"s","raw":"Which tasks do you find the most challenging or time consuming?"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"s","raw":"experience"},{"typ":"s","raw":"What level of training or experience is typically required in your interviews?"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"s","raw":"branching"},{"typ":"s","raw":"Have you administered any interviews with branching logic?"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"s","raw":"follow-ups"},{"typ":"s","raw":"Do you tend to ask follow-up questions beyond what is suggested in the survey?\nHow/when do they usually occur? How are they dealt with in coding?"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"s","raw":"recording"},{"typ":"s","raw":"Are your interviews recorded?\nHave you encountered any limitations in being allowed to record?"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"s","raw":"notes"},{"typ":"s","raw":"Do you take notes during your interviews?"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"s","raw":"contingencies"},{"typ":"s","raw":"Have you ever needed to discard recordings/notes that you collected?"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"s","raw":"end branch"},{},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"s","raw":"begin branch"},{},{"typ":"s","raw":"No administrative experience."},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"s","raw":"end branch"},{},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"s","raw":"comments"},{"typ":"s","raw":"Do you have any comments about the tool I am using? About the interview experience as a whole?"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"}]
+		]
+	}
+	]
+}

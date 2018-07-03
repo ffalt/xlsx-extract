@@ -1,0 +1,13 @@
+{"description":"Merged Cells",
+	"sheets": [
+	{
+		"name":"Merge","nr":"1","id":"1","rid":"rId1",
+		"rows": [
+			[{"typ":"s","raw":"A1:B2"},{"typ":"n"},{"typ":"s","raw":"C1:C2"},{"typ":"s","raw":"Separate blocks"}],
+			[{"typ":"n"},{"typ":"n"},{"typ":"n"},{"typ":"n"}],
+			[{"typ":"s","raw":"A3:B3"},{"typ":"n"},{"typ":"s","raw":"C3"}],
+			[{"typ":"s","raw":"… are merged separately"},{"typ":"n"}]
+		]
+	}
+	]
+}

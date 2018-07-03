@@ -1,0 +1,13 @@
+{"description":"Sized Boxen",
+	"sheets": [
+	{
+		"name":"Sheet1","nr":"1","id":"1","rid":"rId1",
+		"rows": [
+			[{"typ":"s","raw":"default"},{"typ":"s","raw":"b1"},{},{"typ":"s","raw":"d1"}],
+			[{"typ":"s","raw":"a2"},{"typ":"s","raw":"42x42"}],
+			[{},{},{"typ":"s","raw":"20x20"}],
+			[{"typ":"s","raw":"a4"},{},{},{"typ":"n","raw":"1","val":1}]
+		]
+	}
+	]
+}

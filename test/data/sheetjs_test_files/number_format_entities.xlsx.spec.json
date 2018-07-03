@@ -1,0 +1,11 @@
+{"description":"Number Format Entities",
+	"sheets": [
+	{
+		"name":"Sheet1","nr":"1","id":"1","rid":"rId1",
+		"rows": [
+			[{"fmt":"[>=100000]0.000\\ \\<","fmt_typ":"f","typ":"n","raw":"12345.678900000001","val":12345.679}],
+			[{"fmt":"[>=100000]0.000\\ \\\"","fmt_typ":"f","typ":"n","raw":"12345.678900000001","val":12345.679}]
+		]
+	}
+	]
+}

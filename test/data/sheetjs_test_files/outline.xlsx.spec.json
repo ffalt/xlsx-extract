@@ -1,0 +1,39 @@
+{"description":"Outline",
+	"sheets": [
+	{
+		"name":"Sheet1","nr":"1","id":"1","rid":"rId1",
+		"rows": [
+			[{"typ":"n","raw":"0","val":0},{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"2","val":2},{"typ":"n","raw":"3","val":3},{"typ":"n","raw":"4","val":4},{"typ":"n","raw":"5","val":5},{"typ":"n","raw":"6","val":6},{"typ":"n","raw":"7","val":7},{"typ":"n","raw":"7","val":7},{"typ":"n","raw":"6","val":6},{"typ":"n","raw":"5","val":5},{"typ":"n","raw":"4","val":4},{"typ":"n","raw":"3","val":3},{"typ":"n","raw":"2","val":2},{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"0","val":0},{},{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"3","val":3},{"typ":"n","raw":"5","val":5},{"typ":"n","raw":"7","val":7},{"typ":"n","raw":"6","val":6},{"typ":"n","raw":"4","val":4},{"typ":"n","raw":"2","val":2},{"typ":"n","raw":"0","val":0},{},{"typ":"n","raw":"7","val":7},{"typ":"n","raw":"0","val":0}],
+			[{"typ":"n","raw":"1","val":1}],
+			[{"typ":"n","raw":"2","val":2}],
+			[{"typ":"n","raw":"3","val":3}],
+			[{"typ":"n","raw":"4","val":4}],
+			[{"typ":"n","raw":"5","val":5}],
+			[{"typ":"n","raw":"6","val":6}],
+			[{"typ":"n","raw":"7","val":7}],
+			[{"typ":"n","raw":"7","val":7}],
+			[{"typ":"n","raw":"6","val":6}],
+			[{"typ":"n","raw":"5","val":5}],
+			[{"typ":"n","raw":"4","val":4}],
+			[{"typ":"n","raw":"3","val":3}],
+			[{"typ":"n","raw":"2","val":2}],
+			[{"typ":"n","raw":"1","val":1}],
+			[{"typ":"n","raw":"0","val":0}],
+			[],
+			[{"typ":"n","raw":"1","val":1}],
+			[{"typ":"n","raw":"3","val":3}],
+			[{"typ":"n","raw":"5","val":5}],
+			[{"typ":"n","raw":"7","val":7}],
+			[{"typ":"n","raw":"6","val":6}],
+			[{"typ":"n","raw":"4","val":4}],
+			[{"typ":"n","raw":"2","val":2}],
+			[{"typ":"n","raw":"0","val":0}],
+			[],
+			[{"typ":"n","raw":"7","val":7}],
+			[{"typ":"n","raw":"0","val":0}],
+			[],
+			[]
+		]
+	}
+	]
+}

@@ -1,0 +1,24 @@
+{"description":"Named Ranges",
+	"sheets": [
+	{
+		"name":"Cross-Sheet","nr":"2","id":"1","rid":"rId2",
+		"rows": [
+			[{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"2","val":2},{"typ":"n","raw":"3","val":3},{"typ":"n","raw":"15","val":15},{"typ":"e","raw":"#NAME?"},{"typ":"n","raw":"110","val":110}],
+			[{},{},{},{"typ":"n","raw":"21","val":21},{"typ":"n","raw":"15","val":15}]
+		]
+	},
+	{
+		"name":"Named Ranges","nr":"1","id":"2","rid":"rId1",
+		"rows": [
+			[{"typ":"s","raw":"col1"},{"typ":"s","raw":"col2"},{"typ":"s","raw":"col3"}],
+			[{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"2","val":2},{"typ":"n","raw":"2","val":2},{},{"typ":"n","raw":"110","val":110}],
+			[{"typ":"n","raw":"2","val":2},{"typ":"n","raw":"4","val":4},{"typ":"n","raw":"8","val":8},{},{"typ":"e","raw":"#NAME?"}],
+			[{"typ":"n","raw":"3","val":3},{"typ":"n","raw":"6","val":6},{"typ":"n","raw":"18","val":18},{},{"typ":"n","raw":"15","val":15}],
+			[{"typ":"n","raw":"4","val":4},{"typ":"n","raw":"8","val":8},{"typ":"n","raw":"32","val":32}],
+			[{"typ":"n","raw":"5","val":5},{"typ":"n","raw":"10","val":10},{"typ":"n","raw":"50","val":50}],
+			[{"typ":"n","raw":"6","val":6},{"typ":"n","raw":"12","val":12},{"typ":"n","raw":"72","val":72},{"typ":"s","raw":"row6"},{"typ":"e","raw":"#NAME?"}],
+			[{},{},{},{},{"typ":"n","raw":"8.0213903743315509E-2","val":0.08021390374331551}]
+		]
+	}
+	]
+}

@@ -1,0 +1,27 @@
+{"description":"Mixed Sheet",
+	"sheets": [
+	{
+		"name":"choices","nr":"2","id":"2","rid":"rId2",
+		"rows": [
+			[{"typ":"s","raw":"list_name"},{"typ":"s","raw":"value"},{"typ":"s","raw":"label"}],
+			[{"typ":"s","raw":"yes_no"},{"typ":"s","raw":"Yes"},{"typ":"s","raw":"Yes"}],
+			[{"typ":"s","raw":"yes_no"},{"typ":"s","raw":"No"},{"typ":"s","raw":"No"}]
+		]
+	},
+	{
+		"name":"settings","nr":"3","id":"3","rid":"rId3",
+		"rows": [
+			[{"typ":"s","raw":"form_title"},{"typ":"s","raw":"font"}],
+			[{"typ":"s","raw":"SANITARY SURVEY FOR THE ASSESSMENT OF RISKS \nOF CONTAMINATION OF DRINKING WATER SOURCES"},{"typ":"s","raw":"9pt Verdana, sans-serif"}],
+			[{"typ":"n"}]
+		]
+	},
+	{
+		"name":"survey","nr":"1","id":"1","rid":"rId1",
+		"rows": [
+			[{"typ":"s","raw":"type"},{"typ":"s","raw":"name"}],
+			[{"typ":"s","raw":"note"},{"typ":"s","raw":"type"}]
+		]
+	}
+	]
+}

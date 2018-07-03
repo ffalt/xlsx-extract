@@ -1,0 +1,23 @@
+{"description":"Error Types",
+	"sheets": [
+	{
+		"name":"RawErrors","nr":"1","id":"1","rid":"rId1",
+		"rows": [
+			[{"typ":"s","raw":"Error"},{"typ":"s","raw":"Bang"},{"typ":"s","raw":"Que"},{"typ":"s","raw":"Non"},{"typ":"s","raw":"Val"},{"typ":"s","raw":"ErrType"},{"typ":"s","raw":"Type"},{"typ":"s","raw":"ISERR"},{"typ":"s","raw":"ISNA"},{"typ":"s","raw":"ErrTypeIsErr"}],
+			[{"typ":"e","raw":"#NULL!"},{"typ":"e","raw":"#NULL!"},{"typ":"s","raw":"#NULL?"},{"typ":"s","raw":"#NULL"},{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"1","val":1},{"typ":"n","raw":"16","val":16},{"typ":"b","raw":"1","val":true},{"typ":"b","raw":"0","val":false},{"typ":"b","raw":"0","val":false}],
+			[{"typ":"e","raw":"#DIV/0!"},{"typ":"e","raw":"#DIV/0!"},{"typ":"s","raw":"#DIV/0?"},{"typ":"s","raw":"#DIV/0"},{"typ":"n","raw":"2","val":2},{"typ":"n","raw":"2","val":2},{"typ":"n","raw":"16","val":16},{"typ":"b","raw":"1","val":true},{"typ":"b","raw":"0","val":false},{"typ":"b","raw":"0","val":false}],
+			[{"typ":"e","raw":"#VALUE!"},{"typ":"e","raw":"#VALUE!"},{"typ":"s","raw":"#VALUE?"},{"typ":"s","raw":"#VALUE"},{"typ":"n","raw":"3","val":3},{"typ":"n","raw":"3","val":3},{"typ":"n","raw":"16","val":16},{"typ":"b","raw":"1","val":true},{"typ":"b","raw":"0","val":false},{"typ":"b","raw":"0","val":false}],
+			[{"typ":"e","raw":"#REF!"},{"typ":"e","raw":"#REF!"},{"typ":"s","raw":"#REF?"},{"typ":"s","raw":"#REF"},{"typ":"n","raw":"4","val":4},{"typ":"n","raw":"4","val":4},{"typ":"n","raw":"16","val":16},{"typ":"b","raw":"1","val":true},{"typ":"b","raw":"0","val":false},{"typ":"b","raw":"0","val":false}],
+			[{"typ":"e","raw":"#NAME?"},{"typ":"s","raw":"#NAME!"},{"typ":"e","raw":"#NAME?"},{"typ":"s","raw":"#NAME"},{"typ":"n","raw":"5","val":5},{"typ":"n","raw":"5","val":5},{"typ":"n","raw":"16","val":16},{"typ":"b","raw":"1","val":true},{"typ":"b","raw":"0","val":false},{"typ":"b","raw":"0","val":false}],
+			[{"typ":"e","raw":"#NUM!"},{"typ":"e","raw":"#NUM!"},{"typ":"s","raw":"#NUM?"},{"typ":"s","raw":"#NUM"},{"typ":"n","raw":"6","val":6},{"typ":"n","raw":"6","val":6},{"typ":"n","raw":"16","val":16},{"typ":"b","raw":"1","val":true},{"typ":"b","raw":"0","val":false},{"typ":"b","raw":"0","val":false}],
+			[{"typ":"e","raw":"#N/A"},{"typ":"s","raw":"#N/A!"},{"typ":"s","raw":"#N/A?"},{"typ":"e","raw":"#N/A"},{"typ":"n","raw":"7","val":7},{"typ":"n","raw":"7","val":7},{"typ":"n","raw":"16","val":16},{"typ":"b","raw":"0","val":false},{"typ":"b","raw":"1","val":true},{"typ":"b","raw":"0","val":false}],
+			[{"typ":"s","raw":"#WTF"},{"typ":"s","raw":"#WTF!"},{"typ":"s","raw":"#WTF?"},{"typ":"s","raw":"#WTF"},{"typ":"n","raw":"69","val":69},{"typ":"e","raw":"#N/A"},{"typ":"n","raw":"2","val":2},{"typ":"b","raw":"0","val":false},{"typ":"b","raw":"0","val":false},{"typ":"b","raw":"0","val":false}],
+			[{"typ":"n","raw":"123","val":123},{"typ":"s","raw":"123!"},{"typ":"s","raw":"123?"},{"typ":"n","raw":"123","val":123},{"typ":"n","raw":"123","val":123},{"typ":"e","raw":"#N/A"},{"typ":"n","raw":"1","val":1},{"typ":"b","raw":"0","val":false},{"typ":"b","raw":"0","val":false},{"typ":"b","raw":"0","val":false}],
+			[{"typ":"s","raw":"foo"},{"typ":"s","raw":"foo!"},{"typ":"s","raw":"foo?"},{"typ":"s","raw":"foo"},{"typ":"s","raw":"foo"},{"typ":"e","raw":"#N/A"},{"typ":"n","raw":"2","val":2},{"typ":"b","raw":"0","val":false},{"typ":"b","raw":"0","val":false},{"typ":"b","raw":"0","val":false}],
+			[{"fmt":"mm-dd-yy","fmt_typ":"d","typ":"n","raw":"41923","val":"2014-10-10T22:00:00.000Z"},{"typ":"s","raw":"10/11/14!"},{"typ":"s","raw":"10/11/14?"},{"fmt":"mm-dd-yy","fmt_typ":"d","typ":"n","raw":"41923","val":"2014-10-10T22:00:00.000Z"},{"fmt":"mm-dd-yy","fmt_typ":"d","typ":"n","raw":"41923","val":"2014-10-10T22:00:00.000Z"},{"typ":"e","raw":"#N/A"},{"typ":"n","raw":"1","val":1},{"typ":"b","raw":"0","val":false},{"typ":"b","raw":"0","val":false},{"typ":"b","raw":"0","val":false}],
+			[{"typ":"b","raw":"1","val":true},{"typ":"s","raw":"TRUE!"},{"typ":"s","raw":"TRUE?"},{"typ":"b","raw":"1","val":true},{"typ":"b","raw":"1","val":true},{"typ":"e","raw":"#N/A"},{"typ":"n","raw":"4","val":4},{"typ":"b","raw":"0","val":false},{"typ":"b","raw":"0","val":false},{"typ":"b","raw":"0","val":false}],
+			[{"typ":"s","raw":"array"},{"typ":"s","raw":"array!"},{"typ":"s","raw":"array?"},{"typ":"s","raw":"array"},{"typ":"s","raw":"array"},{"typ":"e","raw":"#N/A"},{"typ":"n","raw":"64","val":64},{"typ":"b","raw":"0","val":false},{"typ":"b","raw":"0","val":false},{"typ":"b","raw":"0","val":false}]
+		]
+	}
+	]
+}

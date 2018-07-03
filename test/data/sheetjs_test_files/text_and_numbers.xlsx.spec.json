@@ -1,0 +1,20 @@
+{"description":"Text and numbers",
+	"sheets": [
+	{
+		"name":"Sheet2","nr":"2","id":"2","rid":"rId2",
+		"rows": [
+			]},{
+		"name":"Sheet3","nr":"3","id":"3","rid":"rId3",
+		"rows": [
+			]},{
+		"name":"Sheet1","nr":"1","id":"1","rid":"rId1",
+		"rows": [
+			[{"typ":"s","raw":"English"},{"typ":"s","raw":"Hello"},{"typ":"s","raw":"World"}],
+			[{"typ":"s","raw":"Hebrew"},{"typ":"s","raw":"שלום"},{"typ":"s","raw":"עולם"}],
+			[{},{"typ":"n"}],
+			[{"typ":"n","raw":"1337","val":1337},{"typ":"n","raw":"13.37","val":13.37},{"fmt":"_(\"$\"* #,##0.00_)","fmt_typ":"f","typ":"n","raw":"1337","val":1337}],
+			[{},{},{"typ":"n"},{"fmt":"_(@_)","fmt_typ":"s","typ":"n"},{"fmt":"0%","fmt_typ":"i","typ":"n"}]
+		]
+	}
+	]
+}
