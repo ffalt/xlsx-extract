@@ -4,12 +4,12 @@ import * as util from 'util';
 import {assert, should, expect, use} from 'chai';
 import chaiExclude = require('chai-exclude');
 import {describe, it} from 'mocha';
-import {Sheet} from '../src/lib/sheet';
+import {Sheet} from '../src/sheet';
 import {XLSX} from '../src';
 import {IXLSXExtractOptions} from '../src/types';
-import {Cell} from '../src/lib/cell';
+import {Cell} from '../src/cell';
 import tmp from 'tmp';
-import {escapeTSV, isValidDate} from '../src/lib/utils';
+import {escapeTSV, isValidDate} from '../src/utils';
 
 use(chaiExclude);
 const parsers: Array<string> = [

@@ -1,5 +1,5 @@
 import {ICellFormat} from './cell';
-import {IXLSXExtractOptions} from '../types';
+import {IXLSXExtractOptions} from './types';
 
 /**
  converts a raw xlsx-date to js date

@@ -1,5 +1,5 @@
 import os from 'os';
-import {IXLSXExtractOptions} from '../types';
+import {IXLSXExtractOptions} from './types';
 
 export function applyDefaults(options: IXLSXExtractOptions | undefined) {
 	const defaults = {

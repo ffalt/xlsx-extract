@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
 import * as util from 'util';
-import {XLSXReader} from './lib/reader';
+import {XLSXReader} from './reader';
 
 export class XLSX extends events.EventEmitter {
 

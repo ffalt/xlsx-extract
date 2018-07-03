@@ -1,6 +1,6 @@
 import {assert} from 'chai';
 import {describe, it} from 'mocha';
-import {alphaNum, numAlpha, splitCellFormats, xlsx_fmts} from '../../src/lib/utils';
+import {alphaNum, numAlpha, splitCellFormats, xlsx_fmts} from '../../src/utils';
 
 describe('utils', () => {
 	describe('column row translation', function() {

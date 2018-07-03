@@ -28,6 +28,5 @@ export interface IXLSXExtractOptions {
 	};
 	// xlsx structure options
 	workfolder?: string; // default 'xl' - the workbook subfolder in zip structure
-
 }
 

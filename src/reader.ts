@@ -4,7 +4,7 @@ import fs from 'fs';
 import unzip from 'unzip2';
 import {Row} from './row';
 import {Cell, ICellFormatStyles} from './cell';
-import {IXLSXExtractOptions} from '../types';
+import {IXLSXExtractOptions} from './types';
 import {Sheet} from './sheet';
 import {ISaxParser, SaxExpat, SaxSax} from './xml';
 import {applyDefaults} from './defaults';
@@ -105,7 +105,7 @@ export class XLSXReader {
 					cell.val = (cell.val ? cell.val : '') + txt;
 				}
 				if (addformular) {
-					cell.formular = (cell.formular ? cell.formular : '') + txt;
+					cell.formula = (cell.formula ? cell.formula : '') + txt;
 				}
 			})
 			.onClose(cb);

@@ -1,4 +1,4 @@
-import {IXLSXExtractOptions} from '../types';
+import {IXLSXExtractOptions} from './types';
 
 export class Sheet {
 	nr?: string;
@@ -28,11 +28,12 @@ export class Sheet {
 		return JSON.stringify({
 			name: this.name,
 			nr: this.nr,
-			rid: this.rid
+			rid: this.rid,
+			id: this.id
 		});
 	}
 
 	toArray(): Array<string | undefined> {
-		return [this.name, this.rid, this.nr];
+		return [this.name, this.rid, this.nr, this.id];
 	}
 }

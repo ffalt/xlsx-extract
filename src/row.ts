@@ -1,5 +1,5 @@
 import {Cell} from './cell';
-import {IXLSXExtractOptions} from '../types';
+import {IXLSXExtractOptions} from './types';
 
 export class Row {
 	cells: Array<Cell> = [];

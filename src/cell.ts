@@ -1,5 +1,5 @@
 import {escapeTSV, isValidDate, unescapexml, xlsx_date} from './utils';
-import {IXLSXExtractOptions} from '../types';
+import {IXLSXExtractOptions} from './types';
 
 export interface ICellFormat {
 	fmt: string;
@@ -24,7 +24,7 @@ export class Cell {
 	address?: string;
 	typ?: string;
 	fmt?: ICellFormatStyle;
-	formular?: string;
+	formula?: string;
 	raw?: string;
 
 	getFormat(options: IXLSXExtractOptions) {
@@ -148,7 +148,7 @@ export class Cell {
 						}
 					}
 					break;
-				case 'e':
+				// case 'e':
 				// debug('Error cell type: Value will be invalid ("#REF!", "#NAME?", "#VALUE!" or similar).');
 				// break;
 				default:
