@@ -12,15 +12,16 @@
     "spreadsheet"
   ],
   "scripts": {
-    "clean": "shx rm -rf lib lib-esm",
-    "build": "npm run clean && npm run build:plain",
+    "clean": "shx rm -rf dist",
+    "build": "npm run clean && npm run build:plain && npm run build:esm && npm run build:single",
     "build:plain": "tsc",
-    "build:esm": "tsc -m es6 --outDir lib-esm",
-    "cover": "istanbul cover _mocha",
+    "build:esm": "tsc -m es6 --outDir dist/lib-esm",
+    "build:single": "webpack --mode production",
+    "cover": "nyc npm run test",
     "pretest": "tsc",
+    "test": "mocha --ui mocha-typescript --require ts-node/register --require source-map-support/register --recursive test/test.ts test/**/test.ts",
     "lint": "tslint --project tsconfig.json \"src/**/*.ts\"",
-    "test": "nyc mocha",
-    "watch": "mocha-typescript-watch"
+    "test2": "nyc mocha"
   },
   "dependencies": {
     "commander": "^2.15.1",
@@ -28,14 +29,14 @@
     "unzip2": "^0.2.5"
   },
   "devDependencies": {
-    "@types/xlsx": "0.0.36",
     "@types/chai": "^4.1.4",
     "@types/debug": "0.0.30",
     "@types/mocha": "^5.2.2",
     "@types/node": "^10.3.6",
     "@types/sax": "^1.0.1",
     "@types/tmp": "0.0.33",
-    "xlsx": "^0.13.1",
+    "@types/xlsx": "0.0.36",
+    "awesome-typescript-loader": "^5.2.0",
     "chai": "^4.1.2",
     "chai-exclude": "^1.0.8",
     "istanbul": "^0.4.5",
@@ -48,7 +49,11 @@
     "tmp": "0.0.33",
     "ts-node": "^6.1.1",
     "tslint": "^5.10.0",
-    "typescript": "^2.9.2"
+    "typescript": "^2.9.2",
+    "webpack": "^4.14.0",
+    "webpack-cli": "^3.0.8",
+    "webpack-node-externals": "^1.7.2",
+    "xlsx": "^0.13.1"
   },
   "bugs": {
     "url": "https://github.com/ffalt/xlsx-extract/issues"
@@ -90,23 +95,23 @@
   },
   "nyc": {
     "temp-directory": "./coverage/.nyc_output",
-    "report-dir": "./coverage",
+    "report-dir": "./coverage/coverage",
     "include": [
+      "src/*.ts",
       "src/**/*.ts"
     ],
-    "exclude": [
-      "test/**/*.ts"
+    "extension": [
+      ".ts"
     ],
     "require": [
       "ts-node/register",
       "source-map-support/register"
     ],
     "reporter": [
-      "lcov",
       "text-summary",
+      "lcov",
       "html"
     ],
-    "all": true,
     "check-coverage": true,
     "sourceMap": true,
     "instrument": true

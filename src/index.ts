@@ -61,9 +61,9 @@ export class XLSX extends events.EventEmitter {
 					if (isJSON) {
 						if (start) {
 							start = false;
-							writeable.write(os.EOL);
+							writeable.write(options.tsv_endofline);
 						} else {
-							writeable.write(',' + os.EOL);
+							writeable.write(',' + options.tsv_endofline);
 						}
 					}
 					this.emit('row', data);
@@ -71,7 +71,7 @@ export class XLSX extends events.EventEmitter {
 					break;
 				case 'end':
 					if (isJSON) {
-						writeable.write(os.EOL + ']');
+						writeable.write(options.tsv_endofline + ']');
 					}
 					writeable.end();
 					break;

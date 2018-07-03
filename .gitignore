@@ -1,5 +1,3 @@
-lib-cov
-coverage
 *.seed
 *.log
 *.csv
@@ -8,11 +6,6 @@ coverage
 *.pid
 *.gz
 
-pids
-logs
-results
-dist
+coverage
 local
-npm-debug.log
 node_modules
-reports

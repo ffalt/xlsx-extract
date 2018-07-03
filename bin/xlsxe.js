@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /* vim: set ts=2: */
-var XLSX = require('../lib/index').XLSX,
+var XLSX = require('../dist/index.min.js').XLSX,
 	fs = require('fs'),
 	program = require('commander');
 	pack = require('../package.json');
@@ -9,6 +9,7 @@ program
 	.version(pack.version)
 	.usage('[options] <file> [destfile]')
 	.option('-m, --mode <mode>', 'json or tsv (default tsv)')
+	.option('-p, --parser <mode>', 'sax or expat (default sax)')
 	.option('-f, --file <file>', 'source .xlsx')
 	.option('-s, --sheet <nr>', 'sheet nr')
 	.option('-d, --dest <file>', 'destination .tsv')
@@ -34,6 +35,7 @@ if (program.header) options.ignore_header = program.header;
 if (program.raw) options.raw_values = program.raw;
 if (program.d1904) options.date1904 = program.d1904;
 if (program.mode) options.format = program.mode;
+if (program.parser) options.parser = program.parser;
 
 if (!filename) {
 	console.error("xlsxe: must specify a filename");
@@ -47,6 +49,7 @@ if (!fs.existsSync(filename)) {
 
 if (destfile) {
 	var error;
+	console.time('written');
 	new XLSX().convert(filename, destfile, options)
 		.on('error', function (err) {
 			error = err;
@@ -54,7 +57,7 @@ if (destfile) {
 		})
 		.on('end', function () {
 			if (!error)
-				console.log('written');
+				console.timeEnd('written');
 		});
 
 } else {
