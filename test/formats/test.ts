@@ -25,8 +25,9 @@ describe('utils', () => {
 		it('should detect right number format types', done => {
 
 			function checkformat(s: string | null, ffs: string | Array<string>, digits?: Array<number>, fmtNr?: string) {
-				if (typeof ffs === 'string')
+				if (typeof ffs === 'string') {
 					ffs = [ffs];
+				}
 				const fmts = splitCellFormats(s || '');
 				for (let i = 0; i < fmts.length; i++) {
 					assert.equal(fmts[i].fmt_type, ffs[i], fmts[i].fmt_type + '=' + ffs[i] + ' ' + JSON.stringify(fmts[i]) + ' check:' + s + (fmtNr ? ' fmtNr:' + fmtNr : ''));
@@ -50,14 +51,14 @@ describe('utils', () => {
 			 xlsx build in nr formats types
 			 */
 			const fmts_types_digits: { [num: number]: Array<number> } = {
-				2: [2], //'0.00',
+				2: [2], // '0.00',
 				4: [2], // '#,##0.00',
 				10: [2], // '0.00%',
 				11: [20], // '0.00E+00',
-				12: [2], //'# ?/?',
-				13: [3], //'# ??/??',
-				39: [2, 2],//'#,##0.00;(#,##0.00)',
-				40: [2, 2],//'#,##0.00;[Red](#,##0.00)',
+				12: [2], // '# ?/?',
+				13: [3], // '# ??/??',
+				39: [2, 2], // '#,##0.00;(#,##0.00)',
+				40: [2, 2], // '#,##0.00;[Red](#,##0.00)',
 				48: [18] // '##0.0E+0',
 			};
 			const fmts_types: { [num: number]: string | Array<string> } = {
@@ -90,10 +91,12 @@ describe('utils', () => {
 				49: 's'
 			};
 
-			for (let key in xlsx_fmts) {
-				if (xlsx_fmts.hasOwnProperty(key) && xlsx_fmts[key])
-					checkformat(xlsx_fmts[key], fmts_types[key], fmts_types_digits[key], key);
-			}
+			Object.keys(xlsx_fmts).forEach(key => {
+				const k = parseInt(key, 10);
+				if (xlsx_fmts[k]) {
+					checkformat(xlsx_fmts[k], fmts_types[k], fmts_types_digits[k], key);
+				}
+			});
 
 			done();
 		});
