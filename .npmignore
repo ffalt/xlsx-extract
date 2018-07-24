@@ -15,6 +15,7 @@
 .gitignore
 webpack.config.js
 tslint.json
+tsconfig.json
 
 coverage
 local
