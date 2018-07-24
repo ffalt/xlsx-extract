@@ -213,7 +213,7 @@ export function escapeTSV(val: string, options: IXLSXExtractOptions): string {
 }
 
 export function unescapexml(text: string): string {
-	const encregex = /&(?:quot|apos|gt|lt|amp|#x?([\da-fA-F]+));/g
+	const encregex = /&(?:quot|apos|gt|lt|amp|#x?([\da-fA-F]+));/g;
 	const coderegex = /_x([\da-fA-F]{4})_/g;
 	const encodings: { [key: string]: string } = {
 		'&quot;': '"',

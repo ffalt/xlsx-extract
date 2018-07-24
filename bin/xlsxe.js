@@ -76,8 +76,9 @@ if (destfile) {
 			console.error(err);
 		})
 		.on('end', function () {
-			if (!error)
+			if (!error) {
 				console.timeEnd('written');
+			}
 		});
 } else {
 	if (options.format !== 'json') {
