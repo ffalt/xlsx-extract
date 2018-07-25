@@ -9,7 +9,7 @@
 			]},{
 		"name":"Sheet1","nr":"1","id":"1","rid":"rId1",
 		"rows": [
-			[{"typ":"s","raw":"fuzzy whuzzy"},{"fmt":"mm-dd-yy","fmt_typ":"d","typ":"n","raw":"41796","val":"2014-06-05T22:00:00.000Z"}],
+			[{"typ":"s","raw":"fuzzy whuzzy"},{"fmt":"mm-dd-yy","fmt_typ":"d","typ":"n","raw":"41796","val":"2014-06-06T00:00:00.000Z"}],
 			[{"typ":"s","raw":"MSFT"},{"typ":"s","raw":"hmm"}],
 			[{"typ":"s","raw":"SPY"},{"typ":"s","raw":"ha ha ha"}],
 			[{"fmt":"\"$\"#,##0_)","fmt_typ":"i","typ":"n","raw":"100000000","val":100000000}]

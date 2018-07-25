@@ -4,7 +4,7 @@ import {IXLSXExtractOptions} from './types';
 /**
  converts a raw xlsx-date to js date
  */
-export function xlsx_date(value: number, date1904: boolean) {
+export function xlsx_date(value: number, date1904: boolean): Date {
 	let date = Math.floor(value),
 		time = Math.round(86400 * (value - date)),
 		d;
@@ -26,7 +26,7 @@ export function xlsx_date(value: number, date1904: boolean) {
 	time = Math.floor(time / 60);
 	d.setMinutes(time % 60);
 	time = Math.floor(time / 60);
-	d.setHours(time);
+	d.setHours(time - d.getTimezoneOffset() / 60);
 	return d;
 }
 

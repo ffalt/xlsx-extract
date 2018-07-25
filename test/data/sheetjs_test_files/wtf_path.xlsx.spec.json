@@ -6,7 +6,7 @@
 		"rows": [
 			[{"typ":"n","raw":"1","val":1},{"fmt":"0%","fmt_typ":"i","typ":"n","raw":"2","val":200},{"typ":"n","raw":"3","val":3},{"typ":"n"},{"typ":"n"}],
 			[{"typ":"b","raw":"1","val":true},{"typ":"b","raw":"0","val":false},{"fmt":"\"This is \"\\ 0.0","fmt_typ":"f","typ":"n"},{"typ":"s","raw":"sheetjs"}],
-			[{"typ":"s","raw":"foo    bar"},{"typ":"s","raw":"baz"},{"fmt":"mm-dd-yy","fmt_typ":"d","typ":"n","raw":"41689.4375","val":"2014-02-19T09:30:00.000Z"},{"typ":"s","raw":"0.3"}],
+			[{"typ":"s","raw":"foo    bar"},{"typ":"s","raw":"baz"},{"fmt":"mm-dd-yy","fmt_typ":"d","typ":"n","raw":"41689.4375","val":"2014-02-19T10:30:00.000Z"},{"typ":"s","raw":"0.3"}],
 			[{"typ":"s","raw":"baz"},{},{"typ":"s","raw":"௮"},{"typ":"n","raw":"3.14159","val":3.14159}],
 			[{"typ":"s","raw":"hidden"}],
 			[{"typ":"s","raw":"visible"}]

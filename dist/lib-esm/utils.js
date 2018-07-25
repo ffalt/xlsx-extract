@@ -17,7 +17,7 @@ export function xlsx_date(value, date1904) {
     time = Math.floor(time / 60);
     d.setMinutes(time % 60);
     time = Math.floor(time / 60);
-    d.setHours(time);
+    d.setHours(time - d.getTimezoneOffset() / 60);
     return d;
 }
 export var xlsx_fmts = {

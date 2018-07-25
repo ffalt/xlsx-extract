@@ -9,10 +9,10 @@
 			[{"typ":"inlineStr","raw":"Boolean"},{"typ":"b","raw":"1","val":true},{"typ":"b","raw":"0","val":false}],
 			[{"typ":"inlineStr","raw":"Date"},{"fmt":"mm-dd-yy","fmt_typ":"d","typ":"d","raw":"2014-02-14T08:27:48.765Z"}],
 			[{"typ":"inlineStr","raw":"2 Decimals Built-in format #2"},{"fmt":"0.00","fmt_typ":"f","typ":"n","raw":"1.5","val":1.5}],
-			[{"typ":"inlineStr","raw":"Time Built-in format #18"},{"fmt":"h:mm AM/PM","fmt_typ":"d","typ":"n","raw":"1.5","val":"1900-01-01T11:00:00.000Z"}],
+			[{"typ":"inlineStr","raw":"Time Built-in format #18"},{"fmt":"h:mm AM/PM","fmt_typ":"d","typ":"n","raw":"1.5","val":"1900-01-01T12:00:00.000Z"}],
 			[{"typ":"inlineStr","raw":"Percentage Built-in format #9"},{"fmt":"0.00%","fmt_typ":"f","typ":"n","raw":"0.5","val":0.5}],
 			[{"typ":"inlineStr","raw":"Percentage Custom format"},{"fmt":"00.000%","fmt_typ":"f","typ":"n","raw":"0.5","val":0.5}],
-			[{"typ":"inlineStr","raw":"Duration 36 hours format #46"},{"fmt":"[h]:mm:ss","fmt_typ":"d","typ":"n","raw":"1.5","val":"1900-01-01T11:00:00.000Z"}],
+			[{"typ":"inlineStr","raw":"Duration 36 hours format #46"},{"fmt":"[h]:mm:ss","fmt_typ":"d","typ":"n","raw":"1.5","val":"1900-01-01T12:00:00.000Z"}],
 			[{"typ":"inlineStr","raw":"Formula"},{"typ":"inlineStr","raw":"String1"}],
 			[{"typ":"inlineStr","raw":"A simple comment"},{"typ":"inlineStr","raw":"cell with comment"}],
 			[{"typ":"inlineStr","raw":"A full comment"},{"typ":"inlineStr","raw":"cell with comment"}]
