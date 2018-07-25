@@ -19,9 +19,10 @@
     "build:single": "webpack --mode production",
     "cover": "nyc npm run test",
     "pretest": "tsc",
-    "test": "mocha --ui mocha-typescript --require ts-node/register --require source-map-support/register --recursive test/test.ts test/**/test.ts",
+    "test": "mocha --require ts-node/register --require source-map-support/register --recursive test/test.ts test/**/test.ts",
     "lint": "tslint --project tsconfig.json \"src/**/*.ts\"",
-    "test2": "nyc mocha"
+    "test:mocha-typescript": "mocha --require --ui mocha-typescript ts-node/register --require source-map-support/register --recursive test/test.ts test/**/test.ts",
+    "test:nyc": "nyc mocha"
   },
   "dependencies": {
     "commander": "^2.16.0",
@@ -32,10 +33,9 @@
     "@types/chai": "^4.1.4",
     "@types/debug": "0.0.30",
     "@types/mocha": "^5.2.5",
-    "@types/node": "^10.5.2",
+    "@types/node": "^10.5.3",
     "@types/sax": "^1.0.1",
     "@types/tmp": "0.0.33",
-    "@types/xlsx": "0.0.36",
     "awesome-typescript-loader": "^5.2.0",
     "chai": "^4.1.2",
     "chai-exclude": "^1.0.8",
