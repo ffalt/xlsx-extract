@@ -19,9 +19,8 @@
     "build:single": "webpack --mode production",
     "cover": "nyc npm run test",
     "pretest": "tsc",
-    "test": "mocha --require ts-node/register --require source-map-support/register --recursive test/test.ts test/**/test.ts",
     "lint": "tslint --project tsconfig.json \"src/**/*.ts\"",
-    "test:mocha-typescript": "mocha --require --ui mocha-typescript ts-node/register --require source-map-support/register --recursive test/test.ts test/**/test.ts",
+    "test": "mocha --require --ui mocha-typescript ts-node/register --require source-map-support/register --recursive test/test.ts test/**/test.ts",
     "test:nyc": "nyc mocha"
   },
   "dependencies": {
