@@ -21,6 +21,8 @@ hence these magnificent features:
 
 [![known vulnerabilities](https://snyk.io/test/github/ffalt/xlsx-extract/badge.svg)](https://snyk.io/test/github/ffalt/xlsx-extract)
 
+[![certification](https://api.codacy.com/project/badge/Grade/7bd868b2fb1c4f38ad9ef2ffb698c314)](https://www.codacy.com/app/ffalt/xlsx-extract)
+
 ## Install
 
 ```
