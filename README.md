@@ -23,7 +23,7 @@ hence these magnificent features:
 
 [![certification](https://api.codacy.com/project/badge/Grade/7bd868b2fb1c4f38ad9ef2ffb698c314)](https://www.codacy.com/app/ffalt/xlsx-extract)
 
-[![build status](https://travis-ci.org/ffalt/xlsx-extract.svg?branch=master)](https://travis-ci.org/ffalt/xlsx-extract)
+[![build status](https://travis-ci.org/ffalt/xlsx-extract.svg?branch=master)](https://travis-ci.org/ffalt/xlsx-extract) [![Greenkeeper badge](https://badges.greenkeeper.io/ffalt/xlsx-extract.svg)](https://greenkeeper.io/)
 
 ## Install
 
