@@ -9,6 +9,8 @@
 .git
 .idea
 .nyc_output/
+.travis.yml
+deplokay.json
 
 .DS_Store
 .npmignore
