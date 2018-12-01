@@ -12,6 +12,7 @@ hence these magnificent features:
 
 
 [![NPM](https://nodei.co/npm/xlsx-extract.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/xlsx-extract/)
+
 [![dependencies](https://img.shields.io/david/ffalt/xlsx-extract.svg)](https://www.npmjs.com/package/xlsx-extract) 
 [![license](https://img.shields.io/npm/l/xlsx-extract.svg)](http://opensource.org/licenses/MIT) 
 [![developer](https://img.shields.io/badge/developer-awesome-brightgreen.svg)](https://github.com/ffalt/xlsx-extract) 
