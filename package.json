@@ -1,0 +1,95 @@
+{
+	"name": "xlsx-extract",
+	"version": "0.1.1",
+	"license": "MIT",
+	"description": "super-simple async XLSX reader with low memory footprint",
+	"homepage": "https://github.com/ffalt/xlsx-extract",
+	"keywords": [
+		"xlsx",
+		"tsv",
+		"extract",
+		"excel",
+		"spreadsheet"
+	],
+	"scripts": {
+		"clean": "rimraf dist",
+		"build": "npm run clean && npm run build:commonjs && npm run build:esm && npm run build:single",
+		"build:commonjs": "tsc",
+		"build:esm": "tsc -m es6 --outDir dist/lib-esm",
+		"build:single": "webpack --mode production",
+		"build:deploy": "npm run build",
+		"cover": "nyc npm run test",
+		"pretest": "tsc",
+		"release": "deplokay -c deplokay.json",
+		"lint": "tslint --project tsconfig.json \"src/**/*.ts\"",
+		"test": "mocha --ui mocha-typescript --require ts-node/register --require source-map-support/register --recursive test/test.ts test/**/test.ts",
+		"test:nyc": "nyc mocha"
+	},
+	"dependencies": {
+		"commander": "^2.19.0",
+		"sax": "^1.2.4",
+		"unzip2": "^0.2.5"
+	},
+	"bugs": {
+		"url": "https://github.com/ffalt/xlsx-extract/issues"
+	},
+	"author": {
+		"name": "ffalt"
+	},
+	"contributors": [
+		{
+			"name": "Michael Pelikan",
+			"url": "https://github.com/mpelikan"
+		},
+		{
+			"name": "Mikuso",
+			"url": "https://github.com/mikuso"
+		},
+		{
+			"name": "Vasil Velichkov",
+			"url": "https://github.com/velichkov"
+		},
+		{
+			"name": "Laurence Hudson",
+			"url": "https://github.com/laurence-hudson-tessella"
+		},
+		{
+			"name": "Chrisdf",
+			"url": "https://github.com/Chrisdf"
+		}
+	],
+	"bin": "./bin/xlsxe.js",
+	"main": "dist/lib/index.js",
+	"types": "dist/lib/index.d.ts",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ffalt/xlsx-extract"
+	},
+	"engines": {
+		"node": ">= 4.0.0"
+	},
+	"nyc": {
+		"temp-directory": "./coverage/.nyc_output",
+		"report-dir": "./coverage/coverage",
+		"include": [
+			"src/*.ts",
+			"src/**/*.ts"
+		],
+		"extension": [
+			".ts"
+		],
+		"require": [
+			"ts-node/register",
+			"source-map-support/register"
+		],
+		"reporter": [
+			"text-summary",
+			"lcov",
+			"html"
+		],
+		"check-coverage": true,
+		"sourceMap": true,
+		"instrument": true
+	},
+	"readmeFilename": "README.md"
+}
