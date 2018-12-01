@@ -28,7 +28,7 @@
     "archive": {
       "path": "./local/archives"
     },
-    "r-branch": {
+    "branch": {
       "branch": "releases"
     }
   }
