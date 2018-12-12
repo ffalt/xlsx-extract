@@ -15,7 +15,6 @@ hence these magnificent features:
 
 [![dependencies](https://img.shields.io/david/ffalt/xlsx-extract.svg)](https://www.npmjs.com/package/xlsx-extract) 
 [![license](https://img.shields.io/npm/l/xlsx-extract.svg)](http://opensource.org/licenses/MIT) 
-[![developer](https://img.shields.io/badge/developer-awesome-brightgreen.svg)](https://github.com/ffalt/xlsx-extract) 
 [![known vulnerabilities](https://snyk.io/test/github/ffalt/xlsx-extract/badge.svg)](https://snyk.io/test/github/ffalt/xlsx-extract) 
 [![certification](https://api.codacy.com/project/badge/Grade/7bd868b2fb1c4f38ad9ef2ffb698c314)](https://www.codacy.com/app/ffalt/xlsx-extract) 
 [![build status](https://travis-ci.org/ffalt/xlsx-extract.svg?branch=master)](https://travis-ci.org/ffalt/xlsx-extract) 
