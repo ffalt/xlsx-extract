@@ -47,7 +47,7 @@
     "natives": "1.1.6",
     "node-expat": "2.3.17",
     "nyc": "13.1.0",
-    "rimraf": "2.6.2",
+    "rimraf": "2.6.3",
     "source-map-support": "0.5.9",
     "tmp": "0.0.33",
     "ts-node": "7.0.1",
