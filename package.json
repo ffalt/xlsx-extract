@@ -34,7 +34,7 @@
     "@types/chai": "4.1.7",
     "@types/debug": "0.0.31",
     "@types/mocha": "5.2.6",
-    "@types/node": "10.12.29",
+    "@types/node": "10.12.30",
     "@types/sax": "1.0.1",
     "@types/tmp": "0.0.34",
     "awesome-typescript-loader": "5.2.1",
