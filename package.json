@@ -39,7 +39,7 @@
     "@types/tmp": "0.0.34",
     "awesome-typescript-loader": "5.2.1",
     "chai": "4.2.0",
-    "chai-exclude": "1.0.12",
+    "chai-exclude": "2.0.1",
     "deplokay": "0.0.6",
     "istanbul": "0.4.5",
     "mocha": "5.2.0",
