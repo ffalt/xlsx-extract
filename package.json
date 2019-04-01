@@ -36,7 +36,7 @@
     "@types/mocha": "5.2.6",
     "@types/node": "10.14.4",
     "@types/sax": "1.0.1",
-    "@types/tmp": "0.0.34",
+    "@types/tmp": "0.1.0",
     "awesome-typescript-loader": "5.2.1",
     "chai": "4.2.0",
     "chai-exclude": "1.0.12",
