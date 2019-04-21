@@ -54,7 +54,7 @@
     "tslint": "5.16.0",
     "typescript": "3.4.4",
     "webpack": "4.30.0",
-    "webpack-cli": "3.3.0",
+    "webpack-cli": "3.3.1",
     "webpack-node-externals": "1.7.2"
   },
   "bugs": {
