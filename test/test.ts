@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as util from 'util';
 import {assert, should, expect, use} from 'chai';
-import chaiExclude = require('chai-exclude');
+import chaiExclude from 'chai-exclude';
 import {describe, it} from 'mocha';
 import {Sheet} from '../src/sheet';
 import {XLSX} from '../src';
@@ -12,6 +12,7 @@ import tmp from 'tmp';
 import {escapeTSV, isValidDate} from '../src/utils';
 
 use(chaiExclude);
+
 const parsers: Array<string> = [
 	'sax',
 	'expat',
