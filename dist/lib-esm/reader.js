@@ -1,12 +1,11 @@
 import { getColumnFromDef, splitCellFormats, xlsx_fmts } from './utils';
 import { Workbook } from './book';
-import fs from 'fs';
-import unzip from 'unzip2';
 import { Row } from './row';
 import { Cell } from './cell';
 import { Sheet } from './sheet';
 import { SaxExpat, SaxSax } from './xml';
 import { applyDefaults } from './defaults';
+import { YauzlUnzip } from './unzip';
 var XLSXReader = (function () {
     function XLSXReader(filename, options) {
         this.options = {};
@@ -19,6 +18,9 @@ var XLSXReader = (function () {
             return new SaxExpat();
         }
         return new SaxSax();
+    };
+    XLSXReader.prototype.createUnzip = function () {
+        return new YauzlUnzip();
     };
     XLSXReader.prototype.parseXMLSheet = function (entry, workbook, emit, cb) {
         var _this = this;
@@ -260,13 +262,8 @@ var XLSXReader = (function () {
             }
         };
         var lookups = this.getLookups(workbook);
-        fs.createReadStream(this.filename)
-            .pipe(unzip.Parse())
-            .on('error', function (err) {
-            emit({ err: err });
-            emit({});
-        })
-            .on('entry', function (entry) {
+        var unzip = this.createUnzip();
+        unzip.read(this.filename, function (entry) {
             var lookup = lookups.find(function (l) { return l.filename === entry.path; });
             if (lookup) {
                 running++;
@@ -298,10 +295,12 @@ var XLSXReader = (function () {
                 });
             }
             else {
-                entry.autodrain();
+                entry.ignore();
             }
-        })
-            .on('close', function () {
+        }, function (err) {
+            emit({ err: err });
+            emit({});
+        }, function () {
             running--;
             finish();
         });
@@ -316,13 +315,8 @@ var XLSXReader = (function () {
                 _this.parseSheets(workbook, emit);
             }
         };
-        fs.createReadStream(this.filename)
-            .pipe(unzip.Parse())
-            .on('error', function (err) {
-            emit({ err: err });
-            emit({});
-        })
-            .on('entry', function (entry) {
+        var unzip = this.createUnzip();
+        unzip.read(this.filename, function (entry) {
             if (entry.path === _this.workfolder + '/sharedStrings.xml') {
                 collecting++;
                 _this.parseXMLStrings(entry, function (err, strings) {
@@ -352,10 +346,12 @@ var XLSXReader = (function () {
                 });
             }
             else {
-                entry.autodrain();
+                entry.ignore();
             }
-        })
-            .on('close', function () {
+        }, function (err) {
+            emit({ err: err });
+            emit({});
+        }, function () {
             checkStartParseSheet();
         });
     };

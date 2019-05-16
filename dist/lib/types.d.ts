@@ -14,6 +14,7 @@ export interface IXLSXExtractOptions {
     raw_values?: boolean;
     round_floats?: boolean;
     date1904?: boolean;
+    ignore_timezone?: boolean;
     convert_values?: {
         ints?: boolean;
         floats?: boolean;

@@ -57,7 +57,7 @@ var Cell = (function () {
             switch (format.fmt_type) {
                 case 'd':
                     if (options.convert_values.dates) {
-                        this.val = xlsx_date(this.val, !!options.date1904);
+                        this.val = xlsx_date(this.val, !!options.date1904, !!options.ignore_timezone);
                     }
                     break;
                 case 'i':

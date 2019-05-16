@@ -1,6 +1,6 @@
 import { ICellFormat } from './cell';
 import { IXLSXExtractOptions } from './types';
-export declare function xlsx_date(value: number, date1904: boolean): Date;
+export declare function xlsx_date(value: number, date1904: boolean, ignore_timezone: boolean): Date;
 export declare const xlsx_fmts: {
     [id: number]: string | null;
 };

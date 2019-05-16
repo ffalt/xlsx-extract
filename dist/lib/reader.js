@@ -1,17 +1,13 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var utils_1 = require("./utils");
 var book_1 = require("./book");
-var fs_1 = __importDefault(require("fs"));
-var unzip2_1 = __importDefault(require("unzip2"));
 var row_1 = require("./row");
 var cell_1 = require("./cell");
 var sheet_1 = require("./sheet");
 var xml_1 = require("./xml");
 var defaults_1 = require("./defaults");
+var unzip_1 = require("./unzip");
 var XLSXReader = (function () {
     function XLSXReader(filename, options) {
         this.options = {};
@@ -24,6 +20,9 @@ var XLSXReader = (function () {
             return new xml_1.SaxExpat();
         }
         return new xml_1.SaxSax();
+    };
+    XLSXReader.prototype.createUnzip = function () {
+        return new unzip_1.YauzlUnzip();
     };
     XLSXReader.prototype.parseXMLSheet = function (entry, workbook, emit, cb) {
         var _this = this;
@@ -265,13 +264,8 @@ var XLSXReader = (function () {
             }
         };
         var lookups = this.getLookups(workbook);
-        fs_1.default.createReadStream(this.filename)
-            .pipe(unzip2_1.default.Parse())
-            .on('error', function (err) {
-            emit({ err: err });
-            emit({});
-        })
-            .on('entry', function (entry) {
+        var unzip = this.createUnzip();
+        unzip.read(this.filename, function (entry) {
             var lookup = lookups.find(function (l) { return l.filename === entry.path; });
             if (lookup) {
                 running++;
@@ -303,10 +297,12 @@ var XLSXReader = (function () {
                 });
             }
             else {
-                entry.autodrain();
+                entry.ignore();
             }
-        })
-            .on('close', function () {
+        }, function (err) {
+            emit({ err: err });
+            emit({});
+        }, function () {
             running--;
             finish();
         });
@@ -321,13 +317,8 @@ var XLSXReader = (function () {
                 _this.parseSheets(workbook, emit);
             }
         };
-        fs_1.default.createReadStream(this.filename)
-            .pipe(unzip2_1.default.Parse())
-            .on('error', function (err) {
-            emit({ err: err });
-            emit({});
-        })
-            .on('entry', function (entry) {
+        var unzip = this.createUnzip();
+        unzip.read(this.filename, function (entry) {
             if (entry.path === _this.workfolder + '/sharedStrings.xml') {
                 collecting++;
                 _this.parseXMLStrings(entry, function (err, strings) {
@@ -357,10 +348,12 @@ var XLSXReader = (function () {
                 });
             }
             else {
-                entry.autodrain();
+                entry.ignore();
             }
-        })
-            .on('close', function () {
+        }, function (err) {
+            emit({ err: err });
+            emit({});
+        }, function () {
             checkStartParseSheet();
         });
     };

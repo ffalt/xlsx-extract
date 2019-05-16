@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function xlsx_date(value, date1904) {
+function xlsx_date(value, date1904, ignore_timezone) {
     var date = Math.floor(value), time = Math.round(86400 * (value - date)), d;
     if (date1904) {
         date += 1462;
@@ -19,7 +19,10 @@ function xlsx_date(value, date1904) {
     time = Math.floor(time / 60);
     d.setMinutes(time % 60);
     time = Math.floor(time / 60);
-    d.setHours(time - d.getTimezoneOffset() / 60);
+    if (!ignore_timezone) {
+        time -= d.getTimezoneOffset() / 60;
+    }
+    d.setHours(time);
     return d;
 }
 exports.xlsx_date = xlsx_date;

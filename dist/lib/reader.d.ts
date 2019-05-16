@@ -5,6 +5,7 @@ export declare class XLSXReader {
     workfolder: string;
     constructor(filename: string, options?: IXLSXExtractOptions);
     private createParser;
+    private createUnzip;
     private parseXMLSheet;
     private parseXMLWorkbookSheets;
     private parseXMLWorkbookRelations;
