@@ -20,6 +20,7 @@ export interface IXLSXExtractOptions {
 	raw_values?: boolean;  // default false - do not apply cell formats (get values as string as in xlsx)
 	round_floats?: boolean; // default true - round float values as the cell format defines (values will be reported as parsed floats otherwise)
 	date1904?: boolean;   // default false - use date 1904 conversion
+	ignore_timezone?: boolean;   // default false - ignore timezones in date parsing
 	convert_values?: { // apply cell number formats or not (values will be reported as strings otherwise)
 		ints?: boolean;  // rounds to int if number format is for int
 		floats?: boolean;  // rounds floats according to float number format
