@@ -3,7 +3,7 @@
 extracts data from XLSX files with low memory footprint
 
 
-xlsx-files can get pretty big, so nodejs & full featured xlsx-modules can reach memory limits or just use more than is needed for that task. (--max-old-space-size & --stack_size can't help you all the time either)
+xlsx-files can be pretty big, so nodejs & full featured xlsx-modules can reach memory limits or just use more than is needed for that task. (--max-old-space-size & --stack_size can't help you all the time either)
 
 hence these magnificent features:
 
@@ -61,6 +61,7 @@ interface IXLSXExtractOptions {
 	raw_values?: boolean;  // default false - do not apply cell formats (get values as string as in xlsx)
 	round_floats?: boolean; // default true - round float values as the cell format defines (values will be reported as parsed floats otherwise)
 	date1904?: boolean;   // default false - use date 1904 conversion
+	ignore_timezone?: boolean; // default false - ignore timezone in date parsing
 	convert_values?: { // apply cell number formats or not (values will be reported as strings otherwise)
 		ints?: boolean;  // rounds to int if number format is for int
 		floats?: boolean;  // rounds floats according to float number format

@@ -19,6 +19,7 @@ webpack.config.js
 tslint.json
 tsconfig.json
 
+CHANGELOG.md
 coverage
 local
 node_modules
