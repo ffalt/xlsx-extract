@@ -1,6 +1,6 @@
 {
   "name": "xlsx-extract",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MIT",
   "description": "simple async XLSX reader with low memory footprint",
   "homepage": "https://github.com/ffalt/xlsx-extract",
@@ -26,10 +26,9 @@
     "test:nyc": "nyc mocha"
   },
   "dependencies": {
-    "@types/yauzl": "^2.9.1",
     "commander": "2.20.0",
     "sax": "1.2.4",
-    "yauzl": "^2.10.0"
+    "yauzl": "2.10.0"
   },
   "devDependencies": {
     "@types/chai": "4.1.7",
@@ -38,6 +37,7 @@
     "@types/node": "12.0.2",
     "@types/sax": "1.0.1",
     "@types/tmp": "0.1.0",
+    "@types/yauzl": "2.9.1",
     "awesome-typescript-loader": "5.2.1",
     "chai": "4.2.0",
     "chai-exclude": "2.0.1",
