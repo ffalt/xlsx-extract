@@ -1,14 +1,12 @@
 import {getColumnFromDef, splitCellFormats, xlsx_fmts} from './utils';
 import {Workbook} from './book';
-import fs from 'fs';
-import unzip from 'unzip2';
 import {Row} from './row';
 import {Cell, ICellFormatStyles} from './cell';
 import {IXLSXExtractOptions} from './types';
 import {Sheet} from './sheet';
 import {ISaxParser, SaxExpat, SaxSax} from './xml';
 import {applyDefaults} from './defaults';
-
+import {IUnzip, IUnzipEntry, YauzlUnzip} from './unzip';
 
 export class XLSXReader {
 	filename: string;
@@ -28,7 +26,11 @@ export class XLSXReader {
 		return new SaxSax();
 	}
 
-	private parseXMLSheet(entry: unzip.ZipEntry, workbook: Workbook, emit: (row?: Row | null, cell?: Cell | null) => void, cb: (err?: Error) => void) {
+	private createUnzip(): IUnzip {
+		return new YauzlUnzip();
+	}
+
+	private parseXMLSheet(entry: IUnzipEntry, workbook: Workbook, emit: (row?: Row | null, cell?: Cell | null) => void, cb: (err?: Error) => void) {
 		/*
 		 converts cell value according to the cell type & number format
 		 */
@@ -112,7 +114,7 @@ export class XLSXReader {
 		entry.pipe(sax.piper());
 	}
 
-	private parseXMLWorkbookSheets(entry: unzip.ZipEntry, cb: (err: Error | undefined, sheets: Array<Sheet>) => void) {
+	private parseXMLWorkbookSheets(entry: IUnzipEntry, cb: (err: Error | undefined, sheets: Array<Sheet>) => void) {
 		const sheets: Array<Sheet> = [];
 		const sax = this.createParser()
 			.onStartElement((name, attrs) => {
@@ -131,7 +133,7 @@ export class XLSXReader {
 		entry.pipe(sax.piper());
 	}
 
-	private parseXMLWorkbookRelations(entry: unzip.ZipEntry, cb: (err: Error | undefined, relations: Array<{ sheetid: string, filename: string }>) => void) {
+	private parseXMLWorkbookRelations(entry: IUnzipEntry, cb: (err: Error | undefined, relations: Array<{ sheetid: string, filename: string }>) => void) {
 		const relations: Array<{ sheetid: string, filename: string }> = [];
 		const sax = this.createParser()
 			.onStartElement((name, attrs) => {
@@ -149,7 +151,7 @@ export class XLSXReader {
 		entry.pipe(sax.piper());
 	}
 
-	private parseXMLStyles(entry: unzip.ZipEntry, cb: (err: Error | undefined, formatstyles: ICellFormatStyles) => void) {
+	private parseXMLStyles(entry: IUnzipEntry, cb: (err: Error | undefined, formatstyles: ICellFormatStyles) => void) {
 		const formatstyles: ICellFormatStyles = {};
 		const numFmts: { [id: string]: string } = {};
 		const cellXfs: Array<number> = [];
@@ -186,7 +188,7 @@ export class XLSXReader {
 		entry.pipe(sax.piper());
 	}
 
-	private parseXMLStrings(entry: unzip.ZipEntry, cb: (err: Error | undefined, strings: Array<string>) => void) {
+	private parseXMLStrings(entry: IUnzipEntry, cb: (err: Error | undefined, strings: Array<string>) => void) {
 		const strings: Array<string> = [];
 		let collect_strings = false;
 		let sl: Array<string> = [];
@@ -266,13 +268,9 @@ export class XLSXReader {
 			}
 		};
 		const lookups = this.getLookups(workbook);
-		fs.createReadStream(this.filename)
-			.pipe(unzip.Parse())
-			.on('error', (err: Error) => {
-				emit({err});
-				emit({});
-			})
-			.on('entry', (entry: unzip.ZipEntry) => {
+		const unzip = this.createUnzip();
+		unzip.read(this.filename,
+			entry => {
 				const lookup = lookups.find(l => l.filename === entry.path);
 				if (lookup) {
 					running++;
@@ -301,13 +299,18 @@ export class XLSXReader {
 						}
 					});
 				} else {
-					entry.autodrain();
+					entry.ignore();
 				}
-			})
-			.on('close', () => {
+			},
+			err => {
+				emit({err});
+				emit({});
+			},
+			() => {
 				running--;
 				finish();
-			});
+			}
+		);
 	}
 
 	private parseWorkbook(emit: (part: { err?: Error, cell?: Cell, row?: Row, sheet?: Sheet }) => void) {
@@ -323,13 +326,9 @@ export class XLSXReader {
 
 		// first get styles & strings
 		// TODO: is there really no memory friendly way to NOT read zip stream twice for styles/strings/etc and then for sheets?
-		fs.createReadStream(this.filename)
-			.pipe(unzip.Parse())
-			.on('error', (err: Error) => {
-				emit({err});
-				emit({});
-			})
-			.on('entry', (entry: unzip.ZipEntry) => {
+		const unzip = this.createUnzip();
+		unzip.read(this.filename,
+			entry => {
 				if (entry.path === this.workfolder + '/sharedStrings.xml') {
 					collecting++;
 					this.parseXMLStrings(entry, (err, strings) => {
@@ -355,12 +354,17 @@ export class XLSXReader {
 						checkStartParseSheet();
 					});
 				} else {
-					entry.autodrain();
+					entry.ignore();
 				}
-			})
-			.on('close', () => {
+			},
+			err => {
+				emit({err});
+				emit({});
+			},
+			() => {
 				checkStartParseSheet();
-			});
+			}
+		);
 	}
 
 	read(emit: (what: string, data?: any) => void) {
