@@ -51,7 +51,7 @@
     "rimraf": "2.6.3",
     "source-map-support": "0.5.12",
     "tmp": "0.1.0",
-    "ts-node": "8.1.0",
+    "ts-node": "8.1.1",
     "tslint": "5.16.0",
     "typescript": "3.4.5",
     "webpack": "4.32.2",
