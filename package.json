@@ -46,7 +46,7 @@
     "mocha": "6.1.4",
     "mocha-typescript": "1.1.17",
     "natives": "1.1.6",
-    "node-expat": "2.3.17",
+    "node-expat": "2.3.18",
     "nyc": "14.1.1",
     "rimraf": "2.6.3",
     "source-map-support": "0.5.12",
