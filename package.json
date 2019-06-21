@@ -52,7 +52,7 @@
     "source-map-support": "0.5.12",
     "tmp": "0.1.0",
     "ts-node": "8.3.0",
-    "tslint": "5.17.0",
+    "tslint": "5.18.0",
     "typescript": "3.5.2",
     "webpack": "4.35.0",
     "webpack-cli": "3.3.4",
