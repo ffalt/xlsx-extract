@@ -41,7 +41,7 @@
     "awesome-typescript-loader": "5.2.1",
     "chai": "4.2.0",
     "chai-exclude": "2.0.1",
-    "deplokay": "0.0.6",
+    "deplokay": "0.0.7",
     "istanbul": "0.4.5",
     "mocha": "6.1.4",
     "mocha-typescript": "1.1.17",
