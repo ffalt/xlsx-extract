@@ -53,7 +53,7 @@
     "tmp": "0.1.0",
     "ts-node": "8.3.0",
     "tslint": "5.18.0",
-    "typescript": "3.5.2",
+    "typescript": "3.5.3",
     "webpack": "4.35.3",
     "webpack-cli": "3.3.5",
     "webpack-node-externals": "1.7.2"
