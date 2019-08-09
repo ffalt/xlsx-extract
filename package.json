@@ -26,7 +26,7 @@
     "test:nyc": "nyc mocha"
   },
   "dependencies": {
-    "commander": "2.20.0",
+    "commander": "3.0.0",
     "sax": "1.2.4",
     "yauzl": "2.10.0"
   },
