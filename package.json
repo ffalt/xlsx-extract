@@ -43,7 +43,7 @@
     "chai-exclude": "2.0.2",
     "deplokay": "0.0.9",
     "istanbul": "0.4.5",
-    "mocha": "6.2.0",
+    "mocha": "6.2.1",
     "mocha-typescript": "1.1.17",
     "natives": "1.1.6",
     "node-expat": "2.3.18",
