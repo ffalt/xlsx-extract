@@ -1,3 +1,9 @@
+<a name="0.1.3"></a>
+# 0.1.3 (2019/11/27)
+
+### Bug Fixes
+* phonetic information was merged into cell string instead of being ignored
+
 <a name="0.1.2"></a>
 # 0.1.2 (2019/05/16)
 
