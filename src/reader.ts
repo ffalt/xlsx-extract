@@ -193,27 +193,30 @@ export class XLSXReader {
 		let collect_strings = false;
 		let sl: Array<string> = [];
 		let s = '';
+		let phonetic = false;
 		const sax = this.createParser()
 			.onStartElement((name, attrs) => {
 				if (name === 'si') {
 					sl = [];
-				}
-				if (name === 't') {
+				} else if (name === 't') {
 					collect_strings = true;
 					s = '';
+				} else if (name === 'rph') {
+					phonetic = true;
 				}
 			})
 			.onEndElement((name) => {
 				if (name === 't') {
 					sl.push(s);
 					collect_strings = false;
-				}
-				if (name === 'si') {
+				} else if (name === 'rph') {
+					phonetic = false;
+				} else if (name === 'si') {
 					strings.push(sl.join(''));
 				}
 			})
 			.onText((txt) => {
-				if (collect_strings) {
+				if (collect_strings && !phonetic) {
 					s = s + txt.replace(/\r\n/g, '\n');
 				}
 			})

@@ -3,8 +3,8 @@
 	{
 		"name":"Sheet1","nr":"1","id":"1","rid":"rId1",
 		"rows": [
-			[{"typ":"s","raw":"漢字カンジ"}],
-			[{"typ":"s","raw":"漢字withColorカンジ"}]
+			[{"typ":"s","raw":"漢字"}],
+			[{"typ":"s","raw":"漢字withColor"}]
 		]
 	}
 	]
