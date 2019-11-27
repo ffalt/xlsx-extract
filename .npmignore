@@ -11,10 +11,11 @@
 .nyc_output/
 .travis.yml
 deplokay.json
-
+renovate.json
 .DS_Store
 .npmignore
 .gitignore
+jest.config.js
 webpack.config.js
 tslint.json
 tsconfig.json

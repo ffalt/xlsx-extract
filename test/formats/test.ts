@@ -1,28 +1,24 @@
-import {assert} from 'chai';
-import {describe, it} from 'mocha';
 import {alphaNum, numAlpha, splitCellFormats, xlsx_fmts} from '../../src/utils';
 
 describe('utils', () => {
-	describe('column row translation', function() {
-		it('should match column conversation', done => {
-			assert.equal(numAlpha(0), 'A');
-			assert.equal(numAlpha(26), 'AA');
-			assert.equal(numAlpha(701), 'ZZ');
-			assert.equal(alphaNum('A'), 0);
-			assert.equal(alphaNum('ZZ'), 701);
+
+	describe('column row translation', () => {
+		it('should match column conversation', () => {
+			expect(numAlpha(0)).toBe('A');
+			expect(numAlpha(26)).toBe('AA');
+			expect(numAlpha(701)).toBe('ZZ');
+			expect(alphaNum('A')).toBe(0);
+			expect(alphaNum('ZZ')).toBe(701);
 			let i = 0;
 			while (i < 9999) {
-				assert.equal(alphaNum(numAlpha(i)), i);
+				expect(alphaNum(numAlpha(i))).toBe(i);
 				i++;
 			}
-
-			done();
 		});
 	});
 
-	describe('cell formats', function() {
-
-		it('should detect right number format types', done => {
+	describe('cell formats', () => {
+		it('should detect right number format types', () => {
 
 			function checkformat(s: string | null, ffs: string | Array<string>, digits?: Array<number>, fmtNr?: string) {
 				if (typeof ffs === 'string') {
@@ -30,9 +26,11 @@ describe('utils', () => {
 				}
 				const fmts = splitCellFormats(s || '');
 				for (let i = 0; i < fmts.length; i++) {
-					assert.equal(fmts[i].fmt_type, ffs[i], fmts[i].fmt_type + '=' + ffs[i] + ' ' + JSON.stringify(fmts[i]) + ' check:' + s + (fmtNr ? ' fmtNr:' + fmtNr : ''));
+					let msg = fmts[i].fmt_type + '=' + ffs[i] + ' ' + JSON.stringify(fmts[i]) + ' check:' + s + (fmtNr ? ' fmtNr:' + fmtNr : '');
+					expect(fmts[i].fmt_type, msg).toBe(ffs[i]);
 					if (digits) {
-						assert.equal(fmts[i].digits, digits[i], 'Invalid digits in format' + ' check:' + s + (fmtNr ? ' fmtNr:' + fmtNr : ''));
+						msg = 'Invalid digits in format' + ' check:' + s + (fmtNr ? ' fmtNr:' + fmtNr : '');
+						expect(fmts[i].digits, msg).toBe(digits[i]);
 					}
 				}
 			}
@@ -98,7 +96,6 @@ describe('utils', () => {
 				}
 			});
 
-			done();
 		});
 	});
 

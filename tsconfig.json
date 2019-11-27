@@ -22,6 +22,7 @@
       ]
     },
     "typeRoots": [
+      "node_modules/@types",
       "node_modules/@types/**/*",
       "typings/**/*"
     ]
@@ -37,6 +38,7 @@
     "node_modules",
     "bin",
     "lib",
+    "coverage",
     "data",
     "local",
     "dist",
