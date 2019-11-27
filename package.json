@@ -1,6 +1,6 @@
 {
 	"name": "xlsx-extract",
-	"version": "0.1.2",
+	"version": "0.1.3",
 	"license": "MIT",
 	"description": "simple async XLSX reader with low memory footprint",
 	"homepage": "https://github.com/ffalt/xlsx-extract",
@@ -22,11 +22,12 @@
 		"pretest": "tsc",
 		"release": "deplokay -c deplokay.json",
 		"lint": "tslint --project tsconfig.json \"src/**/*.ts\"",
-		"test": "mocha --ui mocha-typescript --require ts-node/register --require source-map-support/register --recursive test/test.ts test/**/test.ts",
-		"test:nyc": "nyc mocha"
+		"test": "jest",
+		"test:watch": "jest --watch",
+		"coverage": "jest --coverage"
 	},
 	"dependencies": {
-		"commander": "2.20.0",
+		"commander": "4.0.1",
 		"sax": "1.2.4",
 		"yauzl": "2.10.0"
 	},

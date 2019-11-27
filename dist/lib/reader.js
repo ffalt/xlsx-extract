@@ -187,14 +187,18 @@ var XLSXReader = (function () {
         var collect_strings = false;
         var sl = [];
         var s = '';
+        var phonetic = false;
         var sax = this.createParser()
             .onStartElement(function (name, attrs) {
             if (name === 'si') {
                 sl = [];
             }
-            if (name === 't') {
+            else if (name === 't') {
                 collect_strings = true;
                 s = '';
+            }
+            else if (name === 'rph') {
+                phonetic = true;
             }
         })
             .onEndElement(function (name) {
@@ -202,12 +206,15 @@ var XLSXReader = (function () {
                 sl.push(s);
                 collect_strings = false;
             }
-            if (name === 'si') {
+            else if (name === 'rph') {
+                phonetic = false;
+            }
+            else if (name === 'si') {
                 strings.push(sl.join(''));
             }
         })
             .onText(function (txt) {
-            if (collect_strings) {
+            if (collect_strings && !phonetic) {
                 s = s + txt.replace(/\r\n/g, '\n');
             }
         })
