@@ -48,7 +48,7 @@
     "source-map-support": "0.5.16",
     "tmp": "0.1.0",
     "ts-jest": "24.3.0",
-    "ts-node": "8.5.4",
+    "ts-node": "8.6.0",
     "tslint": "5.20.1",
     "typescript": "3.7.4",
     "webpack": "4.41.5",
