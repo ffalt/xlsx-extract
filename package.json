@@ -32,7 +32,7 @@
     "yauzl": "2.10.0"
   },
   "devDependencies": {
-    "@types/jest": "24.9.0",
+    "@types/jest": "24.9.1",
     "@types/jest-expect-message": "1.0.1",
     "@types/node": "12.12.25",
     "@types/sax": "1.2.1",
