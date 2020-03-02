@@ -50,7 +50,7 @@
     "ts-jest": "25.2.1",
     "ts-node": "8.6.2",
     "tslint": "6.0.0",
-    "typescript": "3.8.2",
+    "typescript": "3.8.3",
     "webpack": "4.42.0",
     "webpack-cli": "3.3.11",
     "webpack-node-externals": "1.7.2"
