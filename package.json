@@ -40,7 +40,7 @@
     "@types/yauzl": "2.9.1",
     "awesome-typescript-loader": "5.2.1",
     "deplokay": "0.0.12",
-    "jest": "25.2.2",
+    "jest": "25.2.3",
     "jest-expect-message": "1.0.2",
     "natives": "1.1.6",
     "node-expat": "2.3.18",
