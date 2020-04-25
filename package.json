@@ -27,7 +27,7 @@
     "coverage": "jest --coverage"
   },
   "dependencies": {
-    "commander": "5.0.0",
+    "commander": "5.1.0",
     "sax": "1.2.4",
     "yauzl": "2.10.0"
   },
