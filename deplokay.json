@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/deplokay/config-schema.json",
-  "id": "xlsx-extract/master",
+  "id": "xlsx-extract/main",
   "source": {
     "local": {
       "path": "."
