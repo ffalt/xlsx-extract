@@ -42,7 +42,7 @@
     "jest": "26.1.0",
     "jest-expect-message": "1.0.2",
     "natives": "1.1.6",
-    "node-expat": "^2.3.18",
+    "node-expat": "2.3.18",
     "rimraf": "3.0.2",
     "source-map-support": "0.5.19",
     "tmp": "0.2.1",
