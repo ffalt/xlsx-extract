@@ -1,9 +1,7 @@
 import stream from 'stream';
 import sax from 'sax';
 
-import EXPAT from 'node-expat';
-
-let expat: typeof EXPAT;
+let expat: any;
 
 function lowerFudge(obj: any): any {
 	const result: any = {};
@@ -82,6 +80,7 @@ export class SaxExpat implements ISaxParser {
 			try {
 				expat = require('node-expat');
 			} catch (e) {
+				console.error(e);
 				throw new Error('To use {parser:"expat"} you need to install it manually with "npm install node-expat"');
 			}
 		}
