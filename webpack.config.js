@@ -1,5 +1,4 @@
 const path = require('path');
-const {CheckerPlugin} = require('awesome-typescript-loader');
 const nodeExternals = require('webpack-node-externals');
 module.exports = {
 	entry: './src/index.ts',
@@ -15,9 +14,6 @@ module.exports = {
 			}
 		]
 	},
-	plugins: [
-		new CheckerPlugin()
-	],
 	resolve: {
 		extensions: ['.ts']
 	},
