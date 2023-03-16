@@ -1,6 +1,6 @@
 {
   "name": "xlsx-extract",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "license": "MIT",
   "description": "simple async XLSX reader with low memory footprint",
   "homepage": "https://github.com/ffalt/xlsx-extract",
@@ -88,7 +88,7 @@
     "url": "https://github.com/ffalt/xlsx-extract"
   },
   "engines": {
-    "node": ">= 8.0.0"
+    "node": ">= 12.0.0"
   },
   "nyc": {
     "temp-directory": "./coverage/.nyc_output",
