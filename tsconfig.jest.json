@@ -2,7 +2,10 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "rootDir": ".",
-    "moduleResolution": "node16",
+    "target": "ES6",
+    "module": "CommonJS",
+    "moduleResolution": "Node10",
+    "ignoreDeprecations": "6.0",
     "types": ["node", "jest", "jest-expect-message"]
   },
   "include": [
