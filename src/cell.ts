@@ -72,7 +72,7 @@ export class Cell {
 			return this.fmt.fmts.at(0);
 		}
 		if (isNaN(this.val as number)) {
-			return this.fmt.fmts.at(3);
+			return this.fmt.fmts.at(Math.min(3, this.fmt.fmts.length - 1));
 		}
 		if ((this.val as number) < 0) {
 			return this.fmt.fmts.at(1);
