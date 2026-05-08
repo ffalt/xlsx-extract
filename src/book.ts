@@ -1,11 +1,11 @@
-import {Sheet} from './sheet';
-import {ICellFormatStyles} from './cell';
+import { Sheet } from './sheet';
+import { ICellFormatStyles } from './cell';
 
 export class Workbook {
-	sheets: Array<Sheet> = [];
-	sharedStrings: Array<string> = [];
+	sheets: Sheet[] = [];
+	sharedStrings: string[] = [];
 	styles: ICellFormatStyles = {};
-	relations: Array<{ sheetid: string, filename: string }> = [];
+	relations: { sheetid: string; filename: string }[] = [];
 
 	getByRId(id: string): Sheet | undefined {
 		return this.sheets.find(sheet => sheet.rid === id);
@@ -16,9 +16,7 @@ export class Workbook {
 	}
 
 	getByNr(nr: string): Sheet | undefined {
-		return this.sheets.find((sheet) => {
-			return !!sheet.nr && sheet.nr.toString() === nr.toString();
-		});
+		return this.sheets.find(sheet => !!sheet.nr && sheet.nr === nr);
 	}
 
 	getByName(name: string): Sheet | undefined {

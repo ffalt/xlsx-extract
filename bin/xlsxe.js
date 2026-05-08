@@ -83,12 +83,13 @@ if (destfile) {
 		options.format = "tsv";
 	}
 	new XLSX().extract(filename, options)
-		.on("row", function (row) {
+		.on("row", row => {
 			console.log(row);
 		})
-		.on("error", function (error) {
+		.on("error", error => {
 			console.error(error);
 		})
-		.on("end", function (error) {
+		.on("end", () => {
+		// nop
 		});
 }

@@ -38,14 +38,22 @@ const tsRules = {
 };
 
 const stylisticRules = {
-	"@stylistic/semi": "error",
-	"@stylistic/indent": ["error", "tab"],
-	"@stylistic/operator-linebreak": ["error", "after"],
+	"@stylistic/semi": ["error", "always"],
 	"@stylistic/comma-dangle": ["error", "never"],
+	"@stylistic/arrow-parens": ["error", "as-needed"],
+	"@stylistic/indent": ["error", "tab"],
+	"@stylistic/no-tabs": ["error", { allowIndentationTabs: true }],
+	"@stylistic/member-delimiter-style": ["error", {
+		"multiline": { "delimiter": "semi", "requireLast": true },
+		"singleline": { "delimiter": "semi", "requireLast": false },
+		"multilineDetection": "brackets"
+	}],
 	"@stylistic/quote-props": ["error", "consistent"],
+	"@stylistic/brace-style": ["error", "1tbs", { "allowSingleLine": true }],
+	"@stylistic/operator-linebreak": ["error", "after"],
 	"@stylistic/type-annotation-spacing": "error",
 	"@stylistic/linebreak-style": ["error", "unix"],
-	"@stylistic/arrow-parens": ["error", "as-needed", { requireForBlockBody: false }]
+	"@stylistic/no-trailing-spaces": "error"
 };
 
 const commonRules = {
@@ -85,15 +93,7 @@ export default ts.config(
 			...ts.configs.recommendedTypeChecked,
 			...ts.configs.stylisticTypeChecked,
 			unicorn.configs.recommended,
-			stylistic.configs.customize({
-				indent: "tab",
-				quotes: "single",
-				braceStyle: "1tbs",
-				semi: true,
-				arrowParens: false,
-				commaDangle: "never",
-				jsx: false
-			})
+			stylistic.configs.recommended
 		],
 		languageOptions: {
 			parserOptions: {
@@ -118,15 +118,7 @@ export default ts.config(
 			...ts.configs.stylisticTypeChecked,
 			jest.configs["flat/recommended"],
 			unicorn.configs.recommended,
-			stylistic.configs.customize({
-				indent: "tab",
-				quotes: "single",
-				braceStyle: "1tbs",
-				semi: true,
-				arrowParens: false,
-				commaDangle: "never",
-				jsx: false
-			})
+			stylistic.configs.recommended
 		],
 		plugins: {
 			jest
@@ -165,50 +157,18 @@ export default ts.config(
 		extends: [
 			js.configs.recommended,
 			unicorn.configs.recommended,
-			stylistic.configs.customize({
-				indent: "tab",
-				quotes: "double",
-				braceStyle: "1tbs",
-				semi: true,
-				arrowParens: false,
-				commaDangle: "never",
-				jsx: false
-			})
+			stylistic.configs.recommended
 		],
 		languageOptions: {
 			globals: globals.node
 		},
 		rules: {
+			...commonRules,
 			...unicornRules,
-			"arrow-body-style": ["error", "as-needed"],
-			"arrow-parens": ["error", "as-needed"],
-			"brace-style": ["error", "1tbs"],
-			"comma-dangle": "error",
-			"complexity": ["error", { max: 20 }],
-			"default-case": "error",
-			"max-classes-per-file": ["error", 2],
-			"max-len": ["error", { code: 240 }],
-			"max-lines": ["error", 1000],
-			"newline-per-chained-call": "off",
-			"no-duplicate-case": "error",
-			"no-duplicate-imports": "error",
-			"no-empty": "error",
-			"no-extra-bind": "error",
-			"no-invalid-this": "error",
-			"no-multiple-empty-lines": ["error", { max: 1 }],
-			"no-new-func": "error",
-			"no-param-reassign": "error",
-			"no-redeclare": "error",
-			"no-return-await": "error",
-			"no-sequences": "error",
-			"no-sparse-arrays": "error",
-			"no-template-curly-in-string": "error",
-			"no-void": "error",
-			"prefer-const": "error",
-			"prefer-object-spread": "error",
-			"prefer-template": "error",
-			"space-in-parens": ["error", "never"],
-			"yoda": "error"
+			...stylisticRules,
+			"no-console": ["off"],
+			"quotes": ["error", "double"],
+			"@stylistic/quotes": ["error", "double"]
 		}
 	},
 	{
