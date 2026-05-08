@@ -1,42 +1,37 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import * as util from 'util';
-import {Sheet} from '../src/sheet';
-import {XLSX} from '../src';
-import {IXLSXExtractOptions} from '../src/types';
-import {Cell} from '../src/cell';
+import fs from 'node:fs';
+import path from 'node:path';
+import { types } from 'node:util';
+import { Sheet } from '../src/sheet';
+import { XLSX } from '../src';
+import { IXLSXExtractOptions } from '../src/types';
+import { Cell } from '../src/cell';
 import tmp from 'tmp';
-import {escapeTSV, isValidDate} from '../src/utils';
+import { escapeTSV, isValidDate } from '../src/utils';
 
-const parsers: Array<string> = [
+const parsers: string[] = [
 	'sax',
-	'expat',
+	'expat'
 ];
 
-export function collectTestFiles(dirs: Array<string>, rootDir: string, testSingleFile?: string): Array<string> {
-	const files: Array<string> = [];
-	dirs.forEach(dir => {
+function collectTestFiles(directories: string[], rootDir: string, testSingleFile?: string): string[] {
+	const files: string[] = [];
+	for (const dir of directories) {
 		const files1 = fs.readdirSync(path.join(rootDir, dir));
-		files1.forEach(f => {
-			if (['.xlsx'].indexOf(path.extname(f).toLowerCase()) >= 0) {
+		for (const f of files1) {
+			if (['.xlsx'].includes(path.extname(f).toLowerCase())) {
 				const stat = fs.lstatSync(path.join(rootDir, dir, f));
-				if (!stat.isDirectory()
-					&& (!testSingleFile || path.join(dir, f).indexOf(testSingleFile) >= 0)
+				if (!stat.isDirectory() &&
+					(!testSingleFile || path.join(dir, f).includes(testSingleFile))
 				) {
 					files.push(path.join(dir, f));
 				}
 			}
-		});
-	});
+		}
+	}
 	return files;
 }
 
-const testfiles: Array<string> = collectTestFiles([
-		'data',
-		'data/sheetjs_test_files'
-	], __dirname
-	// , 'wtf_path'
-);
+const testFiles: string[] = collectTestFiles(['data', 'data/sheetjs_test_files'], __dirname);
 
 interface IXLSXSpecCell {
 	raw?: string;
@@ -51,25 +46,25 @@ interface IXLSXSpecSheet {
 	name: string;
 	id: string;
 	rid: string;
-	rows: Array<Array<IXLSXSpecCell>>;
+	rows?: IXLSXSpecCell[][];
 }
 
 interface IXLSXSpec {
 	description: string;
 	workfolder?: string;
-	sheets?: Array<IXLSXSpecSheet>;
+	sheets?: IXLSXSpecSheet[];
 	error?: boolean;
 }
 
 interface IXLSXDataSheet extends Sheet {
-	rows: Array<{ cells: Array<Cell> }>;
+	rows: { cells: Cell[] }[];
 }
 
 interface IXLSXData {
-	sheets: Array<IXLSXDataSheet>;
+	sheets: IXLSXDataSheet[];
 }
 
-function convertToTsv(filename: string, options: IXLSXExtractOptions, cb: (err: Error | null, tsv?: string) => void) {
+function convertToTsv(filename: string, options: IXLSXExtractOptions, callback: (error_: Error | null, tsv?: string) => void) {
 	const file = tmp.fileSync();
 	fs.unlinkSync(file.name);
 	let error: Error | null = null;
@@ -80,24 +75,23 @@ function convertToTsv(filename: string, options: IXLSXExtractOptions, cb: (err: 
 			if (exists) {
 				const tsv = fs.readFileSync(file.name).toString();
 				file.removeCallback();
-				cb(error, tsv);
+				callback(error, tsv);
 			} else {
-				cb(error);
+				callback(error);
 			}
-
 		})
-		.on('error', err => {
-			error = err;
+		.on('error', error_ => {
+			error = error_;
 		});
 }
 
-function readFile(filename: string, options: IXLSXExtractOptions, cb: (err: Error | null, xlsx?: IXLSXData) => void) {
+function readFile(filename: string, options: IXLSXExtractOptions, callback: (error_: Error | null, xlsx?: IXLSXData) => void) {
 	const xlsx: IXLSXData = {
 		sheets: []
 	};
 
 	let error: Error | null = null;
-	new XLSX().extract(filename, Object.assign({format: 'obj', include_empty_rows: true}, options))
+	new XLSX().extract(filename, Object.assign({ format: 'obj', include_empty_rows: true }, options))
 		.on('sheet', sheet => {
 			sheet.rows = [];
 			xlsx.sheets.push(sheet);
@@ -108,10 +102,10 @@ function readFile(filename: string, options: IXLSXExtractOptions, cb: (err: Erro
 			}
 		})
 		.on('end', () => {
-			cb(error, xlsx);
+			callback(error, xlsx);
 		})
-		.on('error', err => {
-			error = err;
+		.on('error', error_ => {
+			error = error_;
 		});
 }
 
@@ -121,7 +115,7 @@ function compareSheet(filename: string, specsheet: IXLSXSpecSheet, sheet?: IXLSX
 		return;
 	}
 
-	expect({...sheet, rows: []}, 'Sheets not equal').toEqual({...specsheet, rows: []});
+	expect({ ...sheet, rows: [] }, 'Sheets not equal').toEqual({ ...specsheet, rows: [] });
 	if (sheet.rows.length !== (specsheet.rows ? specsheet.rows.length : 0)) {
 		console.log(sheet, specsheet);
 	}
@@ -129,7 +123,7 @@ function compareSheet(filename: string, specsheet: IXLSXSpecSheet, sheet?: IXLSX
 	if (!specsheet.rows) {
 		return;
 	}
-	specsheet.rows.forEach((specrow, index) => {
+	for (const [index, specrow] of specsheet.rows.entries()) {
 		const sheetrow = sheet.rows[index].cells.map((cell: Cell) => {
 			const def: IXLSXSpecCell = {};
 			const fmt = cell.getEffectiveNumFormat();
@@ -152,7 +146,7 @@ function compareSheet(filename: string, specsheet: IXLSXSpecSheet, sheet?: IXLSX
 			return def;
 		});
 		expect(sheetrow, 'Row not equal').toEqual(specrow);
-	});
+	}
 }
 
 function toSpec(xlsx: IXLSXData, filename: string) {
@@ -183,12 +177,8 @@ function toSpec(xlsx: IXLSXData, filename: string) {
 						}
 						if (cell.raw && cell.val !== cell.raw) {
 							def.val = cell.val;
-							if (util.types.isDate(def.val)) {
-								if (isValidDate(cell.val)) {
-									def.val = cell.val.toISOString();
-								} else {
-									def.val = cell.val.toString();
-								}
+							if (types.isDate(def.val)) {
+								def.val = isValidDate(cell.val) ? cell.val.toISOString() : cell.val.toString();
 							}
 						}
 						return def;
@@ -198,12 +188,12 @@ function toSpec(xlsx: IXLSXData, filename: string) {
 		})
 	};
 
-	const compact = JSON.stringify(spec).replace(/\],\[/g, '],\n\t\t\t[')
-		.replace(/"sheets":\[{/g, '\n\t"sheets": [\n\t{\n\t\t')
-		.replace(/"rows":\[/g, '\n\t\t"rows": [\n\t\t\t')
-		.replace(/}\]\]},/g, '}]\n\t\t]\n\t},\n\t')
-		.replace(/{"name"/g, '{\n\t\t"name"')
-		.replace(/\]\]}\]}/g, ']\n\t\t]\n\t}\n\t]\n}')
+	const compact = JSON.stringify(spec).replaceAll('],[', '],\n\t\t\t[')
+		.replaceAll('"sheets":[{', '\n\t"sheets": [\n\t{\n\t\t')
+		.replaceAll('"rows":[', '\n\t\t"rows": [\n\t\t\t')
+		.replaceAll('}]]},', '}]\n\t\t]\n\t},\n\t')
+		.replaceAll('{"name"', '{\n\t\t"name"')
+		.replaceAll(']]}]}', ']\n\t\t]\n\t}\n\t]\n}')
 	;
 	fs.writeFileSync(filename + '.spec.json', compact);
 }
@@ -211,9 +201,9 @@ function toSpec(xlsx: IXLSXData, filename: string) {
 function compareSpec(filename: string, xlsx: IXLSXData, spec: IXLSXSpec) {
 	const specsheets = (spec.sheets || []);
 	expect(xlsx.sheets.length, 'Invalid sheet count').toBe(specsheets.length);
-	specsheets.forEach((specsheet) => {
+	for (const specsheet of specsheets) {
 		compareSheet(filename, specsheet, xlsx.sheets.find(s => s.nr === specsheet.nr));
-	});
+	}
 }
 
 function compareSingleSpec(filename: string, xlsx: IXLSXData, specsheet: IXLSXSpecSheet) {
@@ -233,39 +223,39 @@ function defToTSV(specSheet: IXLSXSpecSheet, options: IXLSXExtractOptions) {
 }
 
 describe('xlsx', () => {
-	testfiles.forEach(testfile => {
+	for (const testfile of testFiles) {
 		const sourcefile = path.join(__dirname, testfile);
 		if (!fs.existsSync(sourcefile + '.spec.json')) {
-			readFile(sourcefile, {sheet_all: true}, (err, xlsx) => {
-				if (err || !xlsx) {
+			readFile(sourcefile, { sheet_all: true }, (error, xlsx) => {
+				if (error || !xlsx) {
 					return;
 				}
 				toSpec(xlsx, sourcefile);
 			});
-			return;
+			continue;
 		}
 		const spec: IXLSXSpec = JSON.parse(fs.readFileSync(sourcefile + '.spec.json').toString());
 		const workfolder: string | undefined = spec.workfolder;
 		if (spec.error) {
 			describe(spec.description + ' - ' + testfile, () => {
-				parsers.forEach(parser => {
+				for (const parser of parsers) {
 					describe(parser, () => {
 						it('should fail according to spec', done => {
-							readFile(sourcefile, {sheet_all: true, parser, workfolder}, (err, xlsx) => {
-								expect(err).toBeDefined();
+							readFile(sourcefile, { sheet_all: true, parser, workfolder }, error => {
+								expect(error).toBeDefined();
 								done();
 							});
 						});
 					});
-				});
+				}
 			});
 		} else {
 			describe(spec.description + ' - ' + testfile, () => {
-				parsers.forEach(parser => {
+				for (const parser of parsers) {
 					describe(parser, () => {
 						it('should read and compare according to spec', done => {
-							readFile(sourcefile, {sheet_all: true, parser, workfolder}, (err, xlsx) => {
-								expect(err).toBeFalsy();
+							readFile(sourcefile, { sheet_all: true, parser, workfolder }, (error, xlsx) => {
+								expect(error).toBeFalsy();
 								expect(xlsx).toBeDefined();
 								if (!xlsx) {
 									return done();
@@ -274,10 +264,10 @@ describe('xlsx', () => {
 								done();
 							});
 						});
-						(spec.sheets || []).forEach(specSheet => {
+						for (const specSheet of (spec.sheets ?? [])) {
 							it('should read the sheet ' + specSheet.nr + ' by number: ' + specSheet.nr, done => {
-								readFile(sourcefile, {sheet_nr: specSheet.nr, parser, workfolder}, (err, xlsx) => {
-									expect(err).toBeFalsy();
+								readFile(sourcefile, { sheet_nr: specSheet.nr, parser, workfolder }, (error, xlsx) => {
+									expect(error).toBeFalsy();
 									expect(xlsx).toBeDefined();
 									if (!xlsx) {
 										return done();
@@ -287,8 +277,8 @@ describe('xlsx', () => {
 								});
 							});
 							it('should read the sheet ' + specSheet.nr + ' by name: ' + specSheet.name, done => {
-								readFile(sourcefile, {sheet_name: specSheet.name, parser, workfolder}, (err, xlsx) => {
-									expect(err).toBeFalsy();
+								readFile(sourcefile, { sheet_name: specSheet.name, parser, workfolder }, (error, xlsx) => {
+									expect(error).toBeFalsy();
 									expect(xlsx).toBeDefined();
 									if (!xlsx) {
 										return done();
@@ -298,8 +288,8 @@ describe('xlsx', () => {
 								});
 							});
 							it('should read the sheet ' + specSheet.nr + ' by id: ' + specSheet.id, done => {
-								readFile(sourcefile, {sheet_id: specSheet.id, parser, workfolder}, (err, xlsx) => {
-									expect(err).toBeFalsy();
+								readFile(sourcefile, { sheet_id: specSheet.id, parser, workfolder }, (error, xlsx) => {
+									expect(error).toBeFalsy();
 									expect(xlsx).toBeDefined();
 									if (!xlsx) {
 										return done();
@@ -309,8 +299,8 @@ describe('xlsx', () => {
 								});
 							});
 							it('should read the sheet ' + specSheet.nr + ' by rid: ' + specSheet.rid, done => {
-								readFile(sourcefile, {sheet_rid: specSheet.rid, parser, workfolder}, (err, xlsx) => {
-									expect(err).toBeFalsy();
+								readFile(sourcefile, { sheet_rid: specSheet.rid, parser, workfolder }, (error, xlsx) => {
+									expect(error).toBeFalsy();
 									expect(xlsx).toBeDefined();
 									if (!xlsx) {
 										return done();
@@ -320,8 +310,8 @@ describe('xlsx', () => {
 								});
 							});
 							it('should read the sheet ' + specSheet.nr + ' ignoring the first line', done => {
-								readFile(sourcefile, {sheet_rid: specSheet.rid, ignore_header: 1, parser, workfolder}, (err, xlsx) => {
-									expect(err).toBeFalsy();
+								readFile(sourcefile, { sheet_rid: specSheet.rid, ignore_header: 1, parser, workfolder }, (error, xlsx) => {
+									expect(error).toBeFalsy();
 									expect(xlsx).toBeDefined();
 									if (!xlsx) {
 										return done();
@@ -338,8 +328,8 @@ describe('xlsx', () => {
 								});
 							});
 							it('should read the sheet ' + specSheet.nr + ' ignoring the two lines', done => {
-								readFile(sourcefile, {sheet_rid: specSheet.rid, ignore_header: 2, parser, workfolder}, (err, xlsx) => {
-									expect(err).toBeFalsy();
+								readFile(sourcefile, { sheet_rid: specSheet.rid, ignore_header: 2, parser, workfolder }, (error, xlsx) => {
+									expect(error).toBeFalsy();
 									expect(xlsx).toBeDefined();
 									if (!xlsx) {
 										return done();
@@ -356,8 +346,8 @@ describe('xlsx', () => {
 								});
 							});
 							it('should read the sheet ' + specSheet.nr + ' with empty rows filtered', done => {
-								readFile(sourcefile, {sheet_rid: specSheet.rid, include_empty_rows: false, parser, workfolder}, (err, xlsx) => {
-									expect(err).toBeFalsy();
+								readFile(sourcefile, { sheet_rid: specSheet.rid, include_empty_rows: false, parser, workfolder }, (error, xlsx) => {
+									expect(error).toBeFalsy();
 									expect(xlsx).toBeDefined();
 									if (!xlsx) {
 										return done();
@@ -374,8 +364,8 @@ describe('xlsx', () => {
 								});
 							});
 							it('should read the sheet ' + specSheet.nr + ' ignoring the first line and empty rows filtered', done => {
-								readFile(sourcefile, {sheet_rid: specSheet.rid, ignore_header: 1, include_empty_rows: false, parser, workfolder}, (err, xlsx) => {
-									expect(err).toBeFalsy();
+								readFile(sourcefile, { sheet_rid: specSheet.rid, ignore_header: 1, include_empty_rows: false, parser, workfolder }, (error, xlsx) => {
+									expect(error).toBeFalsy();
 									expect(xlsx).toBeDefined();
 									if (!xlsx) {
 										return done();
@@ -392,8 +382,8 @@ describe('xlsx', () => {
 								});
 							});
 							it('should read the sheet ' + specSheet.nr + ' ignoring the first two lines and empty rows filtered', done => {
-								readFile(sourcefile, {sheet_rid: specSheet.rid, ignore_header: 2, include_empty_rows: false, parser, workfolder}, (err, xlsx) => {
-									expect(err).toBeFalsy();
+								readFile(sourcefile, { sheet_rid: specSheet.rid, ignore_header: 2, include_empty_rows: false, parser, workfolder }, (error, xlsx) => {
+									expect(error).toBeFalsy();
 									expect(xlsx).toBeDefined();
 									if (!xlsx) {
 										return done();
@@ -415,18 +405,17 @@ describe('xlsx', () => {
 									tsv_delimiter: '\t', tsv_endofline: '\n', tsv_float_comma: false,
 									parser, workfolder
 								};
-								convertToTsv(sourcefile, options, (err, tsv) => {
-									expect(err).toBeFalsy();
+								convertToTsv(sourcefile, options, (error, tsv) => {
+									expect(error).toBeFalsy();
 									expect(tsv).toBeDefined();
 									expect(tsv, 'Invalid tsv').toBe(defToTSV(specSheet, options));
 									done();
 								});
 							});
-
-						});
+						}
 					});
-				});
+				}
 			});
 		}
-	});
+	}
 });

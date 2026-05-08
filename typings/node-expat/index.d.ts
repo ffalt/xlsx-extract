@@ -4,7 +4,7 @@
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
 declare module 'node-expat' {
-	import * as stream from 'stream';
+	import * as stream from 'node:stream';
 
 	export function createParser(): stream.Duplex;
 }

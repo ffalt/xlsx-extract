@@ -3,7 +3,7 @@
 // Definitions by: ffalt <https://github.com/ffalt>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
-import * as stream from 'stream';
+import * as stream from 'node:stream';
 
 declare namespace unzip2 {
 
@@ -19,5 +19,5 @@ declare namespace unzip2 {
 
 }
 
-declare var unzip2: unzip2.Client;
+declare const unzip2: unzip2.Client;
 export = unzip2;

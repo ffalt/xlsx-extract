@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "moduleResolution": "node16",
+    "types": ["node", "jest"]
+  },
+  "include": [
+    "test/**/*.ts",
+    "**/*.test.ts",
+    "**/*.d.ts"
+  ]
+}

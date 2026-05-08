@@ -1,36 +1,34 @@
-import {alphaNum, numAlpha, splitCellFormats, xlsx_fmts} from '../../src/utils';
+import { alphaNum as alphaNumber, numAlpha as numberAlpha, splitCellFormats, xlsx_fmts } from '../src/utils';
 
 describe('utils', () => {
-
 	describe('column row translation', () => {
 		it('should match column conversation', () => {
-			expect(numAlpha(0)).toBe('A');
-			expect(numAlpha(26)).toBe('AA');
-			expect(numAlpha(701)).toBe('ZZ');
-			expect(alphaNum('A')).toBe(0);
-			expect(alphaNum('ZZ')).toBe(701);
-			let i = 0;
-			while (i < 9999) {
-				expect(alphaNum(numAlpha(i))).toBe(i);
-				i++;
+			expect(numberAlpha(0)).toBe('A');
+			expect(numberAlpha(26)).toBe('AA');
+			expect(numberAlpha(701)).toBe('ZZ');
+			expect(alphaNumber('A')).toBe(0);
+			expect(alphaNumber('ZZ')).toBe(701);
+			let index = 0;
+			while (index < 9999) {
+				expect(alphaNumber(numberAlpha(index))).toBe(index);
+				index++;
 			}
 		});
 	});
 
 	describe('cell formats', () => {
 		it('should detect right number format types', () => {
-
-			function checkformat(s: string | null, ffs: string | Array<string>, digits?: Array<number>, fmtNr?: string) {
+			function checkformat(s: string | null, ffs: string | string[], digits?: number[], fmtNr?: string) {
 				if (typeof ffs === 'string') {
 					ffs = [ffs];
 				}
-				const fmts = splitCellFormats(s || '');
-				for (let i = 0; i < fmts.length; i++) {
-					let msg = fmts[i].fmt_type + '=' + ffs[i] + ' ' + JSON.stringify(fmts[i]) + ' check:' + s + (fmtNr ? ' fmtNr:' + fmtNr : '');
-					expect(fmts[i].fmt_type, msg).toBe(ffs[i]);
+				const fmts = splitCellFormats(s ?? '');
+				for (const [index, fmt] of fmts.entries()) {
+					let message = `${fmt.fmt_type}=${ffs[index]} ${JSON.stringify(fmt)} check:${s ?? ''}${fmtNr ? ' fmtNr:' + fmtNr : ''}`;
+					expect(fmt.fmt_type, message).toBe(ffs[index]);
 					if (digits) {
-						msg = 'Invalid digits in format' + ' check:' + s + (fmtNr ? ' fmtNr:' + fmtNr : '');
-						expect(fmts[i].digits, msg).toBe(digits[i]);
+						message = `Invalid digits in format check:${s ?? ''}${fmtNr ? ' fmtNr:' + fmtNr : ''}`;
+						expect(fmt.digits, message).toBe(digits[index]);
 					}
 				}
 			}
@@ -48,7 +46,7 @@ describe('utils', () => {
 			/*
 			 xlsx build in nr formats types
 			 */
-			const fmts_types_digits: { [num: number]: Array<number> } = {
+			const fmts_types_digits: Record<number, number[]> = {
 				2: [2], // '0.00',
 				4: [2], // '#,##0.00',
 				10: [2], // '0.00%',
@@ -59,7 +57,7 @@ describe('utils', () => {
 				40: [2, 2], // '#,##0.00;[Red](#,##0.00)',
 				48: [18] // '##0.0E+0',
 			};
-			const fmts_types: { [num: number]: string | Array<string> } = {
+			const fmts_types: Record<number, string | string[]> = {
 				1: 'i',
 				2: 'f',
 				3: 'i',
@@ -89,14 +87,12 @@ describe('utils', () => {
 				49: 's'
 			};
 
-			Object.keys(xlsx_fmts).forEach(key => {
-				const k = parseInt(key, 10);
+			for (const key of Object.keys(xlsx_fmts)) {
+				const k = Number.parseInt(key, 10);
 				if (xlsx_fmts[k]) {
 					checkformat(xlsx_fmts[k], fmts_types[k], fmts_types_digits[k], key);
 				}
-			});
-
+			}
 		});
 	});
-
 });

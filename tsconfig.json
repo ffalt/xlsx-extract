@@ -1,47 +1,48 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "outDir": "dist/lib",
+    "target": "es6",
+    "module": "node16",
+    "outDir": "./dist/lib",
+    "rootDir": "./src",
     "sourceMap": true,
     "declaration": true,
     "strict": true,
     "strictNullChecks": true,
+    "isolatedModules": true,
     "noImplicitAny": true,
-    "moduleResolution": "node",
+    "moduleResolution": "node16",
     "esModuleInterop": true,
     "removeComments": true,
     "allowSyntheticDefaultImports": true,
     "lib": [
-      "es2015"
+      "es2022"
     ],
-    "baseUrl": "./",
     "paths": {
       "*": [
-        "typings/*"
+        "./typings/*"
       ]
     },
     "typeRoots": [
-      "node_modules/@types",
-      "node_modules/@types/**/*",
-      "typings/**/*"
+      "./node_modules/@types",
+      "./node_modules/@types/**/*",
+      "./typings/**/*"
     ]
   },
   "include": [
-    "src/types.ts",
-    "typings/**/*",
-    "src/**/*"
+    "./src/types.ts",
+    "./typings/**/*",
+    "./src/**/*"
   ],
   "exclude": [
     "./node_modules/**/*.tsx",
-    "node_modules/**/*.ts",
-    "node_modules",
-    "bin",
-    "lib",
-    "coverage",
-    "data",
-    "local",
-    "dist",
+    "./node_modules/**/*.ts",
+    "./node_modules",
+    "./bin",
+    "./lib",
+    "./coverage",
+    "./data",
+    "./local",
+    "./dist",
     "**/*.spec.ts"
   ],
   "awesomeTypescriptLoaderOptions": {
