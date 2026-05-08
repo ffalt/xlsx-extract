@@ -16,8 +16,10 @@ export interface ICellFormatStyle {
 
 export type ICellFormatStyles = Record<string, ICellFormatStyle>;
 
+export type CellValue = string | number | boolean | Date | undefined;
+
 export class Cell {
-	val: any;
+	val: CellValue;
 	col?: number;
 	address?: string;
 	typ?: string;
@@ -69,13 +71,13 @@ export class Cell {
 		if (this.fmt.fmts.length === 1) {
 			return this.fmt.fmts.at(0);
 		}
-		if (isNaN(this.val)) {
+		if (isNaN(this.val as number)) {
 			return this.fmt.fmts.at(3);
 		}
-		if (this.val < 0) {
+		if ((this.val as number) < 0) {
 			return this.fmt.fmts.at(1);
 		}
-		if (this.val > 0) {
+		if ((this.val as number) > 0) {
 			return this.fmt.fmts.at(0);
 		}
 		return this.fmt.fmts[(this.fmt.fmts.length > 2) ? 2 : 0];
@@ -104,10 +106,10 @@ export class Cell {
 				}
 				case 'f': {
 					if ((format.digits !== undefined) && (format.digits > 0) && options.convert_values.floats) {
-						if (options.round_floats && !isNaN(this.val)) {
-							this.val = this.val.toFixed(format.digits);
+						if (options.round_floats && !isNaN(this.val as number)) {
+							this.val = (this.val as number).toFixed(format.digits);
 						}
-						const v = parseFloat(this.val);
+						const v = parseFloat(String(this.val));
 						if (!isNaN(v)) {
 							this.val = v;
 						}
@@ -126,7 +128,7 @@ export class Cell {
 		if (this.val !== undefined) {
 			switch (this.typ) {
 				case 'n': {
-					const v = parseFloat(this.val);
+					const v = parseFloat(this.val as string);
 					if (!isNaN(v)) {
 						this.val = v;
 					}

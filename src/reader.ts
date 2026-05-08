@@ -118,7 +118,7 @@ export class XLSXReader {
 						addValue = false;
 						if (cell.col !== undefined && cell.col >= 0) {
 							if (cell.typ === 's') {
-								cell.val = workbook.sharedStrings[parseInt(cell.val, 10)];
+								cell.val = workbook.sharedStrings[parseInt(cell.val as string, 10)];
 							}
 							cell.raw = cell.val as string;
 							if (!this.options.raw_values) {
@@ -134,7 +134,7 @@ export class XLSXReader {
 			})
 			.onText((txt: string) => {
 				if (addValue) {
-					cell.val = (cell.val ?? '') + txt;
+					cell.val = ((cell.val ?? '') as string) + txt;
 				}
 				if (addFormular) {
 					cell.formula = (cell.formula ?? '') + txt;

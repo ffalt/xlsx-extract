@@ -1,4 +1,4 @@
-import { Cell } from './cell';
+import { Cell, CellValue } from './cell';
 import { IXLSXExtractOptions } from './types';
 import os from 'node:os';
 
@@ -31,7 +31,7 @@ export class Row {
 		return JSON.stringify(this.toArray());
 	}
 
-	toArray(): (string | number | Date | undefined)[] {
+	toArray(): CellValue[] {
 		return this.cells.map(cell => cell.val);
 	}
 

@@ -248,8 +248,8 @@ export function unescapeXML(text: string): string {
 	const start = text.indexOf('<![CDATA[');
 	if (start === -1) {
 		return text
-			.replaceAll(encregex, ($$, $1) => encodings[$$] || String.fromCodePoint(parseInt($1, $$.includes('x') ? 16 : 10)) || $$)
-			.replaceAll(coderegex, (m, c) => String.fromCodePoint(parseInt(c, 16)));
+			.replaceAll(encregex, ($$: string, $1: string) => encodings[$$] || String.fromCodePoint(parseInt($1, $$.includes('x') ? 16 : 10)) || $$)
+			.replaceAll(coderegex, (_m: string, c: string) => String.fromCodePoint(parseInt(c, 16)));
 	}
 	const end = text.indexOf(']]>');
 	return unescapeXML(text.slice(0, start)) + text.slice(start + 9, end) + unescapeXML(text.slice(end + 3));
