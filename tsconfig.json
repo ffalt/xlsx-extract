@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "module": "node16",
+    "module": "Node16",
+    "moduleResolution": "Node16",
     "outDir": "./dist/lib",
     "rootDir": "./src",
     "sourceMap": true,
@@ -10,27 +11,19 @@
     "strictNullChecks": true,
     "isolatedModules": true,
     "noImplicitAny": true,
-    "moduleResolution": "node16",
     "esModuleInterop": true,
     "removeComments": true,
     "allowSyntheticDefaultImports": true,
     "lib": [
       "es2022"
     ],
-    "paths": {
-      "*": [
-        "./typings/*"
-      ]
-    },
     "typeRoots": [
       "./node_modules/@types",
-      "./node_modules/@types/**/*",
-      "./typings/**/*"
+      "./node_modules/@types/**/*"
     ]
   },
   "include": [
     "./src/types.ts",
-    "./typings/**/*",
     "./src/**/*"
   ],
   "exclude": [
@@ -44,10 +37,5 @@
     "./local",
     "./dist",
     "**/*.spec.ts"
-  ],
-  "awesomeTypescriptLoaderOptions": {
-    "forkChecker": true,
-    "useWebpackText": true,
-    "transpileOnly": true
-  }
+  ]
 }

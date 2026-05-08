@@ -1,32 +1,37 @@
-import {Cell} from './cell';
-import {IXLSXExtractOptions} from './types';
+import { Cell } from './cell';
+import { IXLSXExtractOptions } from './types';
+import os from 'node:os';
 
 export class Row {
-	cells: Array<Cell> = [];
+	cells: Cell[] = [];
 
 	getFormat(options: IXLSXExtractOptions) {
 		switch (options.format) {
-			case 'json':
+			case 'json': {
 				return this.toJson();
-			case 'array':
+			}
+			case 'array': {
 				return this.toArray();
-			case 'obj':
+			}
+			case 'obj': {
 				return this;
+			}
 			// case 'tsv':
-			default:
+			default: {
 				return this.toTSV(options);
+			}
 		}
 	}
 
 	toTSV(options: IXLSXExtractOptions): string {
-		return this.cells.map(cell => cell.toTSV(options)).join(options.tsv_delimiter || '\t') + options.tsv_endofline;
+		return this.cells.map(cell => cell.toTSV(options)).join(options.tsv_delimiter ?? '\t') + (options.tsv_endofline ?? os.EOL);
 	}
 
 	toJson(): string {
 		return JSON.stringify(this.toArray());
 	}
 
-	toArray(): Array<string | number | undefined> {
+	toArray(): (string | number | Date | undefined)[] {
 		return this.cells.map(cell => cell.val);
 	}
 
@@ -39,8 +44,6 @@ export class Row {
 	}
 
 	isEmpty(): boolean {
-		return (this.cells.length === 0) || (this.cells.filter(function(cell) {
-			return (cell.val !== null);
-		}).length === 0);
+		return (this.cells.length === 0) || (this.cells.filter(cell => (cell.val !== null)).length === 0);
 	}
 }

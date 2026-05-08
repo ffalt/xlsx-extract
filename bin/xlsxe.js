@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 
-const XLSX = require("../dist/index.min.js").XLSX;
-const fs = require("node:fs");
-const program = require("commander");
-const pack = require("../package.json");
+import XLSX from "../dist/lib/index.js";
+import fs from "node:fs";
+import { createRequire } from "node:module";
+import program from "commander";
+
+const pack = createRequire(import.meta.url)("../package.json");
 
 program
 	.version(pack.version)
@@ -22,11 +24,11 @@ const options = {
 	sheet_nr: 1
 };
 let filename = null;
-let destfile = null;
+let destinationFile = null;
 if (program.args.at(0)) {
 	filename = program.args.at(0);
 	if (program.args.at(1)) {
-		destfile = program.args.at(1);
+		destinationFile = program.args.at(1);
 	}
 }
 if (program.sheet) {
@@ -36,7 +38,7 @@ if (program.file) {
 	filename = program.file;
 }
 if (program.dest) {
-	destfile = program.dest;
+	destinationFile = program.dest;
 }
 if (program.empty) {
 	options.include_empty_rows = program.empty;
@@ -65,10 +67,10 @@ if (!fs.existsSync(filename)) {
 	process.exit(2);
 }
 
-if (destfile) {
+if (destinationFile) {
 	let error;
 	console.time("written");
-	new XLSX().convert(filename, destfile, options)
+	new XLSX().convert(filename, destinationFile, options)
 		.on("error", function (error_) {
 			error = error_;
 			console.error(error_);

@@ -1,12 +1,12 @@
-import {ICellFormat} from './cell';
-import {IXLSXExtractOptions} from './types';
+import { ICellFormat } from './cell';
+import { IXLSXExtractOptions } from './types';
 
 /**
  converts a raw xlsx-date to js date
  */
 export function xlsx_date(value: number, date1904: boolean, ignore_timezone: boolean): Date {
 	let date = Math.floor(value),
-		time = Math.round(86400 * (value - date)),
+		time = Math.round(86_400 * (value - date)),
 		d;
 	if (date1904) {
 		date += 1462;
@@ -36,7 +36,7 @@ export function xlsx_date(value: number, date1904: boolean, ignore_timezone: boo
 /**
  xlsx build in nr formats
  */
-export const xlsx_fmts: { [id: number]: string | null } = {
+export const xlsx_fmts: Record<number, string | null> = {
 	0: null, // General
 	1: '0',
 	2: '0.00',
@@ -75,9 +75,9 @@ const Alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 /**
  converts a column index to chars e.g. 1 -> A
  */
-export function numberToAlpha(i: number): string {
-	const t = Math.floor(i / 26) - 1;
-	return (t > -1 ? numberToAlpha(t) : '') + Alphabet.charAt(i % 26);
+export function numberToAlpha(columnNumber: number): string {
+	const t = Math.floor(columnNumber / 26) - 1;
+	return (t > -1 ? numberToAlpha(t) : '') + Alphabet.charAt(columnNumber % 26);
 }
 
 /**
@@ -86,8 +86,8 @@ export function numberToAlpha(i: number): string {
 export function alphaToNumber(name: string) {
 	let result = 0;
 	let multiplier = 1;
-	for (let i = name.length - 1; i >= 0; i--) {
-		const value = ((name[i].charCodeAt(0) - 'A'.charCodeAt(0)) + 1);
+	for (let index = name.length - 1; index >= 0; index--) {
+		const value = ((name[index].charCodeAt(0) - 'A'.charCodeAt(0)) + 1);
 		result = result + value * multiplier;
 		multiplier = multiplier * 26;
 	}
@@ -98,8 +98,8 @@ export function alphaToNumber(name: string) {
  split and parse cell formats
  */
 export function containsOnlyChars(value: string, chars: string): boolean {
-	for (let i = 0; i < value.length; i++) {
-		if (chars.indexOf(value[i]) < 0) {
+	for (const element of value) {
+		if (!chars.includes(element)) {
 			return false;
 		}
 	}
@@ -109,22 +109,20 @@ export function containsOnlyChars(value: string, chars: string): boolean {
 /**
  splits and parse cell formats
  */
-export function splitCellFormats(s: string): Array<ICellFormat> {
+export function splitCellFormats(s: string): ICellFormat[] {
 	/*
 	 http://office.microsoft.com/en-gb/excel-help/create-or-delete-a-custom-number-format-HP005199500.aspx?redir=0
 	 _-* #,##0\ _€_-;\-* #,##0\ _€_-;_-* "-"??\ _€_-;_-@_-
 	 positive value ; negative value ; zero; string
 	 */
 	const fmts = s.split(/(?!\\);/);
-	let nr = 0;
-	let last = {t: 'x'};
-	const result: Array<ICellFormat> = [];
-	for (let i = 0; i < fmts.length; i++) {
-		let ff = parseFmtType(fmts[i]);
+	let last = { t: 'x' };
+	const result: ICellFormat[] = [];
+	for (const fmt of fmts) {
+		let ff = parseFmtType(fmt);
 		ff = (ff.t === 'l' ? last : ff);
 		last = ff;
-		result.push({fmt: fmts[i], fmt_type: ff.t, digits: ff.f});
-		nr++;
+		result.push({ fmt: fmt, fmt_type: ff.t, digits: ff.f });
 	}
 	return result;
 }
@@ -132,58 +130,71 @@ export function splitCellFormats(s: string): Array<ICellFormat> {
 /**
  parse cell format
  */
-function parseFmtType(fmt: string): { t: string, f?: number } {
+function parseFmtType(fmt: string): { t: string; f?: number } {
 	// messy hack for extracting some info from the number format (type and float-digits}
 	let s = fmt;
 	let b = '';
 	while (s.length > 0) {
 		const c = s[0];
 		s = s.slice(1);
-		if ((c === '_') || (c === '\\') || (c === '*')) {
-			s = s.slice(1);
-		} else if (c === '[') {
-			s = s.slice(s.indexOf(']') + 1);
-		} else if (c === '"') {
-			s = s.slice(s.indexOf('"') + 1);
-		} else if ((c === '(') || (c === ')')) {
-			// nop
-		} else {
-			b += c;
+		switch (c) {
+			case '_':
+			case '\\':
+			case '*': {
+				s = s.slice(1);
+				break;
+			}
+			case '[': {
+				s = s.slice(s.indexOf(']') + 1);
+				break;
+			}
+			case '"': {
+				s = s.slice(s.indexOf('"') + 1);
+				break;
+			}
+			case '(':
+			case ')': {
+				// nop
+				break;
+			}
+			default: {
+				b += c;
+			}
 		}
 	}
 	b = b.replace(/#/g, '0').replace(/%/g, '');
-	// deal with thousands separator 12000 -> 12 -> formatCode	'#,'
+	// deal with thousands separator 12000 -> 12 -> formatCode '#,'
 	let sp = b.split(',');
 	b = sp[sp.length - 1];
-	if (b === '' || (b.trim().indexOf(' ') < 0) && !isNaN(parseInt(b, 10))) {
-		if (b.indexOf('.') >= 0) {
+	if (b === '' || (!b.trim().includes(' ')) && !isNaN(parseInt(b, 10))) {
+		if (b.includes('.')) {
 			let di = sp[sp.length - 1].split('.')[1].trim().length;
-			if (b.indexOf('E+') >= 0) {
+			if (b.includes('E+')) {
 				di += 14;
 			}
-			return {t: 'f', f: di};
+			return { t: 'f', f: di };
 		} else {
-			return {t: 'i'};
+			return { t: 'i' };
 		}
 	} else if (b === '@') {
-		return {t: 's'};
+		return { t: 's' };
 	}
 	// '-'?? zero value
 	if (b === '??') {
-		return {t: 'l'}; // last fmt should by used
+		return { t: 'l' }; // last fmt should by used
 	}
 	sp = b.split(' ');
 	// test '# ??/??'
 	if ((sp.length > 1) && (containsOnlyChars(sp[sp.length - 1], '?/'))) {
 		// '# ?/?' or '# ??/??',
 		const digits = sp[sp.length - 1].split('/')[0].trim().length + 1;
-		return {t: 'f', f: digits};
+		return { t: 'f', f: digits };
 	}
 	// date format?
 	if (containsOnlyChars(b, 'tmdyhseAPTMH:/-.0 ')) {
-		return {t: 'd'};
+		return { t: 'd' };
 	}
-	return {t: 'x'};
+	return { t: 'x' };
 }
 
 /*
@@ -191,11 +202,11 @@ function parseFmtType(fmt: string): { t: string, f?: number } {
  A2 -> 0
  B2 -> 1
  */
-export function getColumnFromDef(colDef: string): number {
+export function getColumnFromDefinition(columnDefinition: string): number {
 	let cc = '';
-	for (let i = 0; i < colDef.length; i++) {
-		if (isNaN(parseInt(colDef[i], 10))) {
-			cc += colDef[i];
+	for (const element of columnDefinition) {
+		if (isNaN(parseInt(element, 10))) {
+			cc += element;
 		} else {
 			break;
 		}
@@ -207,34 +218,42 @@ export function isValidDate(d: any): boolean {
 	return d instanceof Date && !isNaN(d.getTime());
 }
 
-export function escapeTSV(val: string, options: IXLSXExtractOptions): string {
+export function escapeTSV(value: string, options: IXLSXExtractOptions): string {
 	const delimiter = options.tsv_delimiter || '\t';
-	if (val && val.indexOf('"') > -1 || val.indexOf('\n') > -1 || val.indexOf('\r') > -1 || val.indexOf(delimiter) > -1) {
-		val = '"' + val.replace(/"/g, '""') + '"';
+	if (
+		value &&
+		(
+			value.includes('"') ||
+			value.includes('\n') ||
+			value.includes('\r') ||
+			value.includes(delimiter)
+		)
+	) {
+		value = '"' + value.replace(/"/g, '""') + '"';
 	}
-	return val;
+	return value;
 }
 
-export function unescapexml(text: string): string {
+export function unescapeXML(text: string): string {
 	const encregex = /&(?:quot|apos|gt|lt|amp|#x?([\da-fA-F]+));/g;
 	const coderegex = /_x([\da-fA-F]{4})_/g;
-	const encodings: { [key: string]: string } = {
+	const encodings: Record<string, string> = {
 		'&quot;': '"',
 		'&apos;': '\'',
 		'&gt;': '>',
 		'&lt;': '<',
 		'&amp;': '&'
 	};
-	const s = text + '';
-	const i = s.indexOf('<![CDATA[');
-	if (i === -1) {
-		return s.replace(encregex, function($$, $1) {
-			return encodings[$$] || String.fromCharCode(parseInt($1, $$.indexOf('x') > -1 ? 16 : 10)) || $$;
-		}).replace(coderegex, function(m, c) {
-			return String.fromCharCode(parseInt(c, 16));
-		});
+	const start = text.indexOf('<![CDATA[');
+	if (start === -1) {
+		return text
+			.replace(encregex, ($$, $1) => {
+				return encodings[$$] || String.fromCharCode(parseInt($1, $$.includes('x') ? 16 : 10)) || $$;
+			})
+			.replace(coderegex, (m, c) => {
+				return String.fromCharCode(parseInt(c, 16));
+			});
 	}
-	const j = s.indexOf(']]>');
-	return unescapexml(s.slice(0, i)) + s.slice(i + 9, j) + unescapexml(s.slice(j + 3));
-
+	const end = text.indexOf(']]>');
+	return unescapeXML(text.slice(0, start)) + text.slice(start + 9, end) + unescapeXML(text.slice(end + 3));
 }

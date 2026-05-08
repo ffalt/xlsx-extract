@@ -1,20 +1,19 @@
-import {IXLSXExtractOptions} from './types';
-import * as events from 'events';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as os from 'os';
-import * as util from 'util';
-import {XLSXReader} from './reader';
+import { IXLSXExtractOptions } from './types';
+import events from 'node:events';
+import fs from 'node:fs';
+import path from 'node:path';
+import { inherits } from 'node:util';
+import { XLSXReader } from './reader';
+import os from 'node:os';
 
 export class XLSX extends events.EventEmitter {
-
 	constructor() {
 		super();
-		util.inherits(XLSX, events.EventEmitter);
+		inherits(XLSX, events.EventEmitter);
 		events.EventEmitter.call(this);
 	}
 
-	extract(filename: string, options?: IXLSXExtractOptions): XLSX {
+	extract(filename: string, options?: IXLSXExtractOptions): this {
 		const reader = new XLSXReader(filename, options);
 		reader.read((what: string, data: any) => {
 			this.emit(what, data);
@@ -22,10 +21,10 @@ export class XLSX extends events.EventEmitter {
 		return this;
 	}
 
-	convert(filename: string, destfile: string, options: IXLSXExtractOptions): XLSX {
-		options = options || {};
+	convert(filename: string, destinationFile: string, options?: IXLSXExtractOptions): this {
+		options = options ?? {};
 
-		if ((!options.format) && ((path.extname(destfile).toLowerCase() === '.json'))) {
+		if ((!options.format) && ((path.extname(destinationFile).toLowerCase() === '.json'))) {
 			options.format = 'json';
 		}
 		if (options.format !== 'json') {
@@ -36,12 +35,12 @@ export class XLSX extends events.EventEmitter {
 		const isJSON = options.format !== 'tsv';
 		let writeable: fs.WriteStream;
 		try {
-			writeable = fs.createWriteStream(destfile);
+			writeable = fs.createWriteStream(destinationFile);
 			if (isJSON) {
 				writeable.write('[');
 			}
-		} catch (e) {
-			this.emit('error', e);
+		} catch (error) {
+			this.emit('error', error);
 			this.emit('end');
 			return this;
 		}
@@ -49,35 +48,39 @@ export class XLSX extends events.EventEmitter {
 			this.emit('end');
 		});
 		const reader = new XLSXReader(filename, options);
+		const tsv_endofline = options.tsv_endofline ?? os.EOL;
 		reader.read((what, data) => {
 			switch (what) {
-				case 'error':
+				case 'error': {
 					this.emit('error', data);
 					break;
-				case 'cell':
+				}
+				case 'cell': {
 					this.emit('cell', data);
 					break;
-				case 'row':
+				}
+				case 'row': {
 					if (isJSON) {
 						if (start) {
 							start = false;
-							writeable.write(options.tsv_endofline);
+							writeable.write(tsv_endofline);
 						} else {
-							writeable.write(',' + options.tsv_endofline);
+							writeable.write(',' + tsv_endofline);
 						}
 					}
 					this.emit('row', data);
 					writeable.write(data);
 					break;
-				case 'end':
+				}
+				case 'end': {
 					if (isJSON) {
-						writeable.write(options.tsv_endofline + ']');
+						writeable.write(tsv_endofline + ']');
 					}
 					writeable.end();
 					break;
+				}
 			}
 		});
 		return this;
 	}
-
 }

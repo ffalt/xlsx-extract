@@ -1,5 +1,5 @@
-import {escapeTSV, isValidDate, unescapexml, xlsx_date} from './utils';
-import {IXLSXExtractOptions} from './types';
+import { escapeTSV, isValidDate, unescapeXML, xlsx_date } from './utils';
+import { IXLSXExtractOptions } from './types';
 
 export interface ICellFormat {
 	fmt: string;
@@ -10,13 +10,11 @@ export interface ICellFormat {
 export interface ICellFormatStyle {
 	fmt?: string;
 	fmtnr?: number;
-	fmts: Array<ICellFormat>;
-	def?: { [key: string]: string | undefined };
+	fmts: ICellFormat[];
+	def?: Record<string, string | undefined>;
 }
 
-export interface ICellFormatStyles {
-	[id: string]: ICellFormatStyle;
-}
+export type ICellFormatStyles = Record<string, ICellFormatStyle>;
 
 export class Cell {
 	val: any;
@@ -27,33 +25,37 @@ export class Cell {
 	formula?: string;
 	raw?: string;
 
-	getFormat(options: IXLSXExtractOptions) {
+	getFormat(options: IXLSXExtractOptions): any {
 		switch (options.format) {
-			case 'json':
+			case 'json': {
 				return this.toJson();
-			case 'array':
+			}
+			case 'array': {
 				return this.val;
-			case 'obj':
+			}
+			case 'obj': {
 				return this;
+			}
 			// case 'tsv':
-			default:
+			default: {
 				return this.toTSV(options);
+			}
 		}
 	}
 
 	toTSV(options: IXLSXExtractOptions): string | undefined {
-		let val: string;
+		let value: string;
 		if (this.val === null || this.val === undefined || this.raw === undefined) {
-			val = '';
+			value = '';
 		} else if (isValidDate(this.val)) {
-			val = this.val.toISOString();
+			value = (this.val as Date).toISOString();
 		} else {
-			val = this.val.toString();
+			value = this.val.toString();
 		}
 		if (options.tsv_float_comma && (typeof this.val === 'number')) {
-			val = val.replace('.', ',');
+			value = value.replace('.', ',');
 		}
-		return escapeTSV(val, options);
+		return escapeTSV(value, options);
 	}
 
 	toJson() {
@@ -83,25 +85,24 @@ export class Cell {
 		const format = this.getEffectiveNumFormat();
 		if (format && options.convert_values) {
 			switch (format.fmt_type) {
-				case 'd':
+				case 'd': {
 					if (options.convert_values.dates) {
-						this.val = xlsx_date(this.val, !!options.date1904, !!options.ignore_timezone);
+						this.val = xlsx_date(Number(this.val), !!options.date1904, !!options.ignore_timezone);
 					}
 					break;
-				case 'i':
+				}
+				case 'i': {
 					if (options.convert_values.ints) {
-						let i = null;
-						if (this.fmt && (this.fmt.fmt === '0\\ %' || this.fmt.fmt === '0%')) {
-							i = Math.round(parseFloat(this.val) * 100);
-						} else {
-							i = parseInt(this.val, 10);
-						}
-						if (!isNaN(i)) {
-							this.val = i;
+						const numberValue = this.fmt && (this.fmt.fmt === String.raw`0\ %` || this.fmt.fmt === '0%') ?
+							Math.round(parseFloat(this.val as string) * 100) :
+							parseInt(this.val as string, 10);
+						if (!isNaN(numberValue)) {
+							this.val = numberValue;
 						}
 					}
 					break;
-				case 'f':
+				}
+				case 'f': {
 					if ((format.digits !== undefined) && (format.digits > 0) && options.convert_values.floats) {
 						if (options.round_floats && !isNaN(this.val)) {
 							this.val = this.val.toFixed(format.digits);
@@ -112,9 +113,11 @@ export class Cell {
 						}
 					}
 					break;
-				default:
+				}
+				default: {
 					// nop
 					break;
+				}
 			}
 		}
 	}
@@ -122,7 +125,7 @@ export class Cell {
 	convertValue(options: IXLSXExtractOptions) {
 		if (this.val !== null) {
 			switch (this.typ) {
-				case 'n':
+				case 'n': {
 					const v = parseFloat(this.val);
 					if (!isNaN(v)) {
 						this.val = v;
@@ -131,27 +134,31 @@ export class Cell {
 						this.applyNumFormat(options);
 					}
 					break;
-				case 'str':
+				}
+				case 'str': {
 					if (this.raw) {
-						this.val = unescapexml(this.raw);
+						this.val = unescapeXML(this.raw);
 					}
 					break;
+				}
 				case 's':
-				case 'inlineStr':
-					break; // string, do nothing
-				case 'b':
-					if (options.convert_values && options.convert_values.bools) {
-						if (['0', 'FALSE', 'false'].indexOf(this.val) >= 0) {
+				case 'inlineStr': {
+					break;
+				} // string, do nothing
+				case 'b': {
+					if (options.convert_values?.bools) {
+						if (['0', 'FALSE', 'false'].includes(this.val as string)) {
 							this.val = false;
-						} else if (['1', 'TRUE', 'true'].indexOf(this.val) >= 0) {
+						} else if (['1', 'TRUE', 'true'].includes(this.val as string)) {
 							this.val = true;
 						}
 					}
 					break;
+				}
 				// case 'e':
 				// debug('Error cell type: Value will be invalid ("#REF!", "#NAME?", "#VALUE!" or similar).');
 				// break;
-				default:
+				// default:
 				// debug('Unknown cell type: "%s"', this.typ);
 			}
 		}

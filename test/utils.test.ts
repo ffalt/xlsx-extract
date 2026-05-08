@@ -1,5 +1,5 @@
 import {
-	xlsx_date, getColumnFromDef, isValidDate, escapeTSV, unescapexml,
+	xlsx_date, getColumnFromDefinition, isValidDate, escapeTSV, unescapeXML,
 	containsOnlyChars, splitCellFormats, xlsx_fmts, numberToAlpha, alphaToNumber
 } from '../src/utils';
 import { IXLSXExtractOptions } from '../src/types';
@@ -87,19 +87,19 @@ describe('containsOnlyChars', () => {
 
 describe('getColumnFromDef', () => {
 	it('returns 0 for A1', () => {
-		expect(getColumnFromDef('A1')).toBe(0);
+		expect(getColumnFromDefinition('A1')).toBe(0);
 	});
 
 	it('returns 1 for B2', () => {
-		expect(getColumnFromDef('B2')).toBe(1);
+		expect(getColumnFromDefinition('B2')).toBe(1);
 	});
 
 	it('returns 26 for AA10', () => {
-		expect(getColumnFromDef('AA10')).toBe(26);
+		expect(getColumnFromDefinition('AA10')).toBe(26);
 	});
 
 	it('returns 701 for ZZ1', () => {
-		expect(getColumnFromDef('ZZ1')).toBe(701);
+		expect(getColumnFromDefinition('ZZ1')).toBe(701);
 	});
 });
 
@@ -158,35 +158,35 @@ describe('escapeTSV', () => {
 
 describe('unescapexml', () => {
 	it('unescapes &amp;', () => {
-		expect(unescapexml('&amp;')).toBe('&');
+		expect(unescapeXML('&amp;')).toBe('&');
 	});
 
 	it('unescapes &lt; and &gt;', () => {
-		expect(unescapexml('&lt;tag&gt;')).toBe('<tag>');
+		expect(unescapeXML('&lt;tag&gt;')).toBe('<tag>');
 	});
 
 	it('unescapes &quot; and &apos;', () => {
-		expect(unescapexml('&quot;hello&apos;')).toBe('"hello\'');
+		expect(unescapeXML('&quot;hello&apos;')).toBe('"hello\'');
 	});
 
 	it('unescapes decimal numeric references', () => {
-		expect(unescapexml('&#65;')).toBe('A');
+		expect(unescapeXML('&#65;')).toBe('A');
 	});
 
 	it('unescapes hex numeric references', () => {
-		expect(unescapexml('&#x41;')).toBe('A');
+		expect(unescapeXML('&#x41;')).toBe('A');
 	});
 
 	it('handles CDATA sections', () => {
-		expect(unescapexml('<![CDATA[<raw & unescaped>]]>')).toBe('<raw & unescaped>');
+		expect(unescapeXML('<![CDATA[<raw & unescaped>]]>')).toBe('<raw & unescaped>');
 	});
 
 	it('unescapes _xHHHH_ codes', () => {
-		expect(unescapexml('_x0041_')).toBe('A');
+		expect(unescapeXML('_x0041_')).toBe('A');
 	});
 
 	it('returns plain text unchanged', () => {
-		expect(unescapexml('hello world')).toBe('hello world');
+		expect(unescapeXML('hello world')).toBe('hello world');
 	});
 });
 

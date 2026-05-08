@@ -1,4 +1,5 @@
-import {IXLSXExtractOptions} from './types';
+import { IXLSXExtractOptions } from './types';
+import os from 'node:os';
 
 export class Sheet {
 	nr?: string;
@@ -8,20 +9,24 @@ export class Sheet {
 
 	getFormat(options: IXLSXExtractOptions): any {
 		switch (options.format) {
-			case 'json':
+			case 'json': {
 				return this.toJson();
-			case 'array':
+			}
+			case 'array': {
 				return this.toArray();
-			case 'obj':
+			}
+			case 'obj': {
 				return this;
+			}
 			// case 'tsv':
-			default:
+			default: {
 				return this.toTSV(options);
+			}
 		}
 	}
 
 	toTSV(options: IXLSXExtractOptions): string {
-		return this.toArray().join(options.tsv_delimiter || '\t') + options.tsv_endofline;
+		return this.toArray().join(options.tsv_delimiter ?? '\t') + (options.tsv_endofline ?? os.EOL);
 	}
 
 	toJson(): string {
@@ -33,7 +38,7 @@ export class Sheet {
 		});
 	}
 
-	toArray(): Array<string | undefined> {
+	toArray(): (string | undefined)[] {
 		return [this.name, this.rid, this.nr, this.id];
 	}
 }
