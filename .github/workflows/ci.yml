@@ -1,13 +1,11 @@
-name: test
+name: ci
 
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
 
     strategy:
@@ -27,5 +25,9 @@ jobs:
       run: npm ci
     - name: Build the library
       run: npm run build
-    - name: Run tests
-      run: npm test
+    - name: Run test with coverage
+      run: npm run coverage
+    - name: Run codacy-coverage-reporter
+      uses: codacy/codacy-coverage-reporter-action@6904bd01e29ada115135b5eca20125758ccae53b
+      with:
+        project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
