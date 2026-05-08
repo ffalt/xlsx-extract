@@ -1,6 +1,6 @@
 {
   "name": "xlsx-extract",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "license": "MIT",
   "description": "simple async XLSX reader with low memory footprint",
   "homepage": "https://github.com/ffalt/xlsx-extract",
