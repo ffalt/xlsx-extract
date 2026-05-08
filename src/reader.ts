@@ -70,7 +70,7 @@ export class XLSXReader {
 							const empty = new Cell();
 							empty.col = row.count();
 							row.push(empty);
-							emit(undefined, cell);
+							emit(undefined, empty);
 						}
 						row.push(cell);
 
@@ -134,7 +134,7 @@ export class XLSXReader {
 			})
 			.onText((txt: string) => {
 				if (addValue) {
-					cell.val = ((cell.val ?? '') as string) + txt;
+					cell.val = (cell.val ?? '') + txt;
 				}
 				if (addFormular) {
 					cell.formula = (cell.formula ?? '') + txt;
