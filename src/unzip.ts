@@ -23,7 +23,8 @@ export class YauzlUnzipEntry implements IUnzipEntry {
 	public pipe(piper: stream.Duplex): void {
 		this.zipfile.openReadStream(this.entry, (error, readStream) => {
 			if (error) {
-				throw error;
+				piper.destroy(error);
+				return;
 			}
 			readStream.on('end', () => {
 				this.zipfile.readEntry();
