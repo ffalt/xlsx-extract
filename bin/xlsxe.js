@@ -1,15 +1,16 @@
 #!/usr/bin/env node
 
-import XLSX from "../dist/lib/index.js";
+import { XLSX } from "../dist/lib/index.js";
 import fs from "node:fs";
 import { createRequire } from "node:module";
-import program from "commander";
+import { program } from "commander";
 
 const pack = createRequire(import.meta.url)("../package.json");
 
 program
 	.version(pack.version)
-	.usage("[options] <file> [destfile]")
+	.argument("[file]", "source .xlsx")
+	.argument("[destfile]", "destination file")
 	.option("-m, --mode <mode>", "json or tsv (default tsv)")
 	.option("-f, --file <file>", "source .xlsx")
 	.option("-s, --sheet <nr>", "sheet nr")
@@ -20,6 +21,7 @@ program
 	.option("--d1904", "convert dates with 1904 base")
 	.parse(process.argv);
 
+const parameters = program.opts();
 const options = {
 	sheet_nr: 1
 };
@@ -31,32 +33,32 @@ if (program.args.at(0)) {
 		destinationFile = program.args.at(1);
 	}
 }
-if (program.sheet) {
-	options.sheet_nr = program.sheet;
+if (parameters.sheet) {
+	options.sheet_nr = parameters.sheet;
 }
-if (program.file) {
-	filename = program.file;
+if (parameters.file) {
+	filename = parameters.file;
 }
-if (program.dest) {
-	destinationFile = program.dest;
+if (parameters.dest) {
+	destinationFile = parameters.dest;
 }
-if (program.empty) {
-	options.include_empty_rows = program.empty;
+if (parameters.empty) {
+	options.include_empty_rows = parameters.empty;
 }
-if (program.header) {
-	options.ignore_header = program.header;
+if (parameters.header) {
+	options.ignore_header = parameters.header;
 }
-if (program.raw) {
-	options.raw_values = program.raw;
+if (parameters.raw) {
+	options.raw_values = parameters.raw;
 }
-if (program.d1904) {
-	options.date1904 = program.d1904;
+if (parameters.d1904) {
+	options.date1904 = parameters.d1904;
 }
-if (program.mode) {
-	options.format = program.mode;
+if (parameters.mode) {
+	options.format = parameters.mode;
 }
-if (program.parser) {
-	options.parser = program.parser;
+if (parameters.parser) {
+	options.parser = parameters.parser;
 }
 if (!filename) {
 	console.error("xlsxe: must specify a filename");
