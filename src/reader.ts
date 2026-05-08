@@ -30,7 +30,7 @@ export class XLSXReader {
 	private parseXMLSheet(
 		entry: IUnzipEntry,
 		workbook: Workbook,
-		emit: (row?: Row | null, cell?: Cell | null) => void,
+		emit: (row?: Row, cell?: Cell) => void,
 		callback: (error?: Error) => void
 	) {
 		/*
@@ -70,7 +70,7 @@ export class XLSXReader {
 							const empty = new Cell();
 							empty.col = row.count();
 							row.push(empty);
-							emit(null, cell);
+							emit(undefined, cell);
 						}
 						row.push(cell);
 
@@ -124,7 +124,7 @@ export class XLSXReader {
 							if (!this.options.raw_values) {
 								cell.convertValue(this.options);
 							}
-							emit(null, cell);
+							emit(undefined, cell);
 						}
 
 						break;

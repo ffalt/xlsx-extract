@@ -36,8 +36,8 @@ export function xlsx_date(value: number, date1904: boolean, ignore_timezone: boo
 /**
  xlsx build in nr formats
  */
-export const xlsx_fmts: Record<number, string | null> = {
-	0: null, // General
+export const xlsx_fmts: Record<number, string | undefined> = {
+	0: undefined, // General
 	1: '0',
 	2: '0.00',
 	3: '#,##0',
@@ -135,7 +135,7 @@ function parseFmtType(fmt: string): { t: string; f?: number } {
 	let s = fmt;
 	let b = '';
 	while (s.length > 0) {
-		const c = s[0];
+		const c = s.at(0) ?? '';
 		s = s.slice(1);
 		switch (c) {
 			case '_':
@@ -162,13 +162,13 @@ function parseFmtType(fmt: string): { t: string; f?: number } {
 			}
 		}
 	}
-	b = b.replace(/#/g, '0').replace(/%/g, '');
+	b = b.replaceAll('#', '0').replaceAll('%', '');
 	// deal with thousands separator 12000 -> 12 -> formatCode '#,'
 	let sp = b.split(',');
-	b = sp[sp.length - 1];
-	if (b === '' || (!b.trim().includes(' ')) && !isNaN(parseInt(b, 10))) {
+	b = sp.at(-1) ?? '';
+	if (b === '' || (!b.trim().includes(' ') && !isNaN(parseInt(b, 10)))) {
 		if (b.includes('.')) {
-			let di = sp[sp.length - 1].split('.')[1].trim().length;
+			let di = (b.split('.').at(1) ?? '').trim().length;
 			if (b.includes('E+')) {
 				di += 14;
 			}
@@ -185,9 +185,10 @@ function parseFmtType(fmt: string): { t: string; f?: number } {
 	}
 	sp = b.split(' ');
 	// test '# ??/??'
-	if ((sp.length > 1) && (containsOnlyChars(sp[sp.length - 1], '?/'))) {
+	const lastPart = sp.at(-1) ?? '';
+	if ((sp.length > 1) && (containsOnlyChars(lastPart, '?/'))) {
 		// '# ?/?' or '# ??/??',
-		const digits = sp[sp.length - 1].split('/')[0].trim().length + 1;
+		const digits = (lastPart.split('/').at(0) ?? '').trim().length + 1;
 		return { t: 'f', f: digits };
 	}
 	// date format?
@@ -219,7 +220,7 @@ export function isValidDate(d: any): boolean {
 }
 
 export function escapeTSV(value: string, options: IXLSXExtractOptions): string {
-	const delimiter = options.tsv_delimiter || '\t';
+	const delimiter = options.tsv_delimiter ?? '\t';
 	if (
 		value &&
 		(
@@ -229,7 +230,7 @@ export function escapeTSV(value: string, options: IXLSXExtractOptions): string {
 			value.includes(delimiter)
 		)
 	) {
-		value = '"' + value.replace(/"/g, '""') + '"';
+		value = '"' + value.replaceAll('"', '""') + '"';
 	}
 	return value;
 }
@@ -247,12 +248,8 @@ export function unescapeXML(text: string): string {
 	const start = text.indexOf('<![CDATA[');
 	if (start === -1) {
 		return text
-			.replace(encregex, ($$, $1) => {
-				return encodings[$$] || String.fromCharCode(parseInt($1, $$.includes('x') ? 16 : 10)) || $$;
-			})
-			.replace(coderegex, (m, c) => {
-				return String.fromCharCode(parseInt(c, 16));
-			});
+			.replaceAll(encregex, ($$, $1) => encodings[$$] || String.fromCharCode(parseInt($1, $$.includes('x') ? 16 : 10)) || $$)
+			.replaceAll(coderegex, (m, c) => String.fromCharCode(parseInt(c, 16)));
 	}
 	const end = text.indexOf(']]>');
 	return unescapeXML(text.slice(0, start)) + text.slice(start + 9, end) + unescapeXML(text.slice(end + 3));

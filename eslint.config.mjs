@@ -8,7 +8,7 @@ import globals from "globals";
 const unicornRules = {
 	"unicorn/empty-brace-spaces": "off",
 	"unicorn/no-await-expression-member": "off",
-	"unicorn/no-null": "off",
+	"unicorn/no-null": "error",
 	"unicorn/no-array-sort": "off",
 	"unicorn/no-process-exit": "off",
 	"unicorn/no-useless-promise-resolve-reject": "off",

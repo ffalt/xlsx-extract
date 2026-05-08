@@ -45,7 +45,7 @@ export class Cell {
 
 	toTSV(options: IXLSXExtractOptions): string | undefined {
 		let value: string;
-		if (this.val === null || this.val === undefined || this.raw === undefined) {
+		if (this.val === undefined || this.raw === undefined) {
 			value = '';
 		} else if (isValidDate(this.val)) {
 			value = (this.val as Date).toISOString();
@@ -62,21 +62,21 @@ export class Cell {
 		return JSON.stringify(this.val);
 	}
 
-	getEffectiveNumFormat(): ICellFormat | null {
+	getEffectiveNumFormat(): ICellFormat | undefined {
 		if ((!this.fmt) || (this.fmt.fmts.length === 0)) {
-			return null;
+			return undefined;
 		}
 		if (this.fmt.fmts.length === 1) {
-			return this.fmt.fmts[0];
+			return this.fmt.fmts.at(0);
 		}
 		if (isNaN(this.val)) {
-			return this.fmt.fmts[3];
+			return this.fmt.fmts.at(3);
 		}
 		if (this.val < 0) {
-			return this.fmt.fmts[1];
+			return this.fmt.fmts.at(1);
 		}
 		if (this.val > 0) {
-			return this.fmt.fmts[0];
+			return this.fmt.fmts.at(0);
 		}
 		return this.fmt.fmts[(this.fmt.fmts.length > 2) ? 2 : 0];
 	}
@@ -123,7 +123,7 @@ export class Cell {
 	}
 
 	convertValue(options: IXLSXExtractOptions) {
-		if (this.val !== null) {
+		if (this.val !== undefined) {
 			switch (this.typ) {
 				case 'n': {
 					const v = parseFloat(this.val);

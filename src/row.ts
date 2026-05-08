@@ -44,6 +44,6 @@ export class Row {
 	}
 
 	isEmpty(): boolean {
-		return (this.cells.length === 0) || (this.cells.filter(cell => (cell.val !== null)).length === 0);
+		return (this.cells.length === 0) || (this.cells.filter(cell => (cell.val !== undefined)).length === 0);
 	}
 }

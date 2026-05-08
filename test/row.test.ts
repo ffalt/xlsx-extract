@@ -11,7 +11,7 @@ const baseOptions: IXLSXExtractOptions = {
 function makeCell(val: any): Cell {
 	const cell = new Cell();
 	cell.val = val;
-	cell.raw = (val !== null && val !== undefined) ? String(val) : undefined;
+	cell.raw = (val !== undefined) ? String(val) : undefined;
 	return cell;
 }
 
@@ -34,16 +34,16 @@ describe('Row', () => {
 			expect(new Row().isEmpty()).toBe(true);
 		});
 
-		it('returns true when all cell values are null', () => {
+		it('returns true when all cell values are undefined', () => {
 			const row = new Row();
-			row.push(makeCell(null));
-			row.push(makeCell(null));
+			row.push(makeCell(undefined));
+			row.push(makeCell(undefined));
 			expect(row.isEmpty()).toBe(true);
 		});
 
-		it('returns false when at least one cell has a non-null value', () => {
+		it('returns false when at least one cell has a non-undefined value', () => {
 			const row = new Row();
-			row.push(makeCell(null));
+			row.push(makeCell(undefined));
 			row.push(makeCell('data'));
 			expect(row.isEmpty()).toBe(false);
 		});

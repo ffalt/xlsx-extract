@@ -16,10 +16,10 @@ describe('Cell', () => {
 			expect(cell.toJson()).toBe('42');
 		});
 
-		it('serializes null', () => {
+		it('serializes undefined', () => {
 			const cell = new Cell();
-			cell.val = null;
-			expect(cell.toJson()).toBe('null');
+			cell.val = undefined;
+			expect(cell.toJson()).toBeUndefined();
 		});
 
 		it('serializes a string', () => {
@@ -30,9 +30,9 @@ describe('Cell', () => {
 	});
 
 	describe('toTSV()', () => {
-		it('returns empty string when val is null', () => {
+		it('returns empty string when val is undefined', () => {
 			const cell = new Cell();
-			cell.val = null;
+			cell.val = undefined;
 			cell.raw = '';
 			expect(cell.toTSV(baseOptions)).toBe('');
 		});
@@ -102,14 +102,14 @@ describe('Cell', () => {
 	});
 
 	describe('getEffectiveNumFormat()', () => {
-		it('returns null when fmt is not set', () => {
-			expect(new Cell().getEffectiveNumFormat()).toBeNull();
+		it('returns undefined when fmt is not set', () => {
+			expect(new Cell().getEffectiveNumFormat()).toBeUndefined();
 		});
 
-		it('returns null when fmts is empty', () => {
+		it('returns undefined when fmts is empty', () => {
 			const cell = new Cell();
 			cell.fmt = { fmts: [] };
-			expect(cell.getEffectiveNumFormat()).toBeNull();
+			expect(cell.getEffectiveNumFormat()).toBeUndefined();
 		});
 
 		it('returns fmts[0] when there is exactly one format', () => {
@@ -316,12 +316,12 @@ describe('Cell', () => {
 			expect(cell.val).toBe('1');
 		});
 
-		it('leaves null val unchanged for type "n"', () => {
+		it('leaves undefined val unchanged for type "n"', () => {
 			const cell = new Cell();
 			cell.typ = 'n';
-			cell.val = null;
+			cell.val = undefined;
 			cell.convertValue(baseOptions);
-			expect(cell.val).toBeNull();
+			expect(cell.val).toBeUndefined();
 		});
 	});
 });

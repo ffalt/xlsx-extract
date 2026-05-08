@@ -23,8 +23,8 @@ program
 const options = {
 	sheet_nr: 1
 };
-let filename = null;
-let destinationFile = null;
+let filename;
+let destinationFile;
 if (program.args.at(0)) {
 	filename = program.args.at(0);
 	if (program.args.at(1)) {
@@ -92,6 +92,6 @@ if (destinationFile) {
 			console.error(error);
 		})
 		.on("end", () => {
-		// nop
+			// nop
 		});
 }
