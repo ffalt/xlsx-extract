@@ -15,7 +15,7 @@ program
 	.option("-f, --file <file>", "source .xlsx")
 	.option("-s, --sheet <nr>", "sheet nr")
 	.option("-d, --dest <file>", "destination .tsv")
-	.option("-h, --header <nr>", "nr of headers to ignore")
+	.option("-n, --header <nr>", "n header rows to skip")
 	.option("-e, --empty", "include empty lines")
 	.option("-r, --raw", "do not convert values")
 	.option("--d1904", "convert dates with 1904 base")
