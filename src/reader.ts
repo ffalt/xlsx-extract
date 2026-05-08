@@ -261,7 +261,7 @@ export class XLSXReader {
 			})
 			.onText(text => {
 				if (collect_strings && !phonetic) {
-					s = s + text.replace(/\r\n/g, '\n');
+					s = s + text.replaceAll('\r\n', '\n');
 				}
 			})
 			.onClose(error => {

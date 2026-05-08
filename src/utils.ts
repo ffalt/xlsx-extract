@@ -77,7 +77,7 @@ const Alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
  */
 export function numberToAlpha(columnNumber: number): string {
 	const t = Math.floor(columnNumber / 26) - 1;
-	return (t > -1 ? numberToAlpha(t) : '') + Alphabet.charAt(columnNumber % 26);
+	return (t > -1 ? numberToAlpha(t) : '') + (Alphabet.at(columnNumber % 26) ?? '');
 }
 
 /**
@@ -248,8 +248,8 @@ export function unescapeXML(text: string): string {
 	const start = text.indexOf('<![CDATA[');
 	if (start === -1) {
 		return text
-			.replaceAll(encregex, ($$, $1) => encodings[$$] || String.fromCharCode(parseInt($1, $$.includes('x') ? 16 : 10)) || $$)
-			.replaceAll(coderegex, (m, c) => String.fromCharCode(parseInt(c, 16)));
+			.replaceAll(encregex, ($$, $1) => encodings[$$] || String.fromCodePoint(parseInt($1, $$.includes('x') ? 16 : 10)) || $$)
+			.replaceAll(coderegex, (m, c) => String.fromCodePoint(parseInt(c, 16)));
 	}
 	const end = text.indexOf(']]>');
 	return unescapeXML(text.slice(0, start)) + text.slice(start + 9, end) + unescapeXML(text.slice(end + 3));

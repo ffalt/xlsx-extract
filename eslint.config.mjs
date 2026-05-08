@@ -15,6 +15,7 @@ const unicornRules = {
 	"unicorn/no-useless-undefined": "off",
 	"unicorn/prefer-top-level-await": "off",
 	"unicorn/prefer-number-properties": "off",
+	"unicorn/prefer-code-point": "off",
 
 	"unicorn/prevent-abbreviations": ["error", {
 		replacements: {
