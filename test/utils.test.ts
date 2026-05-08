@@ -181,6 +181,22 @@ describe('unescapexml', () => {
 		expect(unescapeXML('<![CDATA[<raw & unescaped>]]>')).toBe('<raw & unescaped>');
 	});
 
+	it('handles CDATA with surrounding escaped text', () => {
+		expect(unescapeXML('&lt;before&gt;<![CDATA[<inside>]]>&lt;after&gt;')).toBe('<before><inside><after>');
+	});
+
+	it('handles empty CDATA section', () => {
+		expect(unescapeXML('<![CDATA[]]>')).toBe('');
+	});
+
+	it('handles malformed CDATA with no closing marker', () => {
+		expect(unescapeXML('<![CDATA[no close')).toBe('no close');
+	});
+
+	it('handles malformed CDATA with escaped text before it', () => {
+		expect(unescapeXML('&amp;<![CDATA[no close')).toBe('&no close');
+	});
+
 	it('unescapes _xHHHH_ codes', () => {
 		expect(unescapeXML('_x0041_')).toBe('A');
 	});

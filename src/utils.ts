@@ -252,5 +252,8 @@ export function unescapeXML(text: string): string {
 			.replaceAll(coderegex, (_m: string, c: string) => String.fromCodePoint(parseInt(c, 16)));
 	}
 	const end = text.indexOf(']]>');
+	if (end === -1) {
+		return unescapeXML(text.slice(0, start)) + text.slice(start + 9);
+	}
 	return unescapeXML(text.slice(0, start)) + text.slice(start + 9, end) + unescapeXML(text.slice(end + 3));
 }
