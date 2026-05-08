@@ -1,5 +1,5 @@
-import { Sheet } from './sheet';
-import { ICellFormatStyles } from './cell';
+import { Sheet } from './sheet.js';
+import { ICellFormatStyles } from './cell.js';
 
 export class Workbook {
 	sheets: Sheet[] = [];

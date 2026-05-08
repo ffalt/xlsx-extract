@@ -1,12 +1,12 @@
-import { getColumnFromDefinition, splitCellFormats, xlsx_fmts } from './utils';
-import { Workbook } from './book';
-import { Row } from './row';
-import { Cell, ICellFormatStyles } from './cell';
-import { IXLSXExtractOptions } from './types';
-import { Sheet } from './sheet';
-import { ISaxParser, SaxSax } from './xml';
-import { applyDefaults } from './defaults';
-import { IUnzip, IUnzipEntry, YauzlUnzip } from './unzip';
+import { Cell, ICellFormatStyles } from './cell.js';
+import { ISaxParser, SaxSax } from './xml.js';
+import { IUnzip, IUnzipEntry, YauzlUnzip } from './unzip.js';
+import { IXLSXExtractOptions } from './types.js';
+import { Row } from './row.js';
+import { Sheet } from './sheet.js';
+import { Workbook } from './book.js';
+import { applyDefaults } from './defaults.js';
+import { getColumnFromDefinition, splitCellFormats, xlsx_fmts } from './utils.js';
 
 export class XLSXReader {
 	filename: string;

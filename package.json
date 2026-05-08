@@ -13,8 +13,9 @@
   ],
   "scripts": {
     "clean": "rimraf dist",
-    "build": "npm run clean && npm run build:es6",
-    "build:es6": "tsc -p tsconfig.json",
+    "build": "npm run clean && npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc -p tsconfig.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json && node -e \"require('fs').writeFileSync('dist/lib-cjs/package.json', JSON.stringify({type:'commonjs'}))\"",
     "build:deploy": "npm run build",
     "pretest": "tsc",
     "lint": "eslint .",
@@ -49,6 +50,7 @@
     "typescript": "6.0.3",
     "typescript-eslint": "^8.59.2"
   },
+  "files": ["dist", "bin", "LICENSE", "README.md"],
   "bugs": {
     "url": "https://github.com/ffalt/xlsx-extract/issues"
   },
@@ -77,15 +79,31 @@
       "url": "https://github.com/Chrisdf"
     }
   ],
-  "bin": "./bin/xlsxe.js",
-  "main": "dist/lib/index.js",
-  "types": "dist/lib/index.d.ts",
+  "bin": {
+    "xlsxe": "./bin/xlsxe.js"
+  },
+  "main": "dist/lib-cjs/index.js",
+  "types": "dist/lib-cjs/index.d.ts",
+  "module": "dist/lib/index.js",
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/lib/index.d.ts",
+        "default": "./dist/lib/index.js"
+      },
+      "require": {
+        "types": "./dist/lib-cjs/index.d.ts",
+        "default": "./dist/lib-cjs/index.js"
+      }
+    }
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ffalt/xlsx-extract"
+    "url": "git+https://github.com/ffalt/xlsx-extract.git"
   },
   "engines": {
-    "node": ">= 22.0.0"
-  },
-  "readmeFilename": "README.md"
+    "node": ">= 20.0.0"
+  }
 }

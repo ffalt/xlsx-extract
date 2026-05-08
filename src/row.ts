@@ -1,6 +1,6 @@
-import { Cell, CellValue } from './cell';
-import { IXLSXExtractOptions } from './types';
 import os from 'node:os';
+import { Cell, CellValue } from './cell.js';
+import { IXLSXExtractOptions } from './types.js';
 
 export class Row {
 	cells: Cell[] = [];

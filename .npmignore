@@ -14,6 +14,7 @@
 coverage
 local
 node_modules
+src
 test
 
 .gitignore
@@ -21,6 +22,5 @@ test
 CHANGELOG.md
 eslint.config.mjs
 jest.config.js
-README.md
 tsconfig.jest.json
 tsconfig.json

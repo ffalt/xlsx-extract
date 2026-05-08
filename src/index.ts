@@ -1,9 +1,9 @@
-import { IXLSXExtractOptions } from './types';
 import events from 'node:events';
 import fs from 'node:fs';
 import path from 'node:path';
-import { XLSXReader } from './reader';
 import os from 'node:os';
+import { IXLSXExtractOptions } from './types.js';
+import { XLSXReader } from './reader.js';
 
 export class XLSX extends events.EventEmitter {
 	extract(filename: string, options?: IXLSXExtractOptions): this {

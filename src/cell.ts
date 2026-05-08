@@ -1,5 +1,5 @@
-import { escapeTSV, isValidDate, unescapeXML, xlsx_date } from './utils';
-import { IXLSXExtractOptions } from './types';
+import { escapeTSV, isValidDate, unescapeXML, xlsx_date } from './utils.js';
+import { IXLSXExtractOptions } from './types.js';
 
 export interface ICellFormat {
 	fmt: string;

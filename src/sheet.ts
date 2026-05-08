@@ -1,5 +1,5 @@
-import { IXLSXExtractOptions } from './types';
 import os from 'node:os';
+import { IXLSXExtractOptions } from './types.js';
 
 export class Sheet {
 	nr?: string;

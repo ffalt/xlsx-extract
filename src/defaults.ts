@@ -1,5 +1,5 @@
 import os from 'node:os';
-import { IXLSXExtractOptions } from './types';
+import { IXLSXExtractOptions } from './types.js';
 
 export function applyDefaults(options: IXLSXExtractOptions | undefined) {
 	const defaults = {
