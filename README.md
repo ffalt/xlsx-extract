@@ -1,16 +1,15 @@
 # xlsx-extract
 
-extracts data from XLSX files with low memory footprint
+Streaming XLSX reader with low memory footprint for Node.js.
 
-XLSX files can be pretty big, so nodejs & full featured xlsx-modules can reach memory limits or just use more than is needed for that task. (--max-old-space-size & --stack_size can't help you all the time either)
-
+XLSX files can be pretty big. Full-featured xlsx modules can hit memory limits or use far more than necessary. `xlsx-extract` parses only what you need — sheet by sheet, row by row — without loading the entire file into memory.
 
 [![NPM](https://nodei.co/npm/xlsx-extract.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/xlsx-extract)
 
 ![test](https://github.com/ffalt/xlsx-extract/workflows/test/badge.svg)
-[![license](https://img.shields.io/npm/l/xlsx-extract.svg)](http://opensource.org/licenses/MIT) 
-[![known vulnerabilities](https://snyk.io/test/github/ffalt/xlsx-extract/badge.svg)](https://snyk.io/test/github/ffalt/xlsx-extract) 
-[![certification](https://api.codacy.com/project/badge/Grade/7bd868b2fb1c4f38ad9ef2ffb698c314)](https://app.codacy.com/gh/ffalt/xlsx-extract) 
+[![license](https://img.shields.io/npm/l/xlsx-extract.svg)](http://opensource.org/licenses/MIT)
+[![known vulnerabilities](https://snyk.io/test/github/ffalt/xlsx-extract/badge.svg)](https://snyk.io/test/github/ffalt/xlsx-extract)
+[![certification](https://api.codacy.com/project/badge/Grade/7bd868b2fb1c4f38ad9ef2ffb698c314)](https://app.codacy.com/gh/ffalt/xlsx-extract)
 [![total downloads](https://badgen.net/npm/dt/xlsx-extract)](https://badgen.net/npm/dt/xlsx-extract)
 
 
@@ -20,108 +19,139 @@ XLSX files can be pretty big, so nodejs & full featured xlsx-modules can reach m
 npm install xlsx-extract
 ```
 
-The XML files of the format are parsed with [sax-js](https://github.com/isaacs/sax-js) by default. 
+Requires Node.js >= 20. XML parsing is done with [sax-js](https://github.com/isaacs/sax-js); ZIP extraction with [yauzl](https://github.com/thejoshwolfe/yauzl).
+
+## API
+
+```javascript
+// ES Modules
+import { XLSX } from 'xlsx-extract';
+```
+
+```javascript
+// CommonJS
+const { XLSX } = require('xlsx-extract');
+```
+
+### `extract(filename, options?)`
+
+Streams sheet/row/cell events from an XLSX file. Returns an `EventEmitter`.
+
+```javascript
+new XLSX().extract('path/to/file.xlsx', { sheet_nr: '1' })
+  .on('sheet', (sheet) => {
+    // sheet: [sheetname, sheetid, sheetnr]
+    console.log('sheet', sheet);
+  })
+  .on('row', (row) => {
+    // row: array of values (format:'array') or formatted string (format:'tsv'/'json')
+    console.log('row', row);
+  })
+  .on('cell', (cell) => {
+    // cell: a single value or null
+    console.log('cell', cell);
+  })
+  .on('error', (err) => console.error(err))
+  .on('end', () => console.log('done'));
+```
+
+### `convert(filename, destfile, options?)`
+
+Converts an XLSX file to TSV or JSON and writes the result to `destfile`.
+
+```javascript
+new XLSX().convert('path/to/file.xlsx', 'output.tsv')
+  .on('error', (err) => console.error(err))
+  .on('end', () => console.log('written'));
+
+new XLSX().convert('path/to/file.xlsx', 'output.json')
+  .on('error', (err) => console.error(err))
+  .on('end', () => console.log('written'));
+```
 
 ## Options
 
-```
-
+```typescript
 interface IXLSXExtractOptions {
-	// sheet selection (provide one of the following)
-	sheet_name?: string; // select by sheet name
-	sheet_nr?: string; // default "1" - select by number of the sheet starting on 1
-	sheet_id?: string; // select by sheet id, e.g. "1"
-	sheet_rid?: string; // select by internal sheet rid, e.g. "rId1'
-	sheet_all?: boolean; // default false - select all sheets
-	// row selection
-	ignore_header?: number; // default 0 - the number of header lines to ignore
-	include_empty_rows?: boolean; // default false - include empty rows in the middle/at start
-	// how to output sheet, rows and cells
-	format?: string; // default array - convert to 'array'||'json'||'tsv'||'obj'
-	// tsv output options
-	tsv_float_comma?: boolean; // default false - use "," als decimal point for floats
-	tsv_delimiter?: string; // default '\t' - use specified character to field delimiter
-	tsv_endofline?: string; // default depending on your operating system (node os.EOL) e.g. '\n'
-	// cell value formats
-	raw_values?: boolean;  // default false - do not apply cell formats (get values as string as in xlsx)
-	round_floats?: boolean; // default true - round float values as the cell format defines (values will be reported as parsed floats otherwise)
-	date1904?: boolean;   // default false - use date 1904 conversion
-	ignore_timezone?: boolean; // default false - ignore timezone in date parsing
-	convert_values?: { // apply cell number formats or not (values will be reported as strings otherwise)
-		ints?: boolean;  // rounds to int if number format is for int
-		floats?: boolean;  // rounds floats according to float number format
-		dates?: boolean;  // converts xlsx date to js date
-		bools?: boolean; // converts xlsx bool to js boolean
-	};
-	// xlsx structure options
-	workfolder?: string; // default 'xl' - the workbook subfolder in zip structure
+  // Sheet selection — provide one of:
+  sheet_name?: string;   // select by sheet name
+  sheet_nr?: string;     // default "1" — select by 1-based sheet number
+  sheet_id?: string;     // select by sheet id, e.g. "1"
+  sheet_rid?: string;    // select by internal sheet rid, e.g. "rId1"
+  sheet_all?: boolean;   // default false — iterate all sheets
+
+  // Row selection
+  ignore_header?: number;       // default 0 — skip this many header rows
+  include_empty_rows?: boolean; // default false — include empty rows
+
+  // Output format
+  format?: string; // 'array' (default) | 'json' | 'tsv' | 'obj'
+
+  // TSV options
+  tsv_float_comma?: boolean; // default false — use ',' as decimal separator
+  tsv_delimiter?: string;    // default '\t'
+  tsv_endofline?: string;    // default os.EOL
+
+  // Value conversion
+  raw_values?: boolean;      // default false — skip all format conversion
+  round_floats?: boolean;    // default true — round floats per cell format
+  date1904?: boolean;        // default false — use 1904 date system
+  ignore_timezone?: boolean; // default false — ignore timezone in date parsing
+  convert_values?: {
+    ints?: boolean;    // round to int when number format is integer
+    floats?: boolean;  // round floats per number format
+    dates?: boolean;   // convert xlsx date serial to JS Date
+    bools?: boolean;   // convert xlsx bool to JS boolean
+  };
+
+  // XLSX structure
+  workfolder?: string; // default 'xl' — workbook subfolder in the ZIP
 }
-
-
-
 ```
 
-## Convenience API
-
-```javascript
-
-	var XLSX = require('xlsx-extract').XLSX;
-
-	//dump arrays
-	new XLSX().extract('path/to/file.xlsx', {sheet_id:1}) // or sheet_name or sheet_nr
-		.on('sheet', function (sheet) {
-			console.log('sheet',sheet);  //sheet is array [sheetname, sheetid, sheetnr]
-		})
-		.on('row', function (row) {
-			console.log('row', row);  //row is a array of values or []
-		})
-		.on('cell', function (cell) {
-			console.log('cell', cell); //cell is a value or null
-		})
-		.on('error', function (err) {
-			console.error('error', err);
-		})
-		.on('end', function (err) {
-			console.log('eof');
-		});
-
-	//dump by row in tsv-format
-	new XLSX().extract('path/to/file.xlsx', {sheet_id:1, format:'tsv'}) // or sheet_name or sheet_nr
-		.on('sheet', function (sheet) {
-			console.log('sheet', sheet);  //sheet is tsv sheetname sheetnr
-		})
-		.on('row', function (row) {
-			console.log(row); //row is a tsv line
-		})
-		.on('cell', function (cell) {
-			console.log(cell); //cell is a tsv value
-		})
-		.on('error', function (err) {
-			console.error(err);
-		})
-		.on('end', function (err) {
-			console.log('eof');
-		});
-
-	//convert to tsv-file (sheet info is not written to file)
-	new XLSX().convert('path/to/file.xlsx', 'path/to/destfile.tsv')
-		.on('error', function (err) {
-			console.error(err);
-		})
-		.on('end', function () {
-			console.log('written');
-		})
-
-	//convert to json-file (sheet info is not written to file)
-	new XLSX().convert('path/to/file.xlsx', 'path/to/destfile.json')
-		.on('error', function (err) {
-			console.error(err);
-		})
-		.on('end', function () {
-			console.log('written');
-		})
 
 
+## CLI Usage
+
+The package includes the `xlsxe` command-line tool.
 
 ```
+xlsxe [file] [destfile] [options]
 
+Arguments:
+  file          source .xlsx file
+  destfile      destination file (tsv or json)
+
+Options:
+  -f, --file <file>    source .xlsx
+  -d, --dest <file>    destination file
+  -m, --mode <mode>    output format: json or tsv (default: tsv)
+  -s, --sheet <nr>     sheet number (default: 1)
+  -n, --header <nr>    number of header rows to skip
+  -e, --empty          include empty rows
+  -r, --raw            do not convert values
+  --d1904              use 1904 date base
+```
+
+**Examples:**
+
+```bash
+# Print sheet 1 as TSV to stdout
+xlsxe data.xlsx
+
+# Convert to TSV file
+xlsxe data.xlsx output.tsv
+
+# Convert sheet 2 to JSON, skipping 1 header row
+xlsxe data.xlsx output.json --sheet 2 --header 1 --mode json
+```
+
+
+## Output Formats
+
+| `format`          | `row` event value                            | `cell` event value         |
+|-------------------|----------------------------------------------|----------------------------|
+| `array` (default) | `any[]` — array of cell values               | single value or `null`     |
+| `tsv`             | tab-separated string                         | tab-separated value string |
+| `json`            | JSON array string (one row)                  | JSON value string          |
+| `obj`             | `Record<string, any>` keyed by column header | single value or `null`     |
