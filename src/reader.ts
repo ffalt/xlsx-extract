@@ -1,12 +1,12 @@
-import {getColumnFromDef, splitCellFormats, xlsx_fmts} from './utils';
-import {Workbook} from './book';
-import {Row} from './row';
-import {Cell, ICellFormatStyles} from './cell';
-import {IXLSXExtractOptions} from './types';
-import {Sheet} from './sheet';
-import {ISaxParser, SaxExpat, SaxSax} from './xml';
-import {applyDefaults} from './defaults';
-import {IUnzip, IUnzipEntry, YauzlUnzip} from './unzip';
+import { getColumnFromDef, splitCellFormats, xlsx_fmts } from './utils';
+import { Workbook } from './book';
+import { Row } from './row';
+import { Cell, ICellFormatStyles } from './cell';
+import { IXLSXExtractOptions } from './types';
+import { Sheet } from './sheet';
+import { ISaxParser, SaxSax } from './xml';
+import { applyDefaults } from './defaults';
+import { IUnzip, IUnzipEntry, YauzlUnzip } from './unzip';
 
 export class XLSXReader {
 	filename: string;
@@ -20,9 +20,6 @@ export class XLSXReader {
 	}
 
 	private createParser(): ISaxParser {
-		if (this.options.parser === 'expat') {
-			return new SaxExpat();
-		}
 		return new SaxSax();
 	}
 
@@ -142,7 +139,7 @@ export class XLSXReader {
 					(typeof attrs.target === 'string') &&
 					(attrs.target.toLowerCase().indexOf('worksheets/sheet') >= 0) &&
 					attrs.id) {
-					relations.push({sheetid: attrs.id, filename: attrs.target});
+					relations.push({ sheetid: attrs.id, filename: attrs.target });
 				}
 			})
 			.onClose((err) => {
@@ -232,7 +229,7 @@ export class XLSXReader {
 			workbook.sheets.forEach(s => {
 				const rel = workbook.relations.find(r => r.sheetid === s.rid);
 				if (rel) {
-					result.push({sheet: s, filename: this.workfolder + '/' + rel.filename});
+					result.push({ sheet: s, filename: this.workfolder + '/' + rel.filename });
 				}
 			});
 			return result;
@@ -249,14 +246,14 @@ export class XLSXReader {
 			const sheet_nr = this.options.sheet_nr || '1';
 			sheet = workbook.getByNr(sheet_nr);
 			if (!sheet) {
-				result.push({filename: this.workfolder + '/worksheets/sheet' + sheet_nr + '.xml'});
+				result.push({ filename: this.workfolder + '/worksheets/sheet' + sheet_nr + '.xml' });
 			}
 		}
 		if (sheet) {
 			const sheetId = sheet.rid;
 			const rel = workbook.relations.find(r => r.sheetid === sheetId);
 			if (rel) {
-				result.push({sheet, filename: this.workfolder + '/' + rel.filename});
+				result.push({ sheet, filename: this.workfolder + '/' + rel.filename });
 			}
 		}
 		return result;
@@ -280,22 +277,22 @@ export class XLSXReader {
 					let row_count = 1;
 					const row_start = this.options.ignore_header || 0;
 					if (lookup.sheet) {
-						emit({sheet: lookup.sheet});
+						emit({ sheet: lookup.sheet });
 					}
 					this.parseXMLSheet(entry, workbook, (row, cell) => {
 						if (cell) {
 							if (row_count > row_start) {
-								emit({cell: cell});
+								emit({ cell: cell });
 							}
 						} else if (row) {
 							if (row_count > row_start) {
-								emit({row: row});
+								emit({ row: row });
 							}
 							row_count++;
 						}
 					}, (err) => {
 						if (err) {
-							emit({err: err});
+							emit({ err: err });
 						} else {
 							running--;
 							finish();
@@ -306,7 +303,7 @@ export class XLSXReader {
 				}
 			},
 			err => {
-				emit({err});
+				emit({ err });
 				emit({});
 			},
 			() => {
@@ -361,7 +358,7 @@ export class XLSXReader {
 				}
 			},
 			err => {
-				emit({err});
+				emit({ err });
 				emit({});
 			},
 			() => {

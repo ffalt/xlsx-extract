@@ -8,11 +8,6 @@ import { Cell } from '../src/cell';
 import tmp from 'tmp';
 import { escapeTSV, isValidDate } from '../src/utils';
 
-const parsers: string[] = [
-	'sax',
-	'expat'
-];
-
 function collectTestFiles(directories: string[], rootDir: string, testSingleFile?: string): string[] {
 	const files: string[] = [];
 	for (const dir of directories) {
@@ -238,181 +233,176 @@ describe('xlsx', () => {
 		const workfolder: string | undefined = spec.workfolder;
 		if (spec.error) {
 			describe(spec.description + ' - ' + testfile, () => {
-				for (const parser of parsers) {
-					describe(parser, () => {
-						it('should fail according to spec', done => {
-							readFile(sourcefile, { sheet_all: true, parser, workfolder }, error => {
-								expect(error).toBeDefined();
-								done();
-							});
-						});
+				it('should fail according to spec', done => {
+					readFile(sourcefile, { sheet_all: true, workfolder }, error => {
+						expect(error).toBeDefined();
+						done();
 					});
-				}
+				});
 			});
 		} else {
 			describe(spec.description + ' - ' + testfile, () => {
-				for (const parser of parsers) {
-					describe(parser, () => {
-						it('should read and compare according to spec', done => {
-							readFile(sourcefile, { sheet_all: true, parser, workfolder }, (error, xlsx) => {
-								expect(error).toBeFalsy();
-								expect(xlsx).toBeDefined();
-								if (!xlsx) {
-									return done();
-								}
-								compareSpec(sourcefile, xlsx, spec);
-								done();
-							});
-						});
-						for (const specSheet of (spec.sheets ?? [])) {
-							it('should read the sheet ' + specSheet.nr + ' by number: ' + specSheet.nr, done => {
-								readFile(sourcefile, { sheet_nr: specSheet.nr, parser, workfolder }, (error, xlsx) => {
-									expect(error).toBeFalsy();
-									expect(xlsx).toBeDefined();
-									if (!xlsx) {
-										return done();
-									}
-									compareSingleSpec(sourcefile, xlsx, specSheet);
-									done();
-								});
-							});
-							it('should read the sheet ' + specSheet.nr + ' by name: ' + specSheet.name, done => {
-								readFile(sourcefile, { sheet_name: specSheet.name, parser, workfolder }, (error, xlsx) => {
-									expect(error).toBeFalsy();
-									expect(xlsx).toBeDefined();
-									if (!xlsx) {
-										return done();
-									}
-									compareSingleSpec(sourcefile, xlsx, specSheet);
-									done();
-								});
-							});
-							it('should read the sheet ' + specSheet.nr + ' by id: ' + specSheet.id, done => {
-								readFile(sourcefile, { sheet_id: specSheet.id, parser, workfolder }, (error, xlsx) => {
-									expect(error).toBeFalsy();
-									expect(xlsx).toBeDefined();
-									if (!xlsx) {
-										return done();
-									}
-									compareSingleSpec(sourcefile, xlsx, specSheet);
-									done();
-								});
-							});
-							it('should read the sheet ' + specSheet.nr + ' by rid: ' + specSheet.rid, done => {
-								readFile(sourcefile, { sheet_rid: specSheet.rid, parser, workfolder }, (error, xlsx) => {
-									expect(error).toBeFalsy();
-									expect(xlsx).toBeDefined();
-									if (!xlsx) {
-										return done();
-									}
-									compareSingleSpec(sourcefile, xlsx, specSheet);
-									done();
-								});
-							});
-							it('should read the sheet ' + specSheet.nr + ' ignoring the first line', done => {
-								readFile(sourcefile, { sheet_rid: specSheet.rid, ignore_header: 1, parser, workfolder }, (error, xlsx) => {
-									expect(error).toBeFalsy();
-									expect(xlsx).toBeDefined();
-									if (!xlsx) {
-										return done();
-									}
-									const specSheetLimited: IXLSXSpecSheet = {
-										nr: specSheet.nr,
-										name: specSheet.name,
-										id: specSheet.id,
-										rid: specSheet.rid,
-										rows: specSheet.rows ? specSheet.rows.slice(1) : []
-									};
-									compareSingleSpec(sourcefile, xlsx, specSheetLimited);
-									done();
-								});
-							});
-							it('should read the sheet ' + specSheet.nr + ' ignoring the two lines', done => {
-								readFile(sourcefile, { sheet_rid: specSheet.rid, ignore_header: 2, parser, workfolder }, (error, xlsx) => {
-									expect(error).toBeFalsy();
-									expect(xlsx).toBeDefined();
-									if (!xlsx) {
-										return done();
-									}
-									const specSheetLimited: IXLSXSpecSheet = {
-										nr: specSheet.nr,
-										name: specSheet.name,
-										id: specSheet.id,
-										rid: specSheet.rid,
-										rows: specSheet.rows ? specSheet.rows.slice(2) : []
-									};
-									compareSingleSpec(sourcefile, xlsx, specSheetLimited);
-									done();
-								});
-							});
-							it('should read the sheet ' + specSheet.nr + ' with empty rows filtered', done => {
-								readFile(sourcefile, { sheet_rid: specSheet.rid, include_empty_rows: false, parser, workfolder }, (error, xlsx) => {
-									expect(error).toBeFalsy();
-									expect(xlsx).toBeDefined();
-									if (!xlsx) {
-										return done();
-									}
-									const specSheetLimited: IXLSXSpecSheet = {
-										nr: specSheet.nr,
-										name: specSheet.name,
-										id: specSheet.id,
-										rid: specSheet.rid,
-										rows: specSheet.rows ? specSheet.rows.filter(r => r.length > 0) : []
-									};
-									compareSingleSpec(sourcefile, xlsx, specSheetLimited);
-									done();
-								});
-							});
-							it('should read the sheet ' + specSheet.nr + ' ignoring the first line and empty rows filtered', done => {
-								readFile(sourcefile, { sheet_rid: specSheet.rid, ignore_header: 1, include_empty_rows: false, parser, workfolder }, (error, xlsx) => {
-									expect(error).toBeFalsy();
-									expect(xlsx).toBeDefined();
-									if (!xlsx) {
-										return done();
-									}
-									const specSheetLimited: IXLSXSpecSheet = {
-										nr: specSheet.nr,
-										name: specSheet.name,
-										id: specSheet.id,
-										rid: specSheet.rid,
-										rows: specSheet.rows ? specSheet.rows.filter(r => r.length > 0).slice(1) : []
-									};
-									compareSingleSpec(sourcefile, xlsx, specSheetLimited);
-									done();
-								});
-							});
-							it('should read the sheet ' + specSheet.nr + ' ignoring the first two lines and empty rows filtered', done => {
-								readFile(sourcefile, { sheet_rid: specSheet.rid, ignore_header: 2, include_empty_rows: false, parser, workfolder }, (error, xlsx) => {
-									expect(error).toBeFalsy();
-									expect(xlsx).toBeDefined();
-									if (!xlsx) {
-										return done();
-									}
-									const specSheetLimited: IXLSXSpecSheet = {
-										nr: specSheet.nr,
-										name: specSheet.name,
-										id: specSheet.id,
-										rid: specSheet.rid,
-										rows: specSheet.rows ? specSheet.rows.filter(r => r.length > 0).slice(2) : []
-									};
-									compareSingleSpec(sourcefile, xlsx, specSheetLimited);
-									done();
-								});
-							});
-							it('should convert to tsv', done => {
-								const options: IXLSXExtractOptions = {
-									sheet_rid: specSheet.rid, include_empty_rows: true,
-									tsv_delimiter: '\t', tsv_endofline: '\n', tsv_float_comma: false,
-									parser, workfolder
-								};
-								convertToTsv(sourcefile, options, (error, tsv) => {
-									expect(error).toBeFalsy();
-									expect(tsv).toBeDefined();
-									expect(tsv, 'Invalid tsv').toBe(defToTSV(specSheet, options));
-									done();
-								});
-							});
+				it('should read and compare according to spec', done => {
+					readFile(sourcefile, { sheet_all: true, workfolder }, (error, xlsx) => {
+						expect(error).toBeFalsy();
+						expect(xlsx).toBeDefined();
+						if (!xlsx) {
+							return done();
 						}
+						compareSpec(sourcefile, xlsx, spec);
+						done();
+					});
+				});
+				for (const specSheet of (spec.sheets ?? [])) {
+					it('should read the sheet ' + specSheet.nr + ' by number: ' + specSheet.nr, done => {
+						readFile(sourcefile, { sheet_nr: specSheet.nr, workfolder }, (error, xlsx) => {
+							expect(error).toBeFalsy();
+							expect(xlsx).toBeDefined();
+							if (!xlsx) {
+								return done();
+							}
+							compareSingleSpec(sourcefile, xlsx, specSheet);
+							done();
+						});
+					});
+					it('should read the sheet ' + specSheet.nr + ' by name: ' + specSheet.name, done => {
+						readFile(sourcefile, { sheet_name: specSheet.name, workfolder }, (error, xlsx) => {
+							expect(error).toBeFalsy();
+							expect(xlsx).toBeDefined();
+							if (!xlsx) {
+								return done();
+							}
+							compareSingleSpec(sourcefile, xlsx, specSheet);
+							done();
+						});
+					});
+					it('should read the sheet ' + specSheet.nr + ' by id: ' + specSheet.id, done => {
+						readFile(sourcefile, { sheet_id: specSheet.id, workfolder }, (error, xlsx) => {
+							expect(error).toBeFalsy();
+							expect(xlsx).toBeDefined();
+							if (!xlsx) {
+								return done();
+							}
+							compareSingleSpec(sourcefile, xlsx, specSheet);
+							done();
+						});
+					});
+					it('should read the sheet ' + specSheet.nr + ' by rid: ' + specSheet.rid, done => {
+						readFile(sourcefile, { sheet_rid: specSheet.rid, workfolder }, (error, xlsx) => {
+							expect(error).toBeFalsy();
+							expect(xlsx).toBeDefined();
+							if (!xlsx) {
+								return done();
+							}
+							compareSingleSpec(sourcefile, xlsx, specSheet);
+							done();
+						});
+					});
+					it('should read the sheet ' + specSheet.nr + ' ignoring the first line', done => {
+						readFile(sourcefile, { sheet_rid: specSheet.rid, ignore_header: 1, workfolder }, (error, xlsx) => {
+							expect(error).toBeFalsy();
+							expect(xlsx).toBeDefined();
+							if (!xlsx) {
+								return done();
+							}
+							const specSheetLimited: IXLSXSpecSheet = {
+								nr: specSheet.nr,
+								name: specSheet.name,
+								id: specSheet.id,
+								rid: specSheet.rid,
+								rows: specSheet.rows ? specSheet.rows.slice(1) : []
+							};
+							compareSingleSpec(sourcefile, xlsx, specSheetLimited);
+							done();
+						});
+					});
+					it('should read the sheet ' + specSheet.nr + ' ignoring the two lines', done => {
+						readFile(sourcefile, { sheet_rid: specSheet.rid, ignore_header: 2, workfolder }, (error, xlsx) => {
+							expect(error).toBeFalsy();
+							expect(xlsx).toBeDefined();
+							if (!xlsx) {
+								return done();
+							}
+							const specSheetLimited: IXLSXSpecSheet = {
+								nr: specSheet.nr,
+								name: specSheet.name,
+								id: specSheet.id,
+								rid: specSheet.rid,
+								rows: specSheet.rows ? specSheet.rows.slice(2) : []
+							};
+							compareSingleSpec(sourcefile, xlsx, specSheetLimited);
+							done();
+						});
+					});
+					it('should read the sheet ' + specSheet.nr + ' with empty rows filtered', done => {
+						readFile(sourcefile, { sheet_rid: specSheet.rid, include_empty_rows: false, workfolder }, (error, xlsx) => {
+							expect(error).toBeFalsy();
+							expect(xlsx).toBeDefined();
+							if (!xlsx) {
+								return done();
+							}
+							const specSheetLimited: IXLSXSpecSheet = {
+								nr: specSheet.nr,
+								name: specSheet.name,
+								id: specSheet.id,
+								rid: specSheet.rid,
+								rows: specSheet.rows ? specSheet.rows.filter(r => r.length > 0) : []
+							};
+							compareSingleSpec(sourcefile, xlsx, specSheetLimited);
+							done();
+						});
+					});
+					it('should read the sheet ' + specSheet.nr + ' ignoring the first line and empty rows filtered', done => {
+						readFile(sourcefile, { sheet_rid: specSheet.rid, ignore_header: 1, include_empty_rows: false, workfolder }, (error, xlsx) => {
+							expect(error).toBeFalsy();
+							expect(xlsx).toBeDefined();
+							if (!xlsx) {
+								return done();
+							}
+							const specSheetLimited: IXLSXSpecSheet = {
+								nr: specSheet.nr,
+								name: specSheet.name,
+								id: specSheet.id,
+								rid: specSheet.rid,
+								rows: specSheet.rows ? specSheet.rows.filter(r => r.length > 0).slice(1) : []
+							};
+							compareSingleSpec(sourcefile, xlsx, specSheetLimited);
+							done();
+						});
+					});
+					it('should read the sheet ' + specSheet.nr + ' ignoring the first two lines and empty rows filtered', done => {
+						readFile(sourcefile, { sheet_rid: specSheet.rid, ignore_header: 2, include_empty_rows: false, workfolder }, (error, xlsx) => {
+							expect(error).toBeFalsy();
+							expect(xlsx).toBeDefined();
+							if (!xlsx) {
+								return done();
+							}
+							const specSheetLimited: IXLSXSpecSheet = {
+								nr: specSheet.nr,
+								name: specSheet.name,
+								id: specSheet.id,
+								rid: specSheet.rid,
+								rows: specSheet.rows ? specSheet.rows.filter(r => r.length > 0).slice(2) : []
+							};
+							compareSingleSpec(sourcefile, xlsx, specSheetLimited);
+							done();
+						});
+					});
+					it('should convert to tsv', done => {
+						const options: IXLSXExtractOptions = {
+							sheet_rid: specSheet.rid,
+							include_empty_rows: true,
+							tsv_delimiter: '\t',
+							tsv_endofline: '\n',
+							tsv_float_comma: false,
+							workfolder
+						};
+						convertToTsv(sourcefile, options, (error, tsv) => {
+							expect(error).toBeFalsy();
+							expect(tsv).toBeDefined();
+							expect(tsv, 'Invalid tsv').toBe(defToTSV(specSheet, options));
+							done();
+						});
 					});
 				}
 			});

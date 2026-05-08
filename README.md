@@ -2,13 +2,7 @@
 
 extracts data from XLSX files with low memory footprint
 
-
-xlsx-files can be pretty big, so nodejs & full featured xlsx-modules can reach memory limits or just use more than is needed for that task. (--max-old-space-size & --stack_size can't help you all the time either)
-
-hence these magnificent features:
-
-- files are parsed with sax parser `sax` or `node-expat`
-- get rows/cells each by callback or write them to a .tsv or .json file
+XLSX files can be pretty big, so nodejs & full featured xlsx-modules can reach memory limits or just use more than is needed for that task. (--max-old-space-size & --stack_size can't help you all the time either)
 
 
 [![NPM](https://nodei.co/npm/xlsx-extract.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/xlsx-extract)
@@ -28,12 +22,6 @@ npm install xlsx-extract
 
 The XML files of the format are parsed with [sax-js](https://github.com/isaacs/sax-js) by default. 
 
-If you want to use the faster [node-expat](https://github.com/astro/node-expat) parser please install it manually and use the {parser:"expat"} option. (Needs native compiling on the destination system)
-```
-npm install node-expat
-```
-
-
 ## Options
 
 ```
@@ -45,8 +33,6 @@ interface IXLSXExtractOptions {
 	sheet_id?: string; // select by sheet id, e.g. "1"
 	sheet_rid?: string; // select by internal sheet rid, e.g. "rId1'
 	sheet_all?: boolean; // default false - select all sheets
-	// sax parser selection
-	parser?: string; // default "sax" - 'sax'|'expat'
 	// row selection
 	ignore_header?: number; // default 0 - the number of header lines to ignore
 	include_empty_rows?: boolean; // default false - include empty rows in the middle/at start
