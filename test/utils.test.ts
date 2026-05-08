@@ -65,6 +65,42 @@ describe('xlsx_date', () => {
 		expect(d.getMonth()).toBe(0);
 		expect(d.getDate()).toBe(2);
 	});
+
+	it('correctly adjusts hours for a whole-hour timezone (e.g. UTC+2)', () => {
+		const spy = jest.spyOn(Date.prototype, 'getTimezoneOffset').mockReturnValue(-120);
+		try {
+			// serial 1.5 = Jan 1 1900 at 12:00 stored; UTC+2 should yield 14:00
+			const d = xlsx_date(1.5, false, false);
+			expect(d.getHours()).toBe(14);
+			expect(d.getMinutes()).toBe(0);
+		} finally {
+			spy.mockRestore();
+		}
+	});
+
+	it('correctly adjusts hours and minutes for a half-hour timezone (e.g. UTC+5:30)', () => {
+		const spy = jest.spyOn(Date.prototype, 'getTimezoneOffset').mockReturnValue(-330);
+		try {
+			// serial 1.25 = Jan 1 1900 at 06:00 stored; UTC+5:30 should yield 11:30
+			const d = xlsx_date(1.25, false, false);
+			expect(d.getHours()).toBe(11);
+			expect(d.getMinutes()).toBe(30);
+		} finally {
+			spy.mockRestore();
+		}
+	});
+
+	it('correctly adjusts hours and minutes for a negative half-hour timezone (e.g. UTC-3:30)', () => {
+		const spy = jest.spyOn(Date.prototype, 'getTimezoneOffset').mockReturnValue(210);
+		try {
+			// serial 1.5 = Jan 1 1900 at 12:00 stored; UTC-3:30 should yield 08:30
+			const d = xlsx_date(1.5, false, false);
+			expect(d.getHours()).toBe(8);
+			expect(d.getMinutes()).toBe(30);
+		} finally {
+			spy.mockRestore();
+		}
+	});
 });
 
 describe('containsOnlyChars', () => {

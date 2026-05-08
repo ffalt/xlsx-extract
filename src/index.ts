@@ -2,17 +2,10 @@ import { IXLSXExtractOptions } from './types';
 import events from 'node:events';
 import fs from 'node:fs';
 import path from 'node:path';
-import { inherits } from 'node:util';
 import { XLSXReader } from './reader';
 import os from 'node:os';
 
 export class XLSX extends events.EventEmitter {
-	constructor() {
-		super();
-		inherits(XLSX, events.EventEmitter);
-		events.EventEmitter.call(this);
-	}
-
 	extract(filename: string, options?: IXLSXExtractOptions): this {
 		const reader = new XLSXReader(filename, options);
 		reader.read((what: string, data: any) => {
