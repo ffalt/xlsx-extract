@@ -1,6 +1,7 @@
 import { Row } from '../src/row';
 import { Cell } from '../src/cell';
 import { IXLSXExtractOptions } from '../src/types';
+import os from 'node:os';
 
 const baseOptions: IXLSXExtractOptions = {
 	format: 'tsv',
@@ -99,6 +100,13 @@ describe('Row', () => {
 
 		it('returns only end-of-line for an empty row', () => {
 			expect(new Row().toTSV(baseOptions)).toBe('\n');
+		});
+
+		it('falls back to os.EOL and tab delimiter when options are not set', () => {
+			const row = new Row();
+			row.push(makeCell('a'));
+			row.push(makeCell('b'));
+			expect(row.toTSV({})).toBe('a\tb' + os.EOL);
 		});
 	});
 

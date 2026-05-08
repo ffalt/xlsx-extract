@@ -50,7 +50,6 @@ export class SaxSax implements ISaxParser {
 				reported = true;
 				notify(error);
 			}
-			this.parser.resume();
 		});
 		this.parser.on('end', () => {
 			if (!reported) {

@@ -175,6 +175,7 @@ export default ts.config(
 	{
 		ignores: [
 			"local",
+			"coverage",
 			"dist"
 		]
 	}

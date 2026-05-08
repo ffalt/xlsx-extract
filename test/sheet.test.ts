@@ -1,5 +1,6 @@
 import { Sheet } from '../src/sheet';
 import { IXLSXExtractOptions } from '../src/types';
+import os from 'node:os';
 
 const baseOptions: IXLSXExtractOptions = {
 	format: 'tsv',
@@ -43,6 +44,10 @@ describe('Sheet', () => {
 		it('uses a custom delimiter', () => {
 			const opts = { ...baseOptions, tsv_delimiter: ';' };
 			expect(makeSheet().toTSV(opts)).toBe('Sheet1;rId1;1;id1\n');
+		});
+
+		it('falls back to os.EOL and tab delimiter when options are not set', () => {
+			expect(makeSheet().toTSV({})).toBe('Sheet1\trId1\t1\tid1' + os.EOL);
 		});
 	});
 

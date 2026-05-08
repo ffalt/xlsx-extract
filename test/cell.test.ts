@@ -214,7 +214,7 @@ describe('Cell', () => {
 			cell.fmt = { fmts: [{ fmt: 'mm-dd-yy', fmt_type: 'd' }] };
 			cell.applyNumFormat({ ...baseOptions, ignore_timezone: true });
 			expect(cell.val).toBeInstanceOf(Date);
-			expect((cell.val as Date).getFullYear()).toBe(1900);
+			expect((cell.val as unknown as Date).getFullYear()).toBe(1900);
 		});
 
 		it('skips conversion when convert_values is not set', () => {
@@ -231,6 +231,38 @@ describe('Cell', () => {
 			cell.fmt = { fmts: [{ fmt: '0', fmt_type: 'i' }] };
 			cell.applyNumFormat({ ...baseOptions, convert_values: { ints: false, floats: true, dates: true, bools: true } });
 			expect(cell.val).toBe(42);
+		});
+
+		it('skips date conversion when convert_values.dates is false', () => {
+			const cell = new Cell();
+			cell.val = 45000;
+			cell.fmt = { fmts: [{ fmt: 'mm-dd-yy', fmt_type: 'd' }] };
+			cell.applyNumFormat({ ...baseOptions, convert_values: { ints: true, floats: true, dates: false, bools: true } });
+			expect(cell.val).toBe(45000);
+		});
+
+		it('skips float conversion when convert_values.floats is false', () => {
+			const cell = new Cell();
+			cell.val = 3.14159;
+			cell.fmt = { fmts: [{ fmt: '0.00', fmt_type: 'f', digits: 2 }] };
+			cell.applyNumFormat({ ...baseOptions, convert_values: { ints: true, floats: false, dates: true, bools: true } });
+			expect(cell.val).toBe(3.14159);
+		});
+
+		it('leaves val unchanged when parseInt returns NaN for integer format', () => {
+			const cell = new Cell();
+			cell.val = 'not-a-number';
+			cell.fmt = { fmts: [{ fmt: '0', fmt_type: 'i' }] };
+			cell.applyNumFormat(baseOptions);
+			expect(cell.val).toBe('not-a-number');
+		});
+
+		it('leaves val unchanged when parseFloat returns NaN for float format', () => {
+			const cell = new Cell();
+			cell.val = 'not-a-float';
+			cell.fmt = { fmts: [{ fmt: '0.00', fmt_type: 'f', digits: 2 }] };
+			cell.applyNumFormat(baseOptions);
+			expect(cell.val).toBe('not-a-float');
 		});
 	});
 
@@ -322,6 +354,30 @@ describe('Cell', () => {
 			cell.val = undefined;
 			cell.convertValue(baseOptions);
 			expect(cell.val).toBeUndefined();
+		});
+
+		it('leaves val as string when parseFloat returns NaN for type "n"', () => {
+			const cell = new Cell();
+			cell.typ = 'n';
+			cell.val = 'not-a-number';
+			cell.convertValue(baseOptions);
+			expect(cell.val).toBe('not-a-number');
+		});
+
+		it('leaves val unchanged for type "str" when raw is not set', () => {
+			const cell = new Cell();
+			cell.typ = 'str';
+			cell.val = 'original';
+			cell.convertValue(baseOptions);
+			expect(cell.val).toBe('original');
+		});
+
+		it('leaves val unchanged for type "b" with unrecognized value', () => {
+			const cell = new Cell();
+			cell.typ = 'b';
+			cell.val = 'yes';
+			cell.convertValue(baseOptions);
+			expect(cell.val).toBe('yes');
 		});
 	});
 });

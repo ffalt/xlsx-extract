@@ -134,7 +134,7 @@ export class XLSXReader {
 			})
 			.onText((txt: string) => {
 				if (addValue) {
-					cell.val = (cell.val ?? '') + txt;
+					cell.val = (cell.val ?? '').toString() + txt;
 				}
 				if (addFormular) {
 					cell.formula = (cell.formula ?? '') + txt;

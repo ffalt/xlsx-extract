@@ -190,6 +190,10 @@ describe('escapeTSV', () => {
 	it('returns empty string unchanged', () => {
 		expect(escapeTSV('', tsvOpts)).toBe('');
 	});
+
+	it('quotes tab-containing value using default delimiter when tsv_delimiter is not set', () => {
+		expect(escapeTSV('a\tb', {})).toBe('"a\tb"');
+	});
 });
 
 describe('unescapexml', () => {
