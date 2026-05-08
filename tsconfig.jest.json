@@ -3,7 +3,7 @@
   "compilerOptions": {
     "rootDir": ".",
     "moduleResolution": "node16",
-    "types": ["node", "jest"]
+    "types": ["node", "jest", "jest-expect-message"]
   },
   "include": [
     "test/**/*.ts",

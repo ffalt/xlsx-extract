@@ -11,12 +11,12 @@ hence these magnificent features:
 - get rows/cells each by callback or write them to a .tsv or .json file
 
 
-[![NPM](https://nodei.co/npm/xlsx-extract.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/xlsx-extract/)
+[![NPM](https://nodei.co/npm/xlsx-extract.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/xlsx-extract)
 
 ![test](https://github.com/ffalt/xlsx-extract/workflows/test/badge.svg)
 [![license](https://img.shields.io/npm/l/xlsx-extract.svg)](http://opensource.org/licenses/MIT) 
 [![known vulnerabilities](https://snyk.io/test/github/ffalt/xlsx-extract/badge.svg)](https://snyk.io/test/github/ffalt/xlsx-extract) 
-[![certification](https://api.codacy.com/project/badge/Grade/7bd868b2fb1c4f38ad9ef2ffb698c314)](https://www.codacy.com/app/ffalt/xlsx-extract) 
+[![certification](https://api.codacy.com/project/badge/Grade/7bd868b2fb1c4f38ad9ef2ffb698c314)](https://app.codacy.com/gh/ffalt/xlsx-extract) 
 [![total downloads](https://badgen.net/npm/dt/xlsx-extract)](https://badgen.net/npm/dt/xlsx-extract)
 
 

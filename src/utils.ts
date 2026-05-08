@@ -75,15 +75,15 @@ const Alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 /**
  converts a column index to chars e.g. 1 -> A
  */
-export function numAlpha(i: number): string {
+export function numberToAlpha(i: number): string {
 	const t = Math.floor(i / 26) - 1;
-	return (t > -1 ? numAlpha(t) : '') + Alphabet.charAt(i % 26);
+	return (t > -1 ? numberToAlpha(t) : '') + Alphabet.charAt(i % 26);
 }
 
 /**
  converts a chars to column index e.g. A -> 1
  */
-export function alphaNum(name: string) {
+export function alphaToNumber(name: string) {
 	let result = 0;
 	let multiplier = 1;
 	for (let i = name.length - 1; i >= 0; i--) {
@@ -200,7 +200,7 @@ export function getColumnFromDef(colDef: string): number {
 			break;
 		}
 	}
-	return alphaNum(cc);
+	return alphaToNumber(cc);
 }
 
 export function isValidDate(d: any): boolean {

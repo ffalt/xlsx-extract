@@ -31,7 +31,7 @@ function collectTestFiles(directories: string[], rootDir: string, testSingleFile
 	return files;
 }
 
-const testFiles: string[] = collectTestFiles(['data', 'data/sheetjs_test_files'], __dirname);
+const testFiles: string[] = collectTestFiles(['fixtures', 'fixtures/sheetjs_test_files'], __dirname);
 
 interface IXLSXSpecCell {
 	raw?: string;
