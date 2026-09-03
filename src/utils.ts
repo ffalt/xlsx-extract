@@ -18,7 +18,7 @@ export function xlsx_date(value: number, date1904: boolean, ignore_timezone: boo
 		if (date > 60) {
 			--date;
 		}
-		/* 1 = Jan 1 1900 */
+		// 1 = Jan 1 1900
 		d = new Date(1900, 0, 1, 0, 0, 0);
 		d.setDate(d.getDate() + date - 1);
 	}
@@ -92,8 +92,8 @@ export function alphaToNumber(name: string) {
 	let multiplier = 1;
 	for (let index = name.length - 1; index >= 0; index--) {
 		const value = ((name[index].charCodeAt(0) - 'A'.charCodeAt(0)) + 1);
-		result = result + value * multiplier;
-		multiplier = multiplier * 26;
+		result += value * multiplier;
+		multiplier *= 26;
 	}
 	return (result - 1);
 }
@@ -115,7 +115,7 @@ export function containsOnlyChars(value: string, chars: string): boolean {
  */
 export function splitCellFormats(s: string): ICellFormat[] {
 	/*
-	 http://office.microsoft.com/en-gb/excel-help/create-or-delete-a-custom-number-format-HP005199500.aspx?redir=0
+	 https://web.archive.org/web/20140825101239/https://office.microsoft.com/en-gb/excel-help/create-or-delete-a-custom-number-format-HP005199500.aspx
 	 _-* #,##0\ _€_-;\-* #,##0\ _€_-;_-* "-"??\ _€_-;_-@_-
 	 positive value ; negative value ; zero; string
 	 */
@@ -172,15 +172,15 @@ function parseFmtType(fmt: string): { t: string; f?: number } {
 	b = sp.at(-1) ?? '';
 	if (b === '' || (!b.trim().includes(' ') && !isNaN(parseInt(b, 10)))) {
 		if (b.includes('.')) {
-			let di = (b.split('.').at(1) ?? '').trim().length;
+			let di = (b.split('.', 2).at(1) ?? '').trim().length;
 			if (b.includes('E+')) {
 				di += 14;
 			}
 			return { t: 'f', f: di };
-		} else {
-			return { t: 'i' };
 		}
-	} else if (b === '@') {
+		return { t: 'i' };
+	}
+	if (b === '@') {
 		return { t: 's' };
 	}
 	// '-'?? zero value
@@ -192,7 +192,7 @@ function parseFmtType(fmt: string): { t: string; f?: number } {
 	const lastPart = sp.at(-1) ?? '';
 	if ((sp.length > 1) && (containsOnlyChars(lastPart, '?/'))) {
 		// '# ?/?' or '# ??/??',
-		const digits = (lastPart.split('/').at(0) ?? '').trim().length + 1;
+		const digits = (lastPart.split('/', 1).at(0) ?? '').trim().length + 1;
 		return { t: 'f', f: digits };
 	}
 	// date format?

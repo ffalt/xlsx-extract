@@ -15,7 +15,7 @@ export class XLSX extends events.EventEmitter {
 	}
 
 	convert(filename: string, destinationFile: string, options?: IXLSXExtractOptions): this {
-		options = options ?? {};
+		options ??= {};
 
 		if ((!options.format) && ((path.extname(destinationFile).toLowerCase() === '.json'))) {
 			options.format = 'json';

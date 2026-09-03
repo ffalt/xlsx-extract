@@ -148,14 +148,16 @@ export class XLSXReader {
 		const sheets: Sheet[] = [];
 		const sax = this.createParser()
 			.onStartElement((name, attributes) => {
-				if (name === 'sheet') {
-					const sheet = new Sheet();
-					sheet.rid = attributes['r:id'] ?? '';
-					sheet.id = attributes.sheetid;
-					sheet.nr = (sheets.length + 1).toString();
-					sheet.name = attributes.name;
-					sheets.push(sheet);
+				if (name !== 'sheet') {
+					return;
 				}
+
+				const sheet = new Sheet();
+				sheet.rid = attributes['r:id'] ?? '';
+				sheet.id = attributes.sheetid;
+				sheet.nr = (sheets.length + 1).toString();
+				sheet.name = attributes.name;
+				sheets.push(sheet);
 			})
 			.onClose(error => {
 				callback(error, sheets);
@@ -261,7 +263,7 @@ export class XLSXReader {
 			})
 			.onText(text => {
 				if (collect_strings && !phonetic) {
-					s = s + text.replaceAll('\r\n', '\n');
+					s += text.replaceAll('\r\n', '\n');
 				}
 			})
 			.onClose(error => {

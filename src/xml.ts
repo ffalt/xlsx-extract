@@ -3,8 +3,8 @@ import sax from 'sax';
 
 function lowerFudge(obj: Record<string, string>): Record<string, string> {
 	const result: Record<string, string> = {};
-	for (const key of Object.keys(obj)) {
-		result[key.toLowerCase()] = obj[key];
+	for (const [key, value] of Object.entries(obj)) {
+		result[key.toLowerCase()] = value;
 	}
 	return result;
 }
@@ -46,10 +46,12 @@ export class SaxSax implements ISaxParser {
 	onClose(notify: (error?: Error) => void): ISaxParser {
 		let reported = false;
 		this.parser.on('error', (error: Error) => {
-			if (!reported) {
-				reported = true;
-				notify(error);
+			if (reported) {
+				return;
 			}
+
+			reported = true;
+			notify(error);
 		});
 		this.parser.on('end', () => {
 			if (!reported) {

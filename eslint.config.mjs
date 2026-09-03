@@ -16,12 +16,25 @@ const unicornRules = {
 	"unicorn/prefer-top-level-await": "off",
 	"unicorn/prefer-number-properties": "off",
 	"unicorn/prefer-code-point": "off",
-
-	"unicorn/prevent-abbreviations": ["error", {
-		replacements: {
-			docs: false, req: false, res: false, env: false, dir: false, db: false, obj: false, utils: false
+	"unicorn/prefer-number-coercion": "off",
+	"unicorn/consistent-boolean-name": "off",
+	"unicorn/no-non-function-verb-prefix": "off",
+	"unicorn/no-break-in-nested-loop": "off",
+	"unicorn/name-replacements": [
+		"error",
+		{
+			"replacements": {
+				"docs": false,
+				"req": false,
+				"res": false,
+				"env2": false,
+				"dir": false,
+				"db": false,
+				"obj": false,
+				"utils": false
+			}
 		}
-	}],
+	],
 	"unicorn/prefer-at": ["error", { checkAllIndexAccess: true }]
 };
 

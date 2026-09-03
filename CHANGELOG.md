@@ -3,13 +3,13 @@
 ## Breaking Changes
 
 * Node.js minimum version is now 20.0.0
-* Removed `node-expat` parser support — only the `sax` parser is used; the `parser` option has been removed from `IXLSXExtractOptions` and the CLI `-p/--parser` flag has been removed
+* Removed `node-expat` parser support - only the `sax` parser is used; the `parser` option has been removed from `IXLSXExtractOptions` and the CLI `-p/--parser` flag has been removed
 * CLI: header row option renamed from `-h` to `-n` (`-h` is conventionally reserved for `--help`)
 * Package now ships as ESM default (`"type": "module"`) with dual ESM/CJS exports via `exports` field
 
 ## Features
 
-* Dual ESM/CJS output (NodeNext compatibility) — both `import` and `require` are supported via the `exports` field
+* Dual ESM/CJS output (NodeNext compatibility) - both `import` and `require` are supported via the `exports` field
 * Updated dependencies: yauzl, commander, sax
 
 ## Bug Fixes
